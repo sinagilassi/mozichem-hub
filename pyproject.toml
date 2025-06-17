@@ -20,7 +20,8 @@ classifiers = [
 
 dependencies = [
     "pydantic",
-    "pydantic-settings"
+    "pydantic-settings",
+    "mcp[cli]",
 ]
 
 [project.urls]
