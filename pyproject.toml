@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mozichem-hub"
+version = "0.1.0"
+description = "MoziChem-Hub"
+authors = [
+    { name = "Sina Gilassi", email = "sina.gilassi@gmail.com" }
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "pydantic",
+    "pydantic-settings"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/sinagilassi/mozichem-hub"
+
+[tool.setuptools.packages.find]
+where = ["mozichem_hub"]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+"mozichem_hub" = ["config/*.yml", "data/*.csv"]
