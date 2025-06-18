@@ -1,5 +1,5 @@
 from .settings import (
-    Settings,
+    app_settings,
     __version__,
     __description__,
     __author__,
@@ -7,7 +7,7 @@ from .settings import (
 )
 
 __all__ = [
-    "Settings",
+    "app_settings",
     "__version__",
     "__description__",
     "__author__",

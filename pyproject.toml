@@ -21,7 +21,8 @@ classifiers = [
 dependencies = [
     "pydantic",
     "pydantic-settings",
-    "mcp[cli]",
+    "fastmcp",
+    "PyYAML",
 ]
 
 [project.urls]

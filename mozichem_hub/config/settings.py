@@ -35,3 +35,28 @@ class Settings(BaseSettings):
         """Pydantic configuration."""
         env_prefix = "mozichem_hub_"
         case_sensitive = True
+
+
+def get_config() -> Settings:
+    """
+    Get the application settings.
+
+    Returns
+    -------
+    Settings
+        The application settings.
+    """
+    return Settings()
+
+
+# Initialize settings
+app_settings = get_config()
+
+# log
+# res_ = app_settings.model_dump()
+# print(res_)
+# print(type(res_))
+
+# res_ = app_settings.data_dir
+# print(f"Data directory: {res_}")
+# print(type(res_))
