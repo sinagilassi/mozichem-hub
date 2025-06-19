@@ -1,5 +1,5 @@
-from .core import MoziChemHub
+from .server import MoziServer
 
 __all__ = [
-    "MoziChemHub",
+    "MoziServer",
 ]

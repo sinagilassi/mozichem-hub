@@ -13,7 +13,7 @@ class ToolsReferences:
         Initialize the Reference instance.
         """
         # data path
-        self.data_dir = app_settings.data_dir
+        # self.data_dir = app_settings.data_dir
 
     def load_references(self):
         '''
@@ -29,8 +29,14 @@ class ToolsReferences:
             reference yml files
         '''
         try:
+            # current folder relative
+            current_folder = os.path.dirname(__file__)
+            # parent folder
+            parent_folder = os.path.dirname(current_folder)
+            # data folder
+            data_folder = os.path.join(parent_folder, 'data')
             # reference yml file
-            reference_file = self.data_dir / 'references.yml'
+            reference_file = os.path.join(data_folder, 'references.yml')
 
             # check file exists
             if os.path.exists(reference_file):

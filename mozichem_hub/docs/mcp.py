@@ -1,34 +1,32 @@
 # import libs
-from typing import List
+from typing import List, Literal, Dict, Any
 from fastmcp import FastMCP
 from fastmcp.tools import Tool
 from fastmcp.exceptions import ToolError
 # local
 from ..config import app_settings
+from ..tools import ToolsCore
 
 
 class MoziMCP():
     """
-    MoziApp class for serving the MoziMCP Hub MCP.
+    MoziMCP class for serving the MoziMCP Hub MCP.
     """
     # NOTE: attributes
+    server_parameters: Dict[str, Any] = {
+        "transport": "stdio",  # Must be one of: 'stdio', 'streamable-http'
+        "host": "127.0.0.1",
+        "port": 8000,
+        "path": "/mcp",
+        "log_level": "DEBUG"
+    }
 
-    def __init__(self,
-                 name: str,
-                 transport: str = "stdio",
-                 host: str = "127.0.0.1",
-                 port: int = 8000,
-                 log_level: str = "DEBUG"
-                 ):
+    def __init__(self, name: str):
         """
         Initialize the MoziMCP instance.
         """
         # NOTE: set attributes
         self._name = name
-        self._transport = transport
-        self._host = host
-        self._port = port
-        self._log_level = log_level
 
         # NOTE: Load settings
         self._settings = app_settings
@@ -38,26 +36,149 @@ class MoziMCP():
             name=name,
         )
 
+        # NOTE: Build tools
+        self.mcp_tools = self._build_mcp_tools()
+
     @property
-    def mcp(self) -> FastMCP:
+    def name(self) -> str:
+        """
+        Get the name of the MCP server.
+        """
+        return self._name
+
+    @property
+    def transport(self) -> Literal['stdio', 'streamable-http']:
+        """
+        Get the transport type of the MCP server.
+        """
+        return self.server_parameters["transport"]
+
+    @transport.setter
+    def transport(self, value: Literal['stdio', 'streamable-http']):
+        """
+        Set the transport type of the MCP server.
+        """
+        if value not in ['stdio', 'streamable-http']:
+            raise ValueError(
+                "Transport must be one of: 'stdio', 'streamable-http'")
+        self.server_parameters["transport"] = value
+
+    @property
+    def host(self) -> str:
+        """
+        Get the host address of the MCP server.
+        """
+        return self.server_parameters["host"]
+
+    @host.setter
+    def host(self, value: str):
+        """
+        Set the host address of the MCP server.
+        """
+        if not isinstance(value, str):
+            raise ValueError("Host must be a string.")
+        self.server_parameters["host"] = value
+
+    @property
+    def port(self) -> int:
+        """
+        Get the port number of the MCP server.
+        """
+        return self.server_parameters["port"]
+
+    @port.setter
+    def port(self, value: int):
+        """
+        Set the port number of the MCP server.
+        """
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError("Port must be a positive integer.")
+        self.server_parameters["port"] = value
+
+    @property
+    def path(self) -> str:
+        """
+        Get the path for the MCP server.
+        """
+        return self.server_parameters["path"]
+
+    @path.setter
+    def path(self, value: str):
+        """
+        Set the path for the MCP server.
+        """
+        if not isinstance(value, str):
+            raise ValueError("Path must be a string.")
+        self.server_parameters["path"] = value
+
+    def get_mcp(self) -> FastMCP:
         """
         Get the MCP instance.
-        """
-        if self._mcp is None:
-            raise ValueError("MCP instance is not initialized.")
-        return self._mcp
 
-    def add_tool(self, tools: List[Tool]) -> bool:
-        """
-        Add tools to the MCP server.
-
-        Parameters
-        ----------
-        tools : List[Tool]
-            A list of Tool instances to be added to the MCP server.
-
+        Returns
+        -------
+        FastMCP
+            The MCP instance.
         """
         try:
-            return True
+            # NOTE: Ensure the MCP instance is initialized
+            if not isinstance(self._mcp, FastMCP):
+                raise TypeError("MCP instance is not of type FastMCP.")
+
+            # NOTE: Check if MCP instance is initialized
+            if self._mcp is None:
+                raise ValueError("MCP instance is not initialized.")
+
+            # NOTE: add tools to the MCP server
+            return self._mcp
         except Exception as e:
-            raise ValueError(f"Failed to add tools: {e}") from e
+            raise RuntimeError(f"Failed to get MCP instance: {e}") from e
+
+    def run(self):
+        """
+        Run the MCP server.
+        """
+        try:
+            # NOTE: extract server parameters
+            transport_str = self.server_parameters["transport"]
+            host = self.server_parameters["host"]
+            port = self.server_parameters["port"]
+            path = self.server_parameters["path"]
+            log_level = self.server_parameters["log_level"]
+
+            # check if transport is valid
+            valid_transports = ['stdio', 'streamable-http']
+            if transport_str not in valid_transports:
+                raise ValueError(
+                    f"Invalid transport: {transport_str}. Must be one of: {valid_transports}")
+
+            # Cast str to Literal type after validation
+            transport: Literal[
+                'stdio', 'streamable-http',
+            ] = transport_str  # type: ignore
+
+            # NOTE: Start the MCP server
+            self._mcp.run(
+                transport=transport,
+                host=host,
+                port=port,
+                path=path,
+                log_level=log_level
+            )
+        except Exception as e:
+            raise RuntimeError(f"Failed to run MCP server: {e}") from e
+
+    def _build_mcp_tools(self):
+        """
+        Build the tools for the MCP server.
+
+        Returns
+        -------
+        List[Tool]
+            A list of tools to be registered with the MCP server.
+        """
+        try:
+            # NOTE: Placeholder for tool building logic
+            return ToolsCore().build_mcp_tools()
+        except Exception as e:
+            raise Exception(f"Failed to build tools: {e}") from e

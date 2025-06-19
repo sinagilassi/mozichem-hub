@@ -4,27 +4,21 @@ from fastmcp import FastMCP
 from .mcp import MoziMCP
 
 
-class MoziChemHub:
+class MoziServer:
     """
-    MoziChemHub class for managing the core functionalities of the MoziChem Hub.
+    MoziServer class for managing the core functionalities of the MoziChem Hub.
     """
 
     def __init__(self, name: str = "MoziChemHub"):
         """
-        Initialize the MoziChemHub instance.
+        Initialize the MoziServer instance.
         """
         # set
         self._name = name
 
+        # Return the MCP instance
         # NOTE: Initialize the MCP instance
-        self.MoziMCP_ = MoziMCP(name=name)
-
-    @property
-    def mcp(self) -> FastMCP:
-        """
-        Get the MCP instance.
-        """
-        return self.MoziMCP_.mcp
+        self.MoziMCP_ = MoziMCP(name=self.name)
 
     @property
     def name(self) -> str:
@@ -33,7 +27,22 @@ class MoziChemHub:
         """
         return self._name
 
-    def serve(self):
+    def _build_mcp(self) -> FastMCP:
+        """
+        Build the MCP server using FastMCP.
+
+        Returns
+        -------
+        FastMCP
+            The MCP server instance.
+        """
+        try:
+            # Return the MCP instance
+            return self.MoziMCP_.get_mcp()
+        except Exception as e:
+            raise Exception(f"Failed to build mcp server: {e}") from e
+
+    def _serve(self):
         """
         Serve the MoziChem Hub server.
         """
@@ -43,7 +52,7 @@ class MoziChemHub:
 
             # NOTE: Start the MCP server
             # mcp
-            self.mcp.run()
+            self.MoziMCP_.run()
 
             # log
             print(f"{self._name} server is running.")
