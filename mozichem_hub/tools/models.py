@@ -1,17 +1,19 @@
 # import libs
-from typing import Dict, Any
-from pydantic import BaseModel
+from typing import Any, List
+from pydantic import BaseModel, Field
 # local
 
 
-class MoziToolArgs(BaseModel):
+class MoziToolArg(BaseModel):
     """
     MoziToolArgs class for defining arguments for tools in the MoziChem Hub.
     """
-    type: str
+    name: str
     description: str
     default: Any = None
+    hide: bool = False
     required: bool = False
+    type: str
 
 
 class MoziTool(BaseModel):
@@ -21,4 +23,5 @@ class MoziTool(BaseModel):
     name: str
     reference: str
     description: str
-    args: Dict[str, MoziToolArgs]
+    args: List[MoziToolArg]
+    tags: List[str] = []

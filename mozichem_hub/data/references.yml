@@ -16,6 +16,11 @@ REFERENCES:
       pressure:
         TYPE: float
         DESCRIPTION: "The pressure at which the fugacity is calculated, in bar, atm, Pa."
+    TAGS:
+      - thermodynamics
+      - fugacity
+      - eos
+      - gas-phase
   TOOL2:
     NAME: calculate_gas_fugacity
     REFERENCE: PyThermoModels
@@ -33,3 +38,5 @@ REFERENCES:
       pressure:
         TYPE: float
         DESCRIPTION: "The pressure at which the fugacity is calculated, in bar, atm, Pa."
+    TAGS:
+      - thermodynamics
