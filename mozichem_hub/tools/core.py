@@ -5,7 +5,8 @@ from fastmcp.tools.tool_transform import ArgTransform
 # local
 from ..config import app_settings
 from ..utils import ToolsReferences
-from .models import MoziTool, MoziToolArgs
+from ..data import MoziFunctions
+from .models import MoziTool, MoziToolArg
 
 
 class ToolsCore():
@@ -41,9 +42,10 @@ class ToolsCore():
         except Exception as e:
             raise ValueError(f"Failed to load tools: {e}") from e
 
-    def build_mozi_tools(self,
-                         tools_references: dict
-                         ) -> List[MoziTool]:
+    def build_mozi_tools(
+        self,
+        tools_references: dict
+    ) -> List[MoziTool]:
         """
         Build the Mozi tools.
 
@@ -70,6 +72,9 @@ class ToolsCore():
                     raise ValueError(
                         f"Tool reference '{tool_ref}' does not have a valid name.")
 
+                # NOTE: reference function
+                def fn(x): return x
+
                 # reference
                 reference_ = tool_value.get('REFERENCE', None)
                 if not reference_:
@@ -88,23 +93,34 @@ class ToolsCore():
                     raise ValueError(
                         f"Tool reference '{tool_ref}' args must be a dictionary.")
 
+                # tags
+                tags_ = tool_value.get('TAGS', ())
+                if not isinstance(tags_, set):
+                    raise ValueError(
+                        f"Tool reference '{tool_ref}' tags must be a list.")
+
                 # Build MoziToolArgs instances
-                mozi_args = {}
+                mozi_args = []
                 for arg_name, arg_value in args_.items():
                     # Create MoziToolArgs instance
-                    mozi_args[arg_name] = MoziToolArgs(
+                    mozi_args.append(MoziToolArg(
+                        name=arg_name,
                         type=arg_value.get('type', 'str'),
                         description=arg_value.get('description', ''),
                         default=arg_value.get('default', None),
+                        hide=arg_value.get('hide', False),
                         required=arg_value.get('required', False)
-                    )
+                    ))
 
                 # Create MoziTool instance
                 mozi_tool = MoziTool(
                     name=name_,
+                    fn=fn,  # Use a dummy function for now
                     reference=reference_,
                     description=description_,
-                    args=mozi_args
+                    args=mozi_args,  # Use values to get a list of MoziToolArg instances
+                    tags=tags_
+
                 )
 
                 # Append to the list of Mozi tools
@@ -134,17 +150,10 @@ class ToolsCore():
 
             for mozi_tool in mozi_tools:
                 tool_ = Tool.from_function(
-                    fn=mozi_tool.reference,  # Pass the function as fn parameter
+                    fn=mozi_tool.fn,  # Pass the function as fn parameter
                     name=mozi_tool.name,
                     description=mozi_tool.description,
-                    arg_transforms={  # Use arg_transforms instead of args
-                        arg_name: ArgTransform(
-                            type=arg.type,
-                            description=arg.description,
-                            default=arg.default,
-                            required=arg.required
-                        ) for arg_name, arg in mozi_tool.args.items()
-                    }
+                    tags=mozi_tool.tags,
                 )
                 mcp_tools.append(tool_)
 

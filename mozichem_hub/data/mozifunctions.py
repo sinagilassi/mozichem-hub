@@ -1,9 +1,12 @@
 # import libs
-from typing import List, Dict, Annotated, Literal
+from typing import List, Dict, Annotated, Literal, Optional
 from pydantic import Field
 import pyThermoModels as ptm
 # locals
-from .datamodels import Temperature, Pressure, Component
+from .datamodels import (
+    Temperature, Pressure, Component, CustomReference
+)
+from .thermodb import ThermoDB
 
 
 class MoziFunctions:
@@ -12,13 +15,20 @@ class MoziFunctions:
     """
     # NOTE: attributes
 
-    def __init__(self, datasource: dict):
+    def __init__(
+        self,
+        custom_reference: Optional[CustomReference] = None,
+    ):
         """
         Initialize the MoziFunctions instance.
+
+        Parameters
+        ----------
+        thermodb_rule : str
+            Rule for initializing the pyThermoLinkDB instance.
         """
-        # SECTION: Initialize the datasource
-        # datasource
-        self.datasource = datasource
+        # SECTION: Initialize the ThermoDB instance
+        self.thermodb = ThermoDB(custom_reference)
 
         # SECTION: Initialize the ThermoModels instance
         # eos
@@ -28,15 +38,15 @@ class MoziFunctions:
         self,
         component: Annotated[
             Component,
-            Field(description="Component name and properties")
+            Field(..., description="Component name and properties")
         ],
         temperature: Annotated[
             Temperature,
-            Field(description="Temperature of the system")
+            Field(..., description="Temperature of the system")
         ],
         pressure: Annotated[
             Pressure,
-            Field(description="Pressure of the system")],
+            Field(..., description="Pressure of the system")],
         eos_model: Annotated[
             Literal['PR', 'SRK', 'RK', 'vdW'],
             Field(description="EOS model to use, e.g., 'SRK', 'PR'", default="SRK")
@@ -46,44 +56,29 @@ class MoziFunctions:
         try:
             # NOTE: extract component name
             (
-                component_name, component_formula, component_state
+                component_name, _, _
             ) = component.name, component.formula, component.state
 
-            # model input
+            # SECTION: build model source
+            model_source = self.thermodb.build_component_model_source(
+                component=component
+            )
+
+            # SECTION: model input
             model_inputs = {
-                # "phase": phase,
                 "component": component_name,
                 "pressure": [pressure.value, pressure.unit],
                 "temperature": [temperature.value, temperature.unit]
             }
 
-            # NOTE: build component thermodb
-            component_thermodb = ptdb.build_component_thermodb(
-                component_name=component_name,
-                property_source=property_source,
-                custom_reference=ref)
-
-            # NOTE: add component thermodb
-            thub1.add_thermodb(component_name, component_thermodb)
-
-            # standard thermodb config
-            thub1.config_thermodb_rule(thermodb_config_content)
-
-            # NOTE: build datasource & equationsource
-            datasource, equationsource = thub1.build()
-
-            model_source = {
-                "datasource": datasource,
-                "equationsource": equationsource
-            }
-
-            # NOTE: calc
-            res = eos.cal_fugacity(
+            # SECTION: calc
+            res = self.eos.cal_fugacity(
                 model_name=eos_model,
                 model_input=model_inputs,
                 model_source=model_source
             )
 
+            # return
             return res
         except Exception as e:
             raise ValueError(f"Failed to calculate fugacity: {e}") from e

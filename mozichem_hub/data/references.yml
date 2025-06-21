@@ -1,42 +1,23 @@
 REFERENCES:
   TOOL1:
-    NAME: calculate_gas_fugacity
+    NAME: cal_fugacity
     REFERENCE: PyThermoModels
     DESCRIPTION: "This function calculates the fugacity of single-gas component using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW)."
     ARGS:
-      model-name:
+      model_name:
         TYPE: str
         DESCRIPTION: "The name of the EOS model to use for the calculation."
       component:
-        TYPE: str
+        TYPE: Component
         DESCRIPTION: "The name of the component for which the fugacity is calculated."
       temperature:
-        TYPE: float
+        TYPE: Temperature
         DESCRIPTION: "The temperature at which the fugacity is calculated, in Kelvin."
       pressure:
-        TYPE: float
+        TYPE: Pressure
         DESCRIPTION: "The pressure at which the fugacity is calculated, in bar, atm, Pa."
     TAGS:
       - thermodynamics
       - fugacity
-      - eos
+      - equation of state
       - gas-phase
-  TOOL2:
-    NAME: calculate_gas_fugacity
-    REFERENCE: PyThermoModels
-    DESCRIPTION: "This function calculates the fugacity of single-gas component using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW)."
-    ARGS:
-      model-name:
-        TYPE: str
-        DESCRIPTION: "The name of the EOS model to use for the calculation."
-      component:
-        TYPE: str
-        DESCRIPTION: "The name of the component for which the fugacity is calculated."
-      temperature:
-        TYPE: float
-        DESCRIPTION: "The temperature at which the fugacity is calculated, in Kelvin."
-      pressure:
-        TYPE: float
-        DESCRIPTION: "The pressure at which the fugacity is calculated, in bar, atm, Pa."
-    TAGS:
-      - thermodynamics

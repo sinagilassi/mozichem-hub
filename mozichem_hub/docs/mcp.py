@@ -150,7 +150,8 @@ class MoziMCP():
             valid_transports = ['stdio', 'streamable-http']
             if transport_str not in valid_transports:
                 raise ValueError(
-                    f"Invalid transport: {transport_str}. Must be one of: {valid_transports}")
+                    f"Invalid transport: {transport_str}. Must be one of: {valid_transports}"
+                )
 
             # Cast str to Literal type after validation
             transport: Literal[
