@@ -6,7 +6,7 @@ from typing import Dict
 from ..config import app_settings
 
 
-class ToolsReferences:
+class Loader:
 
     def __init__(self):
         """

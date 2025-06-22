@@ -1,5 +1,5 @@
 # CONTENT: content
-THERMODB_RULE = """
+THERMODB_RULES = """
 CO2:
   DATA:
     Pc: Pc

@@ -1,37 +1,30 @@
 # import libs
-from typing import List, Dict, Annotated, Literal, Optional
+from typing import Annotated, Literal
 from pydantic import Field
 import pyThermoModels as ptm
-# locals
-from .datamodels import (
-    Temperature, Pressure, Component, CustomReference
+# local
+from .models import (
+    Temperature,
+    Pressure,
+    Component,
 )
-from .thermodb import ThermoDB
 
 
-class MoziFunctions:
+class PTMCore:
     """
-    MoziFunctions class for defining functions in the MoziChem Hub.
+    Core class for managing pyThermoModels (PTM) functionalities.
+    This class serves as a central point for PTM-related operations.
     """
     # NOTE: attributes
 
-    def __init__(
-        self,
-        custom_reference: Optional[CustomReference] = None,
-    ):
+    def __init__(self, hub):
         """
-        Initialize the MoziFunctions instance.
-
-        Parameters
-        ----------
-        thermodb_rule : str
-            Rule for initializing the pyThermoLinkDB instance.
+        Initialize the PTMCore instance.
         """
-        # SECTION: Initialize the ThermoDB instance
-        self.thermodb = ThermoDB(custom_reference)
+        # NOTE: store the hub instance
+        self.hub = hub
 
-        # SECTION: Initialize the ThermoModels instance
-        # eos
+        # SECTION: build eos
         self.eos = ptm.eos()
 
     def cal_fugacity(
@@ -60,7 +53,7 @@ class MoziFunctions:
             ) = component.name, component.formula, component.state
 
             # SECTION: build model source
-            model_source = self.thermodb.build_component_model_source(
+            model_source = self.hub.build_component_model_source(
                 component=component
             )
 

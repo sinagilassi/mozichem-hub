@@ -1,5 +1,5 @@
-from .reference import ToolsReferences
+from .loader import Loader
 
 __all__ = [
-    'ToolsReferences',
+    'Loader',
 ]

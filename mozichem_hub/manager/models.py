@@ -1,8 +1,32 @@
 # import libs
-from pyThermoDB import CompBuilder
-from typing import Any, List, Literal
+from typing import Any, List, Set, Callable, Literal
 from pydantic import BaseModel, Field
+from pyThermoDB import CompBuilder
 # local
+
+
+class MoziToolArg(BaseModel):
+    """
+    MoziToolArg class for defining arguments for tools in the MoziChem Hub.
+    """
+    name: str
+    description: str
+    default: Any = None
+    hide: bool = False
+    required: bool = False
+    type: str
+
+
+class MoziTool(BaseModel):
+    """
+    MoziTool class for defining tools in the MoziChem Hub.
+    """
+    name: str
+    fn: Callable
+    reference: str
+    description: str
+    args: List[MoziToolArg]
+    tags: Set[str] = set()
 
 
 class Temperature(BaseModel):
@@ -51,21 +75,21 @@ class ComponentThermoDB(BaseModel):
 class CustomReference(BaseModel):
     content: str = Field(
         ...,
-        description="Reference for the thermodynamic database, e.g., 'CUSTOM-REF-1'"
+        description=(
+            "Reference for the thermodynamic database provided by PyThermoDB"
+        )
     )
     config: dict = Field(
         ...,
-        description="Configuration for the thermodynamic database, which properties should be included"
+        description=(
+            "Configuration for the thermodynamic database, "
+            "which properties should be included"
+        )
     )
     rule: str = Field(
         ...,
-        description="Reference rule to connect properties of the custom reference using "
+        description=(
+            "Reference rule to link between the custom reference "
+            "and application"
+        )
     )
-
-
-# NOTE: available mozichem references
-MOZICHEM_REFERENCES = {
-    'temperature': Temperature,
-    'pressure': Pressure,
-    'component': Component
-}

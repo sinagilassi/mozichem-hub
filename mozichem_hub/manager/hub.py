@@ -1,17 +1,17 @@
 # import libs
-from typing import Literal, List, Optional, Tuple, Dict
+from typing import Literal, List, Optional, Tuple, Dict, Union, Any
 import pyThermoDB as ptdb
 import pyThermoLinkDB as ptldb
 # locals
-from .datamodels import Component, ComponentThermoDB, CustomReference
-from .thermodbref import REFERENCE
-from .referenceconfig import REFERENCE_CONFIG
-from .thermodbrule import THERMODB_RULE
+from .models import Component, ComponentThermoDB, CustomReference
+from ..references.reference import REFERENCE
+from ..references.config import REFERENCE_CONFIG
+from ..references.rules import THERMODB_RULES
 
 
-class ThermoDB:
+class Hub:
     """
-    ThermoDB class for building and managing the thermodynamic properties
+    Hub class for building and managing the thermodynamic properties
     """
     # NOTE: attributes
 
@@ -20,13 +20,13 @@ class ThermoDB:
         custom_reference: Optional[CustomReference] = None
     ):
         """
-        Initialize the ThermoDB instance.
+        Initialize the Hub instance.
         """
         # SECTION: set reference
         (
-            self.reference,
-            self.reference_config,
-            self.thermodb_rule
+            self.reference,  # ! PyThermoDB reference
+            self.reference_config,  # ! PyThermoDB reference configuration
+            self.thermodb_rule  # ! PyThermoLinkDB rule
         ) = self.reference_configuration(custom_reference)
 
         # SECTION: Initialize the ThermoHub
@@ -34,8 +34,14 @@ class ThermoDB:
 
     def reference_configuration(
         self,
-        custom_reference: Optional[CustomReference] = None
-    ) -> Tuple[Dict[str, List[str]], Dict[str, Dict[str, str]], str]:
+        custom_reference: Optional[
+            CustomReference
+        ] = None
+    ) -> Tuple[
+        Dict[str, List[str]],
+        Dict[str, Dict[str, str]],
+        str
+    ]:
         """
         Analyze the custom reference for the ThermoHub.
 
@@ -48,7 +54,7 @@ class ThermoDB:
             # NOTE: set default reference
             reference = {'reference': [REFERENCE]}
             reference_config = REFERENCE_CONFIG
-            thermodb_rule = THERMODB_RULE
+            thermodb_rule = THERMODB_RULES
 
             # return
             return reference, reference_config, thermodb_rule
@@ -136,8 +142,13 @@ class ThermoDB:
     def build_component_thermodb(
         self,
         component: Component | List[Component],
-        build_mode: Literal['name', 'formula'] = 'name'
-    ) -> ComponentThermoDB | List[ComponentThermoDB]:
+        build_mode: Literal[
+            'name', 'formula'
+        ] = 'name'
+    ) -> Union[
+        ComponentThermoDB,
+        List[ComponentThermoDB]
+    ]:
         """
         Build the component thermodynamic database.
 
@@ -153,7 +164,7 @@ class ThermoDB:
 
         Returns
         -------
-        ComponentThermoDB | List[ComponentThermoDB]]
+        Union[ComponentThermoDB, List[ComponentThermoDB]]
             The component thermodynamic database.
         """
         try:
@@ -225,9 +236,7 @@ class ThermoDB:
             raise ValueError(
                 f"Failed to build thermodynamic database: {e}") from e
 
-    def build_model_source(
-        self
-    ):
+    def build_model_source(self) -> Dict[str, Dict[str, Any]]:
         """
         Build the model source for the ThermoHub.
 
@@ -294,8 +303,10 @@ class ThermoDB:
     def build_component_model_source(
         self,
         component: Component,
-        build_mode: Literal['name', 'formula'] = 'name'
-    ) -> Dict:
+        build_mode: Literal[
+            'name', 'formula'
+        ] = 'name'
+    ) -> Dict[str, Any]:
         """
         Build the model source for a component or list of components.
 
@@ -340,7 +351,9 @@ class ThermoDB:
     def build_components_model_source(
         self,
         components: List[Component],
-        build_mode: Literal['name', 'formula'] = 'name'
+        build_mode: Literal[
+            'name', 'formula'
+        ] = 'name'
     ) -> Dict:
         """
         Build the model source for multiple components.
@@ -369,7 +382,10 @@ class ThermoDB:
             if isinstance(components_thermodb, ComponentThermoDB):
                 # NOTE: if only one component, register it directly
                 raise ValueError(
-                    "Only one component provided, please use build_component_model_source."
+                    (
+                        "Only one component provided, please use "
+                        "build_component_model_source."
+                    )
                 )
             else:
                 # NOTE: if multiple components, register them all

@@ -1,29 +1,44 @@
 # import libs
 from typing import List
-from fastmcp.tools import Tool
 from fastmcp.tools.tool_transform import ArgTransform
 # local
-from ..config import app_settings
-from ..utils import ToolsReferences
-from ..data import MoziFunctions
+from ..utils import Loader
 from .models import MoziTool, MoziToolArg
 
 
-class ToolsCore():
+class Builder:
     """
-    ToolsCore class for managing the core functionalities of the MoziChem MCP.
+    Builder class for building MoziFunctions and MoziTools.
     """
     # NOTE: attributes
 
     def __init__(self):
         """
-        Initialize the MoziTools instance.
+        Initialize the Builder instance.
         """
-        # set
-        self._settings = app_settings
+        # NOTE: mozi functions
+        self._mozi_functions = {}
 
-        # NOTE: Initialize the ToolsReferences instance
-        self.ToolsReferences_ = ToolsReferences()
+        # NOTE: mozi tools
+        self._mozi_tools = {}
+
+        # SECTION: Initialize the Loader instance
+        # used to load app references
+        self.Loader_ = Loader()
+
+    @property
+    def mozi_functions(self):
+        """
+        Returns the dictionary of built MoziFunctions.
+        """
+        return self._mozi_functions
+
+    @property
+    def mozi_tools(self):
+        """
+        Returns the dictionary of built MoziTools.
+        """
+        return self._mozi_tools
 
     def load_tools(self):
         """
@@ -34,7 +49,7 @@ class ToolsCore():
         """
         try:
             # Load tools logic here
-            tools_references = self.ToolsReferences_.load_references()
+            tools_references = self.Loader_.load_references()
             if not tools_references:
                 raise ValueError("No tools references found.")
 
@@ -128,35 +143,5 @@ class ToolsCore():
 
             # Return the list of Mozi tools
             return mozi_tools
-        except Exception as e:
-            raise ValueError(f"Failed to build MCP tools: {e}") from e
-
-    def build_mcp_tools(self) -> List[Tool]:
-        """
-        Build the MCP tools.
-
-        This method is responsible for building the tools that will be
-        registered with the MCP server.
-        """
-        try:
-            # NOTE: Load tools references
-            tools_references = self.load_tools()
-
-            # NOTE: Build Mozi tools
-            mozi_tools = self.build_mozi_tools(tools_references)
-
-            # Convert MoziTool instances to Tool instances
-            mcp_tools: list[Tool] = []
-
-            for mozi_tool in mozi_tools:
-                tool_ = Tool.from_function(
-                    fn=mozi_tool.fn,  # Pass the function as fn parameter
-                    name=mozi_tool.name,
-                    description=mozi_tool.description,
-                    tags=mozi_tool.tags,
-                )
-                mcp_tools.append(tool_)
-
-            return mcp_tools
         except Exception as e:
             raise ValueError(f"Failed to build MCP tools: {e}") from e
