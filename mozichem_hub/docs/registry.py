@@ -1,9 +1,10 @@
 # import libs
 import types
+from typing import Dict, Callable
 # local
 
 
-class Registry:
+class RegistryMixin:
     """
     Used to introduce new functions to the Mozichem Hub.
     """
@@ -16,7 +17,19 @@ class Registry:
         # A dictionary to hold registered methods
         self._methods = {}
 
-    def mozi_function(self, name=None):
+    @property
+    def methods(self) -> Dict[str, Callable]:
+        """
+        Get the registered methods.
+
+        Returns
+        -------
+        dict
+            A dictionary of registered methods.
+        """
+        return self._methods
+
+    def tool(self, name=None):
         """
         Decorator to register a custom function.
         """

@@ -1,4 +1,5 @@
 # import libs
+import inspect
 from typing import Annotated, Literal
 from pydantic import Field
 import pyThermoModels as ptm
@@ -8,6 +9,7 @@ from .models import (
     Pressure,
     Component,
 )
+from .hub import Hub
 
 
 class PTMCore:
@@ -17,7 +19,7 @@ class PTMCore:
     """
     # NOTE: attributes
 
-    def __init__(self, hub):
+    def __init__(self, hub: Hub):
         """
         Initialize the PTMCore instance.
         """
@@ -26,6 +28,15 @@ class PTMCore:
 
         # SECTION: build eos
         self.eos = ptm.eos()
+
+    def list_functions(self):
+        return {
+            name: getattr(self, name)
+            for name, obj in inspect.getmembers(
+                self.__class__, predicate=inspect.isfunction
+            )
+            if not name.startswith('__') and name != 'list_functions'
+        }
 
     def cal_fugacity(
         self,

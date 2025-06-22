@@ -70,26 +70,3 @@ class ComponentThermoDB(BaseModel):
     component: Component
     thermodb: CompBuilder
     build_mode: Literal['name', 'formula'] = 'name'
-
-
-class CustomReference(BaseModel):
-    content: str = Field(
-        ...,
-        description=(
-            "Reference for the thermodynamic database provided by PyThermoDB"
-        )
-    )
-    config: dict = Field(
-        ...,
-        description=(
-            "Configuration for the thermodynamic database, "
-            "which properties should be included"
-        )
-    )
-    rule: str = Field(
-        ...,
-        description=(
-            "Reference rule to link between the custom reference "
-            "and application"
-        )
-    )

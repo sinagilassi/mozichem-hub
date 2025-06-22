@@ -1,11 +1,10 @@
 # import libs
-from typing import List, Literal, Dict, Any
+from typing import List, Literal, Dict, Any, Optional
 from fastmcp import FastMCP
 from fastmcp.tools import Tool
 from fastmcp.exceptions import ToolError
 # local
 from ..config import app_settings
-from ..tools import ToolsCore
 
 
 class MoziMCP():
@@ -32,19 +31,7 @@ class MoziMCP():
         self._settings = app_settings
 
         # NOTE: Initialize the MCP instance
-        self._mcp = FastMCP(
-            name=name,
-        )
-
-        # NOTE: Build tools
-        self.mcp_tools = self._build_mcp_tools()
-
-    @property
-    def name(self) -> str:
-        """
-        Get the name of the MCP server.
-        """
-        return self._name
+        self._mcp = self.create_mcp()
 
     @property
     def transport(self) -> Literal['stdio', 'streamable-http']:
@@ -111,6 +98,23 @@ class MoziMCP():
             raise ValueError("Path must be a string.")
         self.server_parameters["path"] = value
 
+    def create_mcp(self):
+        """
+        Create the MCP instance.
+
+        Returns
+        -------
+        FastMCP
+            The MCP instance with registered tools.
+        """
+        try:
+            # NOTE: Initialize the MCP instance
+            return FastMCP(
+                name=self._name
+            )
+        except ToolError as e:
+            raise RuntimeError(f"Failed to register tools: {e}") from e
+
     def get_mcp(self) -> FastMCP:
         """
         Get the MCP instance.
@@ -169,9 +173,14 @@ class MoziMCP():
         except Exception as e:
             raise RuntimeError(f"Failed to run MCP server: {e}") from e
 
-    def _build_mcp_tools(self):
+    def _add_tools(self, tools: List[Tool]):
         """
-        Build the tools for the MCP server.
+        Add the tools for the MCP.
+
+        Parameters
+        ----------
+        tools : List[Tool]
+            A list of tools to be added to the MCP server.
 
         Returns
         -------
@@ -180,6 +189,7 @@ class MoziMCP():
         """
         try:
             # NOTE: Placeholder for tool building logic
-            return ToolsCore().build_mcp_tools()
+            # return ToolsCore().build_mcp_tools()
+            pass
         except Exception as e:
             raise Exception(f"Failed to build tools: {e}") from e

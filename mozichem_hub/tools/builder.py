@@ -5,7 +5,7 @@ from fastmcp.tools import Tool
 from ..config import app_settings
 
 
-class Builder():
+class ToolBuilder():
     """
     Builder class for managing the core functionalities of the MoziChem MCP.
     """

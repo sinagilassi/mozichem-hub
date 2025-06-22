@@ -1,12 +1,19 @@
 # import libs
-from typing import Literal, List, Optional, Tuple, Dict, Union, Any
+from typing import (
+    Literal, List, Optional, Tuple, Dict, Union, Any
+)
 import pyThermoDB as ptdb
 import pyThermoLinkDB as ptldb
 # locals
-from .models import Component, ComponentThermoDB, CustomReference
-from ..references.reference import REFERENCE
-from ..references.config import REFERENCE_CONFIG
-from ..references.rules import THERMODB_RULES
+from .models import (
+    Component,
+    ComponentThermoDB,
+)
+from ..references import (
+    Reference,
+    ReferenceLink,
+    ReferenceThermoDB
+)
 
 
 class Hub:
@@ -16,51 +23,27 @@ class Hub:
     # NOTE: attributes
 
     def __init__(
-        self,
-        custom_reference: Optional[CustomReference] = None
+            self,
+            reference_thermodb: ReferenceThermoDB,
+            reference: Reference,
+            reference_link: ReferenceLink
     ):
         """
         Initialize the Hub instance.
         """
-        # SECTION: set reference
-        (
-            self.reference,  # ! PyThermoDB reference
-            self.reference_config,  # ! PyThermoDB reference configuration
-            self.thermodb_rule  # ! PyThermoLinkDB rule
-        ) = self.reference_configuration(custom_reference)
+        # NOTE: set
+        self.reference_thermodb = reference_thermodb
+        # Reference for the thermodynamic database
+        self.reference = reference
+        # content of the reference thermodynamic database
+        self.reference_content = reference.content
+        # Configuration for the thermodynamic database
+        self.reference_config = reference.config
+        # Rule for the thermodynamic database
+        self.thermodb_rule = reference_link.rule
 
         # SECTION: Initialize the ThermoHub
         self.thermo_hub = self.build_thermo_hub()
-
-    def reference_configuration(
-        self,
-        custom_reference: Optional[
-            CustomReference
-        ] = None
-    ) -> Tuple[
-        Dict[str, List[str]],
-        Dict[str, Dict[str, str]],
-        str
-    ]:
-        """
-        Analyze the custom reference for the ThermoHub.
-
-        Returns
-        -------
-        dict
-            The custom reference dictionary.
-        """
-        try:
-            # NOTE: set default reference
-            reference = {'reference': [REFERENCE]}
-            reference_config = REFERENCE_CONFIG
-            thermodb_rule = THERMODB_RULES
-
-            # return
-            return reference, reference_config, thermodb_rule
-        except Exception as e:
-            raise ValueError(
-                f"Failed to analyze custom reference: {e}") from e
 
     def build_thermo_hub(self):
         """
@@ -201,7 +184,7 @@ class Hub:
                     component_thermodb = ptdb.build_component_thermodb(
                         component_name=component_name,
                         property_source=self.reference_config,
-                        custom_reference=self.reference
+                        custom_reference=self.reference_thermodb.reference
 
                     )
                 elif build_mode == 'formula':
@@ -209,7 +192,7 @@ class Hub:
                     component_thermodb = ptdb.build_component_thermodb(
                         component_name=component_formula,
                         property_source=self.reference_config,
-                        custom_reference=self.reference
+                        custom_reference=self.reference_thermodb.reference
                     )
                 else:
                     raise ValueError(
