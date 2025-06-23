@@ -4,7 +4,6 @@ from fastmcp.tools import Tool
 from fastmcp import FastMCP
 # local
 from .mcp import MoziMCP
-from ..tools import ToolManager
 
 
 class MoziServer(MoziMCP):
@@ -19,9 +18,6 @@ class MoziServer(MoziMCP):
         # SECTION: initialize MoziMCP
         MoziMCP.__init__(self, name=name)
 
-        # SECTION: initialize the ToolManager
-        self.ToolManager_ = ToolManager()
-
     @property
     def name(self) -> str:
         """
@@ -31,7 +27,7 @@ class MoziServer(MoziMCP):
 
     def _build_mcp(
         self,
-        tools: Optional[Dict[str, Callable]] = None
+        tools: List[Tool]
     ) -> FastMCP:
         """
         Build the MCP server using FastMCP.
@@ -42,11 +38,8 @@ class MoziServer(MoziMCP):
             The MCP server instance.
         """
         try:
-            # SECTION: convert tools to MCP tools
-            tools_: List[Tool] = self.ToolManager_._build_tools()
-
             # SECTION: add tools to the MCP server
-            self._add_tools(tools_)
+            self._add_tools(tools)
 
             # SECTION: Return the MCP instance
             return self.get_mcp()

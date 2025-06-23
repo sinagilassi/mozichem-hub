@@ -12,7 +12,8 @@ from ..tools import ToolManager
 from ..references import (
     ReferencesInitializer,
     Reference,
-    ReferenceLink
+    ReferenceLink,
+    ReferenceThermoDB
 )
 
 
@@ -64,7 +65,17 @@ class MoziChemHub(RegistryMixin):
         self.MoziServer_ = MoziServer(name=name)
 
         # SECTION: initialize tool manager
-        self.ToolManager_ = ToolManager()
+        # get references
+        self._reference_thermodb_set = self.ReferencesInitializer_._get_reference_thermodb()
+        self._reference_set = self.ReferencesInitializer_._get_reference()
+        self._reference_link_set = self.ReferencesInitializer_._get_reference_link()
+
+        # initialize the ToolManager with references
+        self.ToolManager_ = ToolManager(
+            reference_thermodb=self._reference_thermodb_set,
+            reference=self._reference_set,
+            reference_link=self._reference_link_set
+        )
 
     @property
     def name(self) -> str:
@@ -74,18 +85,25 @@ class MoziChemHub(RegistryMixin):
         return self._name
 
     @property
-    def reference_content(self) -> Reference:
+    def reference(self) -> Reference:
         """
         Get the reference of the hub.
         """
-        return self.ReferencesInitializer_._get_reference()
+        return self._reference_set
 
     @property
     def reference_link(self) -> ReferenceLink:
         """
         Get the reference link of the hub.
         """
-        return self.ReferencesInitializer_._get_reference_link()
+        return self._reference_link_set
+
+    @property
+    def reference_thermodb(self) -> ReferenceThermoDB:
+        """
+        Get the reference thermodb of the hub.
+        """
+        return self._reference_thermodb_set
 
     def __launch(self):
         """
@@ -95,13 +113,13 @@ class MoziChemHub(RegistryMixin):
         """
         try:
             # NOTE: manage tools
-            # collect the registered tools
-            custom_tools: Dict[str, Callable] = self.methods
+            # collect the registered functions
+            custom_functions: Dict[str, Callable] = self.methods
 
             # NOTE: build the tools
             # build the tools using the ToolManager
             tools = self.ToolManager_._build_tools(
-                custom_tools=custom_tools
+                custom_functions=custom_functions
             )
 
             # NOTE: build the mcp server with the registered tools

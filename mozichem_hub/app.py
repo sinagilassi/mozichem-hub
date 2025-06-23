@@ -4,13 +4,6 @@ from fastmcp import FastMCP
 from .docs import MoziServer
 
 
-def serve():
-    """
-    Serve the mcp server
-    """
-    print("Starting Mozichem Hub server...")
-
-
 def build_mcp(name: str = "MoziChemHub") -> FastMCP:
     """
     Build the mcp server using FastMCP.

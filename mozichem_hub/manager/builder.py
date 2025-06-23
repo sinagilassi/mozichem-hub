@@ -1,12 +1,11 @@
 # import libs
-from typing import List
-from fastmcp.tools.tool_transform import ArgTransform
+from typing import List, Dict, Callable
 # local
 from ..utils import Loader
 from .models import MoziTool, MoziToolArg
 
 
-class Builder:
+class ToolBuilder:
     """
     Builder class for building MoziFunctions and MoziTools.
     """
@@ -16,31 +15,14 @@ class Builder:
         """
         Initialize the Builder instance.
         """
-        # NOTE: mozi functions
-        self._mozi_functions = {}
-
-        # NOTE: mozi tools
-        self._mozi_tools = {}
-
         # SECTION: Initialize the Loader instance
         # used to load app references
         self.Loader_ = Loader()
 
-    @property
-    def mozi_functions(self):
-        """
-        Returns the dictionary of built MoziFunctions.
-        """
-        return self._mozi_functions
+        # NOTE: Load tools references
+        self.mozi_tools_references = self.load_mozi_tools_reference()
 
-    @property
-    def mozi_tools(self):
-        """
-        Returns the dictionary of built MoziTools.
-        """
-        return self._mozi_tools
-
-    def load_tools(self):
+    def load_mozi_tools_reference(self):
         """
         Load tools for the MoziChem MCP.
 
@@ -59,15 +41,15 @@ class Builder:
 
     def build_mozi_tools(
         self,
-        tools_references: dict
+        local_functions: Dict[str, Callable]
     ) -> List[MoziTool]:
         """
         Build the Mozi tools.
 
         Parameters
         ----------
-        tools_references : dict
-            A dictionary containing the tools references.
+        local_functions : Dict[str, Callable]
+            A dictionary of local functions available in the MoziChem Hub.
 
         Returns
         -------
@@ -79,7 +61,7 @@ class Builder:
             mozi_tools = []
 
             # loop through each tool reference
-            for tool_ref, tool_value in tools_references.items():
+            for tool_ref, tool_value in self.mozi_tools_references.items():
                 # Create MoziTool instance
                 # NOTE: name
                 name_ = tool_value.get('NAME', None)
@@ -88,7 +70,10 @@ class Builder:
                         f"Tool reference '{tool_ref}' does not have a valid name.")
 
                 # NOTE: reference function
-                def fn(x): return x
+                fn = local_functions.get(name_, None)
+                if not fn:
+                    raise ValueError(
+                        f"Tool reference '{tool_ref}' does not have a valid function.")
 
                 # reference
                 reference_ = tool_value.get('REFERENCE', None)

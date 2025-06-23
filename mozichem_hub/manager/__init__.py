@@ -1,5 +1,8 @@
-from dispatcher import FunctionDispatcher
+from .dispatcher import FunctionDispatcher
+from .models import MoziTool, MoziToolArg
 
 __all__ = [
-    "FunctionDispatcher"
+    "FunctionDispatcher",
+    "MoziTool",
+    "MoziToolArg"
 ]
