@@ -2,3 +2,6 @@ pydantic
 pydantic-settings
 fastmcp
 PyYAML
+PyThermoDB
+PyThermoLinkDB
+PyThermoModels
