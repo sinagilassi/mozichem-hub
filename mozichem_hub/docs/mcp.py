@@ -1,5 +1,11 @@
 # import libs
-from typing import List, Literal, Dict, Any, Optional
+from typing import (
+    List,
+    Literal,
+    Dict,
+    Any,
+    Optional
+)
 from fastmcp import FastMCP
 from fastmcp.tools import Tool
 from fastmcp.exceptions import ToolError
@@ -7,9 +13,9 @@ from fastmcp.exceptions import ToolError
 from ..config import app_settings
 
 
-class MoziMCP():
+class MCP():
     """
-    MoziMCP class for serving the MoziMCP Hub MCP.
+    MCP class for serving the MCP Hub MCP.
     """
     # NOTE: attributes
     server_parameters: Dict[str, Any] = {
@@ -22,7 +28,7 @@ class MoziMCP():
 
     def __init__(self, name: str):
         """
-        Initialize the MoziMCP instance.
+        Initialize the MCP instance.
         """
         # NOTE: set attributes
         self._name = name

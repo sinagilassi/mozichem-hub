@@ -1,12 +1,17 @@
 # import libs
-from typing import List, Dict, Callable, Optional
+from typing import (
+    List,
+    Dict,
+    Callable,
+    Optional
+)
 from fastmcp.tools import Tool
 from fastmcp import FastMCP
 # local
-from .mcp import MoziMCP
+from .mcp import MCP
 
 
-class MoziServer(MoziMCP):
+class MoziServer(MCP):
     """
     MoziServer class for managing the core functionalities of the MoziChem Hub.
     """
@@ -15,8 +20,8 @@ class MoziServer(MoziMCP):
         """
         Initialize the MoziServer instance.
         """
-        # SECTION: initialize MoziMCP
-        MoziMCP.__init__(self, name=name)
+        # SECTION: initialize MCP
+        MCP.__init__(self, name=name)
 
     @property
     def name(self) -> str:

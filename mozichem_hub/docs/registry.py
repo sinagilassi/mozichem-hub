@@ -41,7 +41,7 @@ class RegistryMixin:
             return bound_method
         return decorator
 
-    def mozi_call(self, name, *args, **kwargs):
+    def tool_call(self, name, *args, **kwargs):
         """
         Call a registered method by its name with given arguments.
         """

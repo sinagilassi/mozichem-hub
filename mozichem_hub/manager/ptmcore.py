@@ -1,4 +1,5 @@
 # import libs
+from typing import Dict, Any, Callable
 import inspect
 from typing import Annotated, Literal
 from pydantic import Field
@@ -18,6 +19,7 @@ class PTMCore:
     This class serves as a central point for PTM-related operations.
     """
     # NOTE: attributes
+    id = "PTMCore"
 
     def __init__(self, hub: Hub):
         """
@@ -29,7 +31,7 @@ class PTMCore:
         # SECTION: build eos
         self.eos = ptm.eos()
 
-    def list_functions(self):
+    def list_functions(self) -> Dict[str, Callable[..., Any]]:
         return {
             name: getattr(self, name)
             for name, obj in inspect.getmembers(

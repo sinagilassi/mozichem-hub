@@ -1,8 +1,14 @@
 # import libs
-from typing import Dict, Callable, Optional
+from fastmcp.tools import Tool
+from typing import (
+    Dict,
+    Callable,
+    Optional,
+    List
+)
 # local
 from .builder import ToolBuilder
-from ..manager import FunctionDispatcher
+from ..manager import FunctionDispatcher, MoziTool
 from ..references import (
     ReferenceThermoDB,
     Reference,
@@ -41,9 +47,9 @@ class ToolManager(ToolBuilder):
             reference_link=self._reference_link
         )
 
-    def _retrieve_functions(self) -> Dict[str, Callable]:
+    def _retrieve_local_functions(self) -> Dict[str, List[MoziTool]]:
         """
-        Retrieve the MoziChem functions (local & external).
+        Retrieve the MoziChem local functions.
         """
         try:
             # NOTE: Load function from FunctionDispatcher
@@ -53,8 +59,9 @@ class ToolManager(ToolBuilder):
 
     def _build_tools(
         self,
+        mcp_name: Optional[str] = None,
         custom_functions: Optional[Dict[str, Callable]] = None
-    ):
+    ) -> List[Tool]:
         """
         Build the tools for the MoziChem Hub.
 
@@ -73,20 +80,31 @@ class ToolManager(ToolBuilder):
         """
         try:
             # SECTION: local resources
-            # Retrieve functions
-            _functions = self._retrieve_functions()
+            local_tools = []  # Ensure local_tools is always initialized
 
-            # NOTE: Build local tools
-            local_tools = self.build_tools(_functions)
+            if mcp_name is not None:
+                # Retrieve functions
+                _functions = self._retrieve_local_functions()
+
+                # selected function
+                _function = _functions.get(mcp_name, None)
+
+                if _function is None:
+                    raise ValueError(
+                        f"Function '{mcp_name}' not found in local resources.")
+
+                # NOTE: Build local tools
+                local_tools = self.build_mozi_tools(_function)
 
             # SECTION: Build external tools
+            external_tools = []  # Ensure external_tools is always initialized
+
             if custom_functions:
                 # NOTE: This is a placeholder for building external tools
                 external_tools = self.build_tools(custom_functions)
 
             # NOTE: Combine local and external tools
-            self._tools = local_tools + \
-                (external_tools if custom_functions else [])
+            self._tools = local_tools + external_tools
 
             # return the tools
             return self._tools

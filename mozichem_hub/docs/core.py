@@ -3,21 +3,21 @@ from typing import (
     Optional,
     Dict,
     List,
-    Callable
+    Callable,
+    Any
 )
 # local
 from .registry import RegistryMixin
+from .services import ReferenceServices
 from .server import MoziServer
 from ..tools import ToolManager
 from ..references import (
-    ReferencesInitializer,
     Reference,
     ReferenceLink,
-    ReferenceThermoDB
 )
 
 
-class MoziChemHub(RegistryMixin):
+class MoziChemMCP(RegistryMixin, ReferenceServices):
     """
     This is the main entry point for the MoziChem Hub application.
     It initializes the MoziChemHub instance and prepares it for serving.
@@ -27,6 +27,7 @@ class MoziChemHub(RegistryMixin):
     def __init__(
             self,
             name: str = "MoziChemHub",
+            mcp_name: Optional[str] = None,
             reference: Optional[Reference] = None,
             reference_link: Optional[ReferenceLink] = None,
             **kwargs
@@ -49,32 +50,27 @@ class MoziChemHub(RegistryMixin):
         """
         # NOTE: set
         self._name = name
+        self.mcp_name = mcp_name
         self._reference = reference
         self._reference_link = reference_link
 
         # SECTION: initialize the registry
         RegistryMixin().__init__()
-
-        # SECTION: configure the reference
-        self.ReferencesInitializer_ = ReferencesInitializer(
-            reference,
-            reference_link
+        # SECTION: initialize the ReferenceServices
+        ReferenceServices.__init__(
+            self,
+            reference=reference,
+            reference_link=reference_link
         )
 
         # SECTION: initialize the MoziServer
         self.MoziServer_ = MoziServer(name=name)
 
-        # SECTION: initialize tool manager
-        # get references
-        self._reference_thermodb_set = self.ReferencesInitializer_._get_reference_thermodb()
-        self._reference_set = self.ReferencesInitializer_._get_reference()
-        self._reference_link_set = self.ReferencesInitializer_._get_reference_link()
-
-        # initialize the ToolManager with references
+        # SECTION: initialize the ToolManager with references
         self.ToolManager_ = ToolManager(
-            reference_thermodb=self._reference_thermodb_set,
-            reference=self._reference_set,
-            reference_link=self._reference_link_set
+            reference_thermodb=self.reference_thermodb,
+            reference=self.reference,
+            reference_link=self.reference_link
         )
 
     @property
@@ -84,28 +80,7 @@ class MoziChemHub(RegistryMixin):
         """
         return self._name
 
-    @property
-    def reference(self) -> Reference:
-        """
-        Get the reference of the hub.
-        """
-        return self._reference_set
-
-    @property
-    def reference_link(self) -> ReferenceLink:
-        """
-        Get the reference link of the hub.
-        """
-        return self._reference_link_set
-
-    @property
-    def reference_thermodb(self) -> ReferenceThermoDB:
-        """
-        Get the reference thermodb of the hub.
-        """
-        return self._reference_thermodb_set
-
-    def __launch(self):
+    def __build(self):
         """
         Launch the MoziChem Hub.
 
@@ -114,11 +89,12 @@ class MoziChemHub(RegistryMixin):
         try:
             # NOTE: manage tools
             # collect the registered functions
-            custom_functions: Dict[str, Callable] = self.methods
+            custom_functions: Dict[str, Callable[..., Any]] = self.methods
 
             # NOTE: build the tools
             # build the tools using the ToolManager
             tools = self.ToolManager_._build_tools(
+                mcp_name=self.mcp_name,
                 custom_functions=custom_functions
             )
 
@@ -142,6 +118,6 @@ class MoziChemHub(RegistryMixin):
                 print(f"Running {self.name}...")
 
             # NOTE: Additional launch logic can be added here
-            self.__launch()
+            self.__build()
         except Exception as e:
             raise RuntimeError(f"Failed to run {self.name}: {e}") from e
