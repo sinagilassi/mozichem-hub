@@ -7,7 +7,7 @@ from typing import (
     Any
 )
 # local
-from .docs import MCPHub
+from .docs import MCPHub, MoziChemMCP
 from .references import Reference, ReferenceLink
 from .utils import MCPController
 
@@ -46,7 +46,7 @@ def create_mozichem_mcp(
     reference: Optional[Reference] = None,
     reference_link: Optional[ReferenceLink] = None,
     **kwargs
-):
+) -> MoziChemMCP:
     """
     Build the mcp server using FastMCP.
 
@@ -66,7 +66,7 @@ def create_mozichem_mcp(
 
     Returns
     -------
-    FastMCP
+    MoziChemMCP
         The MCP server instance.
     """
     try:
@@ -92,7 +92,7 @@ def create_mozichem_mcp(
         )
 
         # SECTION: retrieve the mcp server
-        mcp = MCPHub_._retrieve_mcp()
+        mcp = MCPHub_._build_mozichem_mcp()
 
         # return the mcp server instance of FastMCP
         return mcp

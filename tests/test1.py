@@ -14,7 +14,10 @@ mcp_names = get_mozichem_mcp()
 print(f"mcp names: {mcp_names}")
 
 # SECTION: Build the MCP server
-mcp = create_mozichem_mcp(name="thermo-models-mcp")
+thermo_models_mcp = create_mozichem_mcp(name="thermo-models-mcp")
+
+# NOTE: mcp info
+
 
 # SECTION: Serve the MCP server
-mcp.run()
+thermo_models_mcp.run()

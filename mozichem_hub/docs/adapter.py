@@ -31,6 +31,10 @@ class MCPHub(MoziChemMCP):
         self._name = mcp
         self._mcp_name = mcp
 
+        # NOTE: set the reference and reference link
+        self._reference = reference
+        self._reference_link = reference_link
+
         # NOTE: check if mcp is available
         # mcp names
         mcp_names = [
@@ -46,16 +50,6 @@ class MCPHub(MoziChemMCP):
 
         # SECTION: mcp info
         self._mcp_info = MCPController.get_mcp_info(mcp)
-
-        # SECTION: initialize the MoziChemHub
-        MoziChemMCP.__init__(
-            self,
-            name=mcp,
-            reference=reference,
-            reference_link=reference_link,
-            local_mcp=True,  # set local_mcp to True
-            **kwargs
-        )
 
     @property
     def name(self) -> str:
@@ -172,3 +166,21 @@ class MCPHub(MoziChemMCP):
 
         # return the prompts from the source
         return source.get("prompts", {})
+
+    def _build_mozichem_mcp(self, **kwargs) -> MoziChemMCP:
+        """
+        Build the MoziChem MCP server.
+
+        Returns
+        -------
+        MoziChemMCP
+            The MoziChem MCP server instance.
+        """
+        # NOTE: build the MoziChem MCP server
+        return MoziChemMCP(
+            name=self.name,
+            reference=self._reference,
+            reference_link=self._reference_link,
+            local_mcp=True,
+            **kwargs
+        )

@@ -88,9 +88,13 @@ class ToolBuilder:
 
                 # tags
                 tags_ = tool_value.get('TAGS', ())
-                if not isinstance(tags_, (set)):
+                # convert tags to a set if not already
+                if isinstance(tags_, list):
+                    tags_ = set(tags_)
+                # check if tags is a set
+                if not isinstance(tags_, set):
                     raise ValueError(
-                        f"Tool reference '{tool_ref}' tags must be a list.")
+                        f"Tool reference '{tool_ref}' tags must be a set.")
 
                 # Create MoziTool instance
                 mozi_tool = MoziTool(
