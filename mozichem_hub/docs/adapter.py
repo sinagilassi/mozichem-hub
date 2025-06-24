@@ -53,7 +53,7 @@ class MCPHub(MoziChemMCP):
             name=mcp,
             reference=reference,
             reference_link=reference_link,
-            mcp_name=self._mcp_name,
+            local_mcp=True,  # set local_mcp to True
             **kwargs
         )
 
@@ -75,6 +75,26 @@ class MCPHub(MoziChemMCP):
             Information about the MCP.
         """
         return self._mcp_info
+
+    @property
+    def description(self) -> str:
+        """
+        Get the description of the MCP.
+
+        Returns
+        -------
+        str
+            Description of the MCP.
+        """
+        source = self.info
+        if source is None:
+            raise ValueError(
+                f"'{self._mcp_name}' is not a valid MCP name. "
+                f"Available MCPs: {', '.join(MCPController.mcp_names())}"
+            )
+
+        # return the description from the source
+        return source.get("description", "No description available.")
 
     @property
     def mcp_version(self) -> str:

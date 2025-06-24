@@ -4,7 +4,7 @@ from ..utils import Loader
 from ..config import MCP_MODULES
 
 
-class ToolDescriptor:
+class MCPDescriptor:
     """
     Descriptor class for defining tools in the MoziChem Hub.
     """
@@ -24,7 +24,49 @@ class ToolDescriptor:
             target_folder='descriptors'
         )
 
-    def tool_descriptor(self, mcp_name: str) -> dict:
+    def mcp_all_descriptor(self):
+        """
+        Get all mcp descriptors
+
+        Returns
+        -------
+        list
+            A list of dictionaries containing all tool descriptors.
+        """
+        try:
+            # NOTE: int reference
+            mcp_references = {}
+
+            # SECTION: load from MCP_MODULES
+            for mcp_module in MCP_MODULES:
+                # get mcp name
+                mcp_name = mcp_module.get('name', None)
+
+                if not mcp_name:
+                    raise ValueError(
+                        "MCP module does not have a name defined.")
+
+                # load reference
+                _ref = self.mcp_descriptor(mcp_name)
+
+                if not _ref:
+                    raise ValueError(
+                        f"Failed to load descriptor for MCP '{mcp_name}'.")
+
+                # add to mcp references
+                mcp_references[mcp_name] = _ref
+
+            # NOTE: check if mcp references are empty
+            if not mcp_references:
+                raise ValueError("No MCP references found.")
+
+            # references
+            return mcp_references
+
+        except Exception as e:
+            raise ValueError(f"Failed to load tool descriptors: {e}") from e
+
+    def mcp_descriptor(self, mcp_name: str) -> dict:
         """
         Get the descriptor for a specific tool in the MoziChem Hub.
 
@@ -52,43 +94,15 @@ class ToolDescriptor:
             mcp_descriptor = mcp_module.get('descriptor', None)
             if not mcp_descriptor:
                 raise ValueError(
-                    f"MCP module '{mcp_name}' does not have a descriptor file defined.")
-
-            # yml file must be provided
-            mcp_descriptor = mcp_descriptor if mcp_descriptor.endswith(
-                '.yml') else f"{mcp_descriptor}.yml"
+                    f"MCP module '{mcp_name}' does not have a descriptor file defined."
+                )
 
             # NOTE: Load tools logic here
-            tool_descriptor = self.Loader_.load_yml_references(
+            descriptor = self.Loader_.load_yml_references(
                 target_file=mcp_descriptor,
                 target_folder='descriptors'
             )
 
-            return tool_descriptor
+            return descriptor
         except Exception as e:
             raise ValueError(f"Failed to load tool descriptor: {e}") from e
-
-    def tool_descriptors(self):
-        """
-        Get all tool descriptors for the MoziChem Hub.
-
-        Returns
-        -------
-        list
-            A list of dictionaries containing all tool descriptors.
-        """
-        try:
-            # NOTE: Load all tool descriptors
-            tool_descriptors = []
-
-            for descriptor_file in self.tool_descriptors_info:
-                # Load each descriptor file
-                descriptor = self.Loader_.load_yml_references(
-                    target_file=descriptor_file,
-                    target_folder='descriptors'
-                )
-                tool_descriptors.append(descriptor)
-
-            return tool_descriptors
-        except Exception as e:
-            raise ValueError(f"Failed to load tool descriptors: {e}") from e

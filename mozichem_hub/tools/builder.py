@@ -53,7 +53,7 @@ class ToolBuilder():
         except Exception as e:
             raise ValueError(f"Failed to build MCP tools: {e}") from e
 
-    def build_tools(
+    def build_tools_from_function(
         self,
         functions: Dict[str, Callable]
     ) -> List[Tool]:
@@ -71,19 +71,16 @@ class ToolBuilder():
             List of Tool instances built from the provided functions.
         """
         try:
-            # SECTION: Build Mozi tools
-            mozi_tools = []
-
             # SECTION: Convert MoziTool instances to Tool instances
             mcp_tools: list[Tool] = []
 
-            for mozi_tool in mozi_tools:
+            for fn_name, fn in functions.items():
                 tool_ = Tool.from_function(
-                    fn=mozi_tool.fn,  # Pass the function as fn parameter
-                    name=mozi_tool.name,
-                    description=mozi_tool.description,
-                    tags=mozi_tool.tags,
+                    fn=fn,  # Pass the function as fn parameter
+                    name=fn_name,
                 )
+
+                # add tool
                 mcp_tools.append(tool_)
 
             return mcp_tools

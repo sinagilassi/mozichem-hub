@@ -22,8 +22,7 @@ class MoziTool(BaseModel):
     MoziTool class for defining tools in the MoziChem Hub.
     """
     name: str
-    fn: Callable
-    reference: str
+    fn: Callable[..., Any]  # Function to be executed
     description: str
     args: List[MoziToolArg]
     tags: Set[str] = set()

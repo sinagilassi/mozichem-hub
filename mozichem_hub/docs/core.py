@@ -29,12 +29,14 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
     def __init__(
             self,
             name: str,
+            description: Optional[str] = None,
             reference: Optional[Reference] = None,
             reference_link: Optional[ReferenceLink] = None,
+            local_mcp: Optional[bool] = False,
             **kwargs
     ):
         """
-        Initialize the MoziChemHub.
+        Initialize the MoziChem MCP.
 
         Parameters
         ----------
@@ -51,11 +53,17 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         """
         # NOTE: set
         self._name = name
+        self._description = description
         self._reference = reference
         self._reference_link = reference_link
 
-        # NOTE: kwargs
-        self.mcp_name = kwargs.get('mcp_name', None)
+        # NOTE: set the mcp name
+        self.local_mcp = local_mcp
+
+        # check
+        if local_mcp is True:
+            # if local_mcp is True, set the mcp name to the name of the hub
+            self._mcp_name = name
 
         # SECTION: initialize the registry
         RegistryMixin.__init__(self)
@@ -80,13 +88,21 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
     @property
     def name(self) -> str:
         """
-        Get the name of the hub.
+        Get the name of the mcp.
         """
         return self._name
 
+    @property
+    def description(self) -> Optional[str]:
+        """
+        Get the description of the mcp.
+        """
+        return self._description
+
     def _update(self):
         """
-        Update the MoziChem mcp for serving. It builds the mcp server, adding tools, resources, prompts, and other configurations.
+        Update the MoziChem mcp for serving. It builds the mcp server,
+        adding tools, resources, prompts, and other configurations.
         """
         try:
             # SECTION: manage tools
@@ -95,10 +111,16 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
 
             # NOTE: build the tools
             # build the tools using the ToolManager
-            tools = self.ToolManager_._build_tools(
-                mcp_name=self.mcp_name,
-                custom_functions=custom_functions
-            )
+            if self.local_mcp:
+                # ! local mcp
+                tools = self.ToolManager_._build_local_tools(
+                    mcp_name=self.name,
+                )
+            else:
+                # ! new mcp
+                tools = self.ToolManager_._build_tools(
+                    custom_functions=custom_functions
+                )
 
             # NOTE: update the MCP server with tools
             if len(tools) > 0:

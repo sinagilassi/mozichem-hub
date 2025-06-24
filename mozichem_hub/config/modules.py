@@ -8,8 +8,8 @@ MCP_MODULES = [
         'version': '0.1.0',
         'description': 'Thermodynamic models including equations of state, activity coefficient models, and more.',
         'package': 'PyThermoModels',
-        'class': 'PTMCore',
-        'descriptor': 'ptmcore',
+        'class': 'MCP_PTMCore',
+        'descriptor': 'ptmcore.yml',
         'resources': [],
         'prompts': [],
         'tools': [

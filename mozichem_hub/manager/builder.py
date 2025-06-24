@@ -1,14 +1,14 @@
 # import libs
-from typing import List, Dict, Callable
+from typing import List, Dict, Callable, Any
 # local
 from ..utils import Loader
-from ..descriptors import ToolDescriptor
+from ..descriptors import MCPDescriptor
 from .models import MoziTool, MoziToolArg
 
 
 class ToolBuilder:
     """
-    Builder class for building MoziFunctions and MoziTools.
+    ToolBuilder class for building MoziFunctions and MoziTools.
     """
     # NOTE: attributes
 
@@ -17,21 +17,18 @@ class ToolBuilder:
         Initialize the Builder instance.
         """
         # SECTION: Initialize tool descriptor
-        self.ToolDescriptor_ = ToolDescriptor()
+        self.MCPDescriptor_ = MCPDescriptor()
 
         # NOTE: Load tools references
-        self.mozi_tools_references = self.load_mozi_tools_reference()
+        self.mozi_mcp_references = self.load_mozi_mcp_references()
 
-    def load_mozi_tools_reference(self):
+    def load_mozi_mcp_references(self):
         """
-        Load tools for the MoziChem MCP.
-
-        This method is responsible for loading the necessary tools
-        that will be used in the MoziChem MCP.
+        Load all references from the tool descriptor.
         """
         try:
             # Load tools logic here
-            tools_references = self.ToolDescriptor_
+            tools_references = self.MCPDescriptor_.mcp_all_descriptor()
             if not tools_references:
                 raise ValueError("No tools references found.")
 
@@ -41,7 +38,8 @@ class ToolBuilder:
 
     def build_mozi_tools(
         self,
-        local_functions: Dict[str, Callable]
+        mcp_name: str,
+        local_functions: Dict[str, Callable[..., Any]]
     ) -> List[MoziTool]:
         """
         Build the Mozi tools.
@@ -57,11 +55,18 @@ class ToolBuilder:
             A list of MoziTool instances built from the tools references.
         """
         try:
+            # SECTION: get the tools references
+            tool_references = self.mozi_mcp_references.get(mcp_name, None)
+
+            if not tool_references:
+                raise ValueError(
+                    f"No tools references found for MCP '{mcp_name}'.")
+
             # NOTE: Mozi tools list
-            mozi_tools = []
+            mozi_tools: List[MoziTool] = []
 
             # loop through each tool reference
-            for tool_ref, tool_value in self.mozi_tools_references.items():
+            for tool_ref, tool_value in tool_references.items():
                 # Create MoziTool instance
                 # NOTE: name
                 name_ = tool_value.get('NAME', None)
@@ -74,12 +79,6 @@ class ToolBuilder:
                 if not fn:
                     raise ValueError(
                         f"Tool reference '{tool_ref}' does not have a valid function.")
-
-                # reference
-                reference_ = tool_value.get('REFERENCE', None)
-                if not reference_:
-                    raise ValueError(
-                        f"Tool reference '{tool_ref}' does not have a valid reference.")
 
                 # description
                 description_ = tool_value.get('DESCRIPTION', None)
@@ -95,7 +94,7 @@ class ToolBuilder:
 
                 # tags
                 tags_ = tool_value.get('TAGS', ())
-                if not isinstance(tags_, set):
+                if not isinstance(tags_, (set)):
                     raise ValueError(
                         f"Tool reference '{tool_ref}' tags must be a list.")
 
@@ -116,7 +115,6 @@ class ToolBuilder:
                 mozi_tool = MoziTool(
                     name=name_,
                     fn=fn,  # Use a dummy function for now
-                    reference=reference_,
                     description=description_,
                     args=mozi_args,  # Use values to get a list of MoziToolArg instances
                     tags=tags_

@@ -1,6 +1,11 @@
 # import libs
-from fastmcp import FastMCP
-from typing import Optional, Dict, List, Callable, Any
+from typing import (
+    Optional,
+    Dict,
+    List,
+    Callable,
+    Any
+)
 # local
 from .docs import MCPHub
 from .references import Reference, ReferenceLink
