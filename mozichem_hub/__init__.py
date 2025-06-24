@@ -1,15 +1,25 @@
 # config
-from .config import __version__, __description__, __author__, __author_email__
+from .config import (
+    __version__,
+    __description__,
+    __author__,
+    __author_email__
+)
 # app
-from .app import build_mcp, serve_mcp
-from .docs import MoziChemHub
+from .app import (
+    get_mozichem_mcp,
+    get_mozichem_mcp_info,
+    create_mozichem_mcp
+)
+from .docs import MoziChemMCP
 
 __all__ = [
     "__version__",
     "__description__",
     "__author__",
     "__author_email__",
-    "build_mcp",
-    "serve_mcp",
-    "MoziChemHub"
+    "get_mozichem_mcp",
+    "get_mozichem_mcp_info",
+    "create_mozichem_mcp",
+    "MoziChemMCP"
 ]

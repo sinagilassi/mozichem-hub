@@ -1,7 +1,7 @@
-from .server import MoziServer
-from .core import MoziChemHub
+from .adapter import MCPHub
+from .core import MoziChemMCP
 
 __all__ = [
-    "MoziChemHub",
-    "MoziServer"
+    "MCPHub",
+    "MoziChemMCP",
 ]

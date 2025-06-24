@@ -1,18 +1,20 @@
 # import libs
-from mozichem_hub import __version__, build_mcp, serve_mcp
+from mozichem_hub import (
+    __version__,
+    create_mozichem_mcp,
+    get_mozichem_mcp
+)
 from rich import print
 
 # version
 print(f"[bold green]Mozichem Hub Version: {__version__}[/bold green]")
 
+# SECTION: mcp names
+mcp_names = get_mozichem_mcp()
+print(f"mcp names: {mcp_names}")
+
 # SECTION: Build the MCP server
-mcp = build_mcp(name="MoziChemHub")
-
-# SECTION: add custom references
-
-
-# SECTION: add custom functions
-
+mcp = create_mozichem_mcp(name="thermo-models-mcp")
 
 # SECTION: Serve the MCP server
-serve_mcp(mcp)
+mcp.run()

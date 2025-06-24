@@ -1,10 +1,12 @@
 # import libs
+from fastmcp import FastMCP
 from typing import (
     Optional,
     Dict,
     List,
     Callable,
-    Any
+    Any,
+    Literal
 )
 # local
 from .registry import RegistryMixin
@@ -26,8 +28,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
 
     def __init__(
             self,
-            name: str = "MoziChemHub",
-            mcp_name: Optional[str] = None,
+            name: str,
             reference: Optional[Reference] = None,
             reference_link: Optional[ReferenceLink] = None,
             **kwargs
@@ -38,7 +39,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         Parameters
         ----------
         name : str
-            Name of the hub, default is "MoziChemHub".
+            Name of the mcp server
         reference : Optional[Reference]
             Custom reference for the hub, default is None. It includes
             - content: str
@@ -50,12 +51,15 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         """
         # NOTE: set
         self._name = name
-        self.mcp_name = mcp_name
         self._reference = reference
         self._reference_link = reference_link
 
+        # NOTE: kwargs
+        self.mcp_name = kwargs.get('mcp_name', None)
+
         # SECTION: initialize the registry
-        RegistryMixin().__init__()
+        RegistryMixin.__init__(self)
+
         # SECTION: initialize the ReferenceServices
         ReferenceServices.__init__(
             self,
@@ -80,16 +84,14 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         """
         return self._name
 
-    def __build(self):
+    def _update(self):
         """
-        Launch the MoziChem Hub.
-
-        This method is called to start the hub and prepare it for serving.
+        Update the MoziChem mcp for serving. It builds the mcp server, adding tools, resources, prompts, and other configurations.
         """
         try:
-            # NOTE: manage tools
+            # SECTION: manage tools
             # collect the registered functions
-            custom_functions: Dict[str, Callable[..., Any]] = self.methods
+            custom_functions: Dict[str, Callable[..., Any]] = self._methods
 
             # NOTE: build the tools
             # build the tools using the ToolManager
@@ -98,26 +100,57 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
                 custom_functions=custom_functions
             )
 
-            # NOTE: build the mcp server with the registered tools
-            mcp = self.MoziServer_._build_mcp(
-                tools=tools
-            )
+            # NOTE: update the MCP server with tools
+            if len(tools) > 0:
+                self.MoziServer_._update_mcp_with_tools(
+                    tools=tools
+                )
 
-            return mcp
+            # SECTION: manage resources
+            # collect the registered resources
+
+            # SECTION: manage prompts
+            # collect the registered prompts
+
         except Exception as e:
             raise RuntimeError(f"Failed to launch {self.name}: {e}") from e
 
-    def run(self, verbose: bool = True):
+    def _retrieve_mcp(self) -> FastMCP:
         """
-        Run the MoziChem Hub.
-
+        Retrieve the mcp server.
         """
         try:
-            # NOTE: Check if verbose is enabled
-            if verbose:
-                print(f"Running {self.name}...")
+            # NOTE: add tools/resources/prompts to the MCP server
+            self._update()
 
-            # NOTE: Additional launch logic can be added here
-            self.__build()
+            # NOTE: return the MCP server instance
+            return self.MoziServer_.get_mcp()
+        except Exception as e:
+            raise RuntimeError(f"Failed to run {self.name}: {e}") from e
+
+    def run(
+        self,
+        transport: Optional[Literal['stdio', 'streamable-http']] = None,
+        **transport_kwargs
+    ):
+        """
+        Run the MoziChem MCP server.
+
+        Parameters
+        ----------
+        transport : Optional[Literal['stdio', 'streamable-http']]
+            The transport method for the MCP server. Default is 'stdio'.
+        **transport_kwargs : dict
+            Additional keyword arguments for the transport configuration.
+        """
+        try:
+            # NOTE: retrieve the mcp server
+            mcp = self._retrieve_mcp()
+
+            # NOTE: run the MCP server
+            mcp.run(
+                transport=transport or 'stdio',
+                **transport_kwargs
+            )
         except Exception as e:
             raise RuntimeError(f"Failed to run {self.name}: {e}") from e

@@ -30,12 +30,12 @@ class MoziServer(MCP):
         """
         return self._name
 
-    def _build_mcp(
+    def _update_mcp_with_tools(
         self,
         tools: List[Tool]
     ) -> FastMCP:
         """
-        Build the MCP server using FastMCP.
+        Update the MCP server with tools.
 
         Returns
         -------
@@ -45,9 +45,6 @@ class MoziServer(MCP):
         try:
             # SECTION: add tools to the MCP server
             self._add_tools(tools)
-
-            # SECTION: Return the MCP instance
-            return self.get_mcp()
         except Exception as e:
             raise Exception(f"Failed to build mcp server: {e}") from e
 

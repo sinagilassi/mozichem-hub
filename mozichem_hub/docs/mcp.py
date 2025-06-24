@@ -194,8 +194,17 @@ class MCP():
             A list of tools to be registered with the MCP server.
         """
         try:
-            # NOTE: Placeholder for tool building logic
-            # return ToolsCore().build_mcp_tools()
-            pass
+            # NOTE: check tools
+            if len(tools) == 0:
+                return
+
+            # NOTE: add tools to the MCP server
+            for tool in tools:
+                if not isinstance(tool, Tool):
+                    raise TypeError(
+                        f"Expected Tool instance, got {type(tool)}")
+
+                # Register each tool with the MCP server
+                self._mcp.add_tool(tool)
         except Exception as e:
             raise Exception(f"Failed to build tools: {e}") from e

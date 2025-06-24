@@ -1,6 +1,6 @@
 # import libs
 from typing import Any, List, Set, Callable, Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from pyThermoDB import CompBuilder
 # local
 
@@ -70,3 +70,7 @@ class ComponentThermoDB(BaseModel):
     component: Component
     thermodb: CompBuilder
     build_mode: Literal['name', 'formula'] = 'name'
+
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+    )

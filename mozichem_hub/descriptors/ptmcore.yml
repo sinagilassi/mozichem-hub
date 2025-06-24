@@ -1,7 +1,6 @@
 REFERENCES:
   TOOL1:
     NAME: cal_fugacity
-    REFERENCE: PyThermoModels
     DESCRIPTION: "This function calculates the fugacity of single-gas component using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW)."
     ARGS:
       model_name:

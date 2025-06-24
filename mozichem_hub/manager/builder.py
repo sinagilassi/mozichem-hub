@@ -2,6 +2,7 @@
 from typing import List, Dict, Callable
 # local
 from ..utils import Loader
+from ..descriptors import ToolDescriptor
 from .models import MoziTool, MoziToolArg
 
 
@@ -15,9 +16,8 @@ class ToolBuilder:
         """
         Initialize the Builder instance.
         """
-        # SECTION: Initialize the Loader instance
-        # used to load app references
-        self.Loader_ = Loader()
+        # SECTION: Initialize tool descriptor
+        self.ToolDescriptor_ = ToolDescriptor()
 
         # NOTE: Load tools references
         self.mozi_tools_references = self.load_mozi_tools_reference()
@@ -31,7 +31,7 @@ class ToolBuilder:
         """
         try:
             # Load tools logic here
-            tools_references = self.Loader_.load_references()
+            tools_references = self.ToolDescriptor_
             if not tools_references:
                 raise ValueError("No tools references found.")
 

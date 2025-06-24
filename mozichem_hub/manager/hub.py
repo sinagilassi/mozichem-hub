@@ -1,6 +1,12 @@
 # import libs
 from typing import (
-    Literal, List, Optional, Tuple, Dict, Union, Any
+    Literal,
+    List,
+    Optional,
+    Tuple,
+    Dict,
+    Union,
+    Any
 )
 import pyThermoDB as ptdb
 import pyThermoLinkDB as ptldb

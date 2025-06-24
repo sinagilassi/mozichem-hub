@@ -1,7 +1,8 @@
 # import libs
-from typing import Any, List, Set, Callable, Literal, Dict, Union
+from typing import (
+    Any, List, Set, Callable, Literal, Dict, Union
+)
 from pydantic import BaseModel, Field
-from pyThermoDB import CompBuilder
 # local
 
 
