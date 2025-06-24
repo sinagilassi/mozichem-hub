@@ -1,5 +1,5 @@
 # import libs
-from typing import Any, List, Set, Callable, Literal
+from typing import Any, List, Set, Callable, Literal, Optional
 from pydantic import BaseModel, Field, ConfigDict
 from pyThermoDB import CompBuilder
 # local
@@ -24,7 +24,7 @@ class MoziTool(BaseModel):
     name: str
     fn: Callable[..., Any]  # Function to be executed
     description: str
-    args: List[MoziToolArg]
+    args: Optional[List[MoziToolArg]] = None
     tags: Set[str] = set()
 
 

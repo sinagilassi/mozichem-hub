@@ -6,7 +6,8 @@ from typing import (
     List,
     Callable,
     Any,
-    Literal
+    Literal,
+    Set
 )
 # local
 from .registry import RegistryMixin
@@ -107,7 +108,9 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         try:
             # SECTION: manage tools
             # collect the registered functions
-            custom_functions: Dict[str, Callable[..., Any]] = self._methods
+            custom_functions: Dict[
+                str, Dict[str, Callable[..., Any | str | Set]]
+            ] = self._methods
 
             # NOTE: build the tools
             # build the tools using the ToolManager

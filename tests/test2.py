@@ -1,4 +1,5 @@
 # import libs
+
 from mozichem_hub import __version__, MoziChemMCP
 from rich import print
 
@@ -52,4 +53,9 @@ def add(a: int, b: int) -> int:
 
 
 # SECTION: run
-app.run()
+# app.run()
+
+if __name__ == "__main__":
+    # SECTION: run the app
+    app.run(transport="stdio")
+    # app.run(transport="streamable-http", port=8000)

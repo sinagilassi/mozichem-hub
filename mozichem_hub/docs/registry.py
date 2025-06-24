@@ -1,6 +1,6 @@
 # import libs
 import types
-from typing import Dict, Callable
+from typing import Dict, Callable, Any, Set
 # local
 
 
@@ -18,7 +18,7 @@ class RegistryMixin:
         self._methods = {}
 
     @property
-    def methods(self) -> Dict[str, Callable]:
+    def methods(self) -> Dict[str, Dict[str, Callable[..., Any | str | Set]]]:
         """
         Get the registered methods.
 
@@ -29,7 +29,7 @@ class RegistryMixin:
         """
         return self._methods
 
-    def tool(self, name=None):
+    def tool(self, name=None, tags=None):
         """
         Decorator to register a custom function.
         """
@@ -37,7 +37,16 @@ class RegistryMixin:
             method_name = name or func.__name__
             bound_method = types.MethodType(func, self)
             setattr(self, method_name, bound_method)
-            self._methods[method_name] = bound_method
+
+            # Add the method to the registry
+            self._methods[method_name] = {
+                'fn': bound_method,
+                'name': method_name,
+                'description': func.__doc__ or '',
+                'tags': set(tags or [])
+            }
+
+            # return
             return bound_method
         return decorator
 

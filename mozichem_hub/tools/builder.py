@@ -1,5 +1,5 @@
 # import libs
-from typing import List, Dict, Callable
+from typing import List, Dict, Callable, Any, Set
 from fastmcp.tools import Tool
 # local
 from ..config import app_settings
@@ -55,7 +55,7 @@ class ToolBuilder():
 
     def build_tools_from_function(
         self,
-        functions: Dict[str, Callable]
+        functions: Dict[str, Dict[str, Callable[..., Any | str | Set]]]
     ) -> List[Tool]:
         """
         Build the MCP tools from external resources.
@@ -74,10 +74,37 @@ class ToolBuilder():
             # SECTION: Convert MoziTool instances to Tool instances
             mcp_tools: list[Tool] = []
 
-            for fn_name, fn in functions.items():
+            for fn_name, fn_elements in functions.items():
+                # get the function
+                fn = fn_elements.get('fn', None)
+                description = fn_elements.get(
+                    'description', 'No description provided.')
+                tags = fn_elements.get('tags', ())
+
+                # check if function is provided
+                if not fn:
+                    raise ValueError(f"Function '{fn_name}' is not provided.")
+
+                if not callable(fn):
+                    raise ValueError(f"Function '{fn_name}' is not callable.")
+
+                if not isinstance(fn_name, str):
+                    raise ValueError(
+                        f"Function name '{fn_name}' is not a string.")
+
+                if not isinstance(description, str):
+                    raise ValueError(
+                        f"Description for function '{fn_name}' is not a string.")
+
+                if not isinstance(tags, set):
+                    raise ValueError(
+                        f"Tags for function '{fn_name}' must be a set or list.")
+
                 tool_ = Tool.from_function(
-                    fn=fn,  # Pass the function as fn parameter
+                    fn=fn,
                     name=fn_name,
+                    description=description,
+                    tags=tags,
                 )
 
                 # add tool

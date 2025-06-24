@@ -86,37 +86,17 @@ class ToolBuilder:
                     raise ValueError(
                         f"Tool reference '{tool_ref}' does not have a valid description.")
 
-                # args
-                args_ = tool_value.get('ARGS', {})
-                if not isinstance(args_, dict):
-                    raise ValueError(
-                        f"Tool reference '{tool_ref}' args must be a dictionary.")
-
                 # tags
                 tags_ = tool_value.get('TAGS', ())
                 if not isinstance(tags_, (set)):
                     raise ValueError(
                         f"Tool reference '{tool_ref}' tags must be a list.")
 
-                # Build MoziToolArgs instances
-                mozi_args = []
-                for arg_name, arg_value in args_.items():
-                    # Create MoziToolArgs instance
-                    mozi_args.append(MoziToolArg(
-                        name=arg_name,
-                        type=arg_value.get('type', 'str'),
-                        description=arg_value.get('description', ''),
-                        default=arg_value.get('default', None),
-                        hide=arg_value.get('hide', False),
-                        required=arg_value.get('required', False)
-                    ))
-
                 # Create MoziTool instance
                 mozi_tool = MoziTool(
                     name=name_,
                     fn=fn,  # Use a dummy function for now
                     description=description_,
-                    args=mozi_args,  # Use values to get a list of MoziToolArg instances
                     tags=tags_
 
                 )

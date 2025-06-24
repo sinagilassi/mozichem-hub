@@ -32,7 +32,7 @@ dependencies = [
 "Homepage" = "https://github.com/sinagilassi/mozichem-hub"
 
 [tool.setuptools.packages.find]
-where = ["mozichem_hub"]
+where = ["."]
 exclude = ["tests*"]
 
 [tool.setuptools.package-data]

@@ -4,7 +4,9 @@ from typing import (
     Dict,
     Callable,
     Optional,
-    List
+    List,
+    Any,
+    Set
 )
 # local
 from .builder import ToolBuilder
@@ -112,7 +114,11 @@ class ToolManager(ToolBuilder):
     def _build_tools(
         self,
         mcp_name: Optional[str] = None,
-        custom_functions: Optional[Dict[str, Callable]] = None
+        custom_functions: Optional[
+            Dict[
+                str, Dict[str, Callable[..., Any | str | Set]]
+            ]
+        ] = None
     ) -> List[Tool]:
         """
         Build the tools for the MoziChem Hub.

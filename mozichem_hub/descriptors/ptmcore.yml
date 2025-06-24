@@ -2,19 +2,6 @@ REFERENCES:
   TOOL1:
     NAME: cal_fugacity
     DESCRIPTION: "This function calculates the fugacity of single-gas component using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW)."
-    ARGS:
-      model_name:
-        TYPE: str
-        DESCRIPTION: "The name of the EOS model to use for the calculation."
-      component:
-        TYPE: Component
-        DESCRIPTION: "The name of the component for which the fugacity is calculated."
-      temperature:
-        TYPE: Temperature
-        DESCRIPTION: "The temperature at which the fugacity is calculated, in Kelvin."
-      pressure:
-        TYPE: Pressure
-        DESCRIPTION: "The pressure at which the fugacity is calculated, in bar, atm, Pa."
     TAGS:
       - thermodynamics
       - fugacity
