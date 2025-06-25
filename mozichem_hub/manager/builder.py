@@ -6,9 +6,9 @@ from ..descriptors import MCPDescriptor
 from .models import MoziTool, MoziToolArg
 
 
-class ToolBuilder:
+class MoziToolBuilder:
     """
-    ToolBuilder class for building MoziFunctions and MoziTools.
+    MoziToolBuilder class for building MoziFunctions and MoziTools.
     """
     # NOTE: attributes
 
@@ -96,12 +96,34 @@ class ToolBuilder:
                     raise ValueError(
                         f"Tool reference '{tool_ref}' tags must be a set.")
 
-                # Create MoziTool instance
+                # args
+                args_ = tool_value.get('ARGS', [])
+
+                if not isinstance(args_, list):
+                    raise ValueError(
+                        f"Tool reference '{tool_ref}' args must be a list.")
+
+                # check if args is empty
+                if len(args_) > 0:
+                    # convert args to MoziToolArg instances
+                    args_ = [
+                        MoziToolArg(
+                            name=arg.get('name', ''),
+                            description=arg.get('description', ''),
+                            default=arg.get('default', None),
+                            hide=arg.get('hide', False),
+                            required=arg.get('required', False),
+                            type=arg.get('type', 'str')
+                        ) for arg in args_
+                    ]
+
+                # NOTE: Create MoziTool instance
                 mozi_tool = MoziTool(
                     name=name_,
                     fn=fn,  # Use a dummy function for now
                     description=description_,
-                    tags=tags_
+                    tags=tags_,
+                    args=args_
 
                 )
 

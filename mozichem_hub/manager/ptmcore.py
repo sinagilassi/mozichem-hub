@@ -77,6 +77,8 @@ class PTMCore:
                 "temperature": [temperature.value, temperature.unit]
             }
 
+            print(f"Model inputs: {model_inputs}")
+
             # SECTION: calc
             res = self.eos.cal_fugacity(
                 model_name=eos_model,
@@ -88,3 +90,19 @@ class PTMCore:
             return res
         except Exception as e:
             raise ValueError(f"Failed to calculate fugacity: {e}") from e
+
+    def cal_fugacity_mixture(self, a: float, b: float, c: float) -> dict:
+        """
+        Calculates the fugacity of a mixture given the coefficients a, b, and c.
+        This is a placeholder function for demonstration purposes.
+        """
+        try:
+            # NOTE: Placeholder logic for mixture calculation
+            result = {
+                "fugacity": a + b + c,
+                "status": "success"
+            }
+            return result
+        except Exception as e:
+            raise ValueError(
+                f"Failed to calculate fugacity mixture: {e}") from e

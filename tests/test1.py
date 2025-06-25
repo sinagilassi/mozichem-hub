@@ -16,8 +16,13 @@ print(f"mcp names: {mcp_names}")
 # SECTION: Build the MCP server
 thermo_models_mcp = create_mozichem_mcp(name="thermo-models-mcp")
 
-# NOTE: mcp info
-
+# NOTE: mcp tools
+tools_info = thermo_models_mcp.tools_info()
+print(f"Tools available in 'thermo-models-mcp': {tools_info}")
 
 # SECTION: Serve the MCP server
-thermo_models_mcp.run()
+thermo_models_mcp.run(transport='streamable-http')
+
+if __name__ == "__main__":
+    # run the MCP server
+    thermo_models_mcp.run(transport='streamable-http')

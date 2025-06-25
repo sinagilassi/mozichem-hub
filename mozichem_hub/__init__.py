@@ -11,7 +11,6 @@ from .app import (
     get_mozichem_mcp_info,
     create_mozichem_mcp
 )
-from .docs import MoziChemMCP
 
 __all__ = [
     "__version__",
@@ -21,5 +20,4 @@ __all__ = [
     "get_mozichem_mcp",
     "get_mozichem_mcp_info",
     "create_mozichem_mcp",
-    "MoziChemMCP"
 ]

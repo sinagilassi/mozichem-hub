@@ -69,6 +69,32 @@ class ToolManager(ToolBuilder):
         except Exception as e:
             raise Exception(f"Failed to load MoziChem functions: {e}") from e
 
+    def _get_info_local_functions(self, mcp_name: str) -> Dict[str, Any]:
+        """
+        Retrieve information about local functions for the given mcp.
+
+        Parameters
+        ----------
+        mcp_name : str
+            The name of the mcp to retrieve information for.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A dictionary containing information about the local functions.
+        """
+        try:
+            # Retrieve local functions
+            local_functions = self._retrieve_local_functions(mcp_name)
+
+            # Return the information
+            return {
+                "mcp_name": mcp_name,
+                "functions": local_functions
+            }
+        except Exception as e:
+            raise ValueError(f"Failed to retrieve local functions: {e}") from e
+
     def _build_local_tools(
         self,
         mcp_name: str,

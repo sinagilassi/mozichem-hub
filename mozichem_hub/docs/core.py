@@ -18,13 +18,14 @@ from ..references import (
     Reference,
     ReferenceLink,
 )
+from ..config import MCP_MODULES
 
 
 class MoziChemMCP(RegistryMixin, ReferenceServices):
     """
-    This is the main entry point for the MoziChem Hub application.
-    It initializes the MoziChemHub instance and prepares it for serving.
-    custom reference and link can be passed to the MoziChemHub instance.
+    This is the main entry point for the MoziChem MCP application.
+    It initializes the MoziChemMCP instance and prepares it for serving.
+    custom reference and link can be passed to the MoziChemMCP instance.
     """
 
     def __init__(
@@ -86,6 +87,12 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             reference_link=self.reference_link
         )
 
+        # SECTION: configure the MCP server
+        # ! update the mcp server with local tools
+        if local_mcp:
+            # call
+            self._update()
+
     @property
     def name(self) -> str:
         """
@@ -99,6 +106,20 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         Get the description of the mcp.
         """
         return self._description
+
+    def tools_info(self):
+        '''
+        Give information about the tools available in the MoziChem MCP.
+        '''
+        try:
+            # SECTION: for local mcp
+            if self.local_mcp:
+                # retrieve all local functions
+                return self.ToolManager_._get_info_local_functions(
+                    mcp_name=self._mcp_name
+                )
+        except Exception as e:
+            raise Exception(f"Failed to load tools: {e}") from e
 
     def _update(self):
         """
@@ -146,7 +167,10 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         """
         try:
             # NOTE: add tools/resources/prompts to the MCP server
-            self._update()
+            if self.local_mcp is False:
+                self._update()
+            else:
+                pass  # No need to update for local MCP
 
             # NOTE: return the MCP server instance
             return self.MoziServer_.get_mcp()

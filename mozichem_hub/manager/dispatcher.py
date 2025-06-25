@@ -16,12 +16,12 @@ from ..references import (
 )
 from .hub import Hub
 from .ptmcore import PTMCore
-from .builder import ToolBuilder
+from .builder import MoziToolBuilder
 from ..config import MCP_MODULES
 from .models import MoziTool
 
 
-class FunctionDispatcher(ToolBuilder):
+class FunctionDispatcher(MoziToolBuilder):
     """
     Dispatcher class for defining functions in the MoziChem Hub.
     """
@@ -45,8 +45,8 @@ class FunctionDispatcher(ToolBuilder):
         reference_link : ReferenceLink
             ReferenceLink instance containing the reference link data.
         """
-        # SECTION: Initialize the ToolBuilder
-        ToolBuilder.__init__(self)
+        # SECTION: Initialize the MoziToolBuilder
+        MoziToolBuilder.__init__(self)
 
         # SECTION: Initialize the Hub
         self.Hub_ = Hub(

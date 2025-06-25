@@ -1,6 +1,6 @@
 # CONTENT: content
 THERMODB_RULES = """
-CO2:
+carbon dioxide:
   DATA:
     Pc: Pc
     Tc: Tc

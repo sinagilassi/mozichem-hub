@@ -1,6 +1,7 @@
 # import libs
 
-from mozichem_hub import __version__, MoziChemMCP
+from mozichem_hub import __version__
+from mozichem_hub.docs import MoziChemMCP
 from rich import print
 
 # version

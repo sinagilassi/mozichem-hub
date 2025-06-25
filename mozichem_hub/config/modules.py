@@ -16,6 +16,10 @@ MCP_MODULES = [
             {
                 'name': 'cal_fugacity',
                 'description': 'Calculates the fugacity of a component at given temperature and pressure.',
+            },
+            {
+                'name': 'cal_fugacity_mixture',
+                'description': 'Calculates the fugacity of a mixture of components at given temperature and pressure.',
             }
         ],
     }
