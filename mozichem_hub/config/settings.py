@@ -31,6 +31,17 @@ class Settings(BaseSettings):
     config_dir: Path = Field(
         default_factory=lambda: Path(__file__).parent / "config")
 
+    # symbols for the application
+    symbols_folder: str = Field(
+        default="references",
+        description="Folder name for storing symbols."
+    )
+
+    symbols_source: str = Field(
+        default="symbols.yml",
+        description="Source file name for symbols."
+    )
+
     class Config:
         """Pydantic configuration."""
         env_prefix = "mozichem_hub_"

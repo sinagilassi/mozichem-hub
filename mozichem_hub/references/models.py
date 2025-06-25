@@ -18,26 +18,47 @@ from pydantic import (
 # local
 
 
-class ComponentReferenceConfig(BaseModel):
+class ComponentProperty(BaseModel):
     """
-    Model for component reference. This model is used by PyThermoLinkDB.
+    Model for component property. This model is used by PyThermoLinkDB.
 
     Example
     -------
-    Example of a component reference configuration:
+    Example of a component property configuration:
     {
-        "properties": {
-            "heat-capacity": "specific heat capacity data",
-            "vapor-pressure": "vapor pressure data",
-            "general": "general thermodynamic properties"
-        }
+        "databook": "databook 1",
+        "table": "table 1",
+        "symbol": "Cp_IG"
     }
     """
-    properties: Dict[str, str] = Field(
+    databook: str = Field(
         ...,
+        description="Databook name where the property is defined"
+    )
+    table: str = Field(
+        ...,
+        description="Table name where the property is defined"
+    )
+    symbol: Optional[str] = Field(
+        None,
+        description="Symbol for the property, e.g., 'Cp_IG'"
+    )
+
+
+class ComponentReferenceConfig(BaseModel):
+    """
+    Model for component reference. This model is used by PyThermoLinkDB.
+    """
+    properties: Optional[
+        Dict[
+            str, ComponentProperty
+        ] | List[
+            Dict[str, ComponentProperty]
+        ]
+    ] = Field(
+        default_factory=list,
         description=(
-            "Set of properties to be included in the reference, "
-            "e.g., {'heat-capacity', 'vapor-pressure', 'general'}"
+            "Set of properties to be included in the reference."
         )
     )
 
@@ -46,9 +67,18 @@ class ComponentReferenceConfig(BaseModel):
             "examples": [
                 {
                     "properties": {
-                        "heat-capacity": "specific heat capacity data",
-                        "vapor-pressure": "vapor pressure data",
-                        "general": "general thermodynamic properties"
+                        "heat-capacity": {
+                            "databook": "databook 1",
+                            "table": "table 1",
+                        },
+                        "vapor-pressure": {
+                            "databook": "databook 2",
+                            "table": "table 2",
+                        },
+                        "general": {
+                            "databook": "databook 3",
+                            "table": "table 3"
+                        }
                     }
                 }
             ]
@@ -114,8 +144,8 @@ class ReferenceLink(BaseModel):
         Reference rule to link between the reference and functions (tools).
 
     """
-    rule: str = Field(
-        ...,
+    rule: Optional[str] = Field(
+        None,
         description=(
             "Reference rule to link between the custom reference "
             "and application"

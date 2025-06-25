@@ -15,6 +15,56 @@ class Loader:
         # data path
         # self.data_dir = app_settings.data_dir
 
+    def load_yml(
+        self,
+        target_folder: str,
+        target_file: str
+    ) -> Dict:
+        '''
+        Load a yml file from the specified folder.
+
+        Parameters
+        ----------
+        target_folder : str
+            The folder where the yml file is located.
+        target_file : str
+            The name of the yml file to load.
+
+        Returns
+        -------
+        dict
+            The contents of the yml file as a dictionary.
+        '''
+        try:
+            # NOTE: check if target_folder and target_file are provided
+            if not target_folder or not target_file:
+                raise ValueError(
+                    "Both target_folder and target_file must be provided.")
+
+            # target file format
+            if not target_file.endswith('.yml'):
+                raise ValueError("The target_file must be a .yml file.")
+
+            # NOTE: get the current folder and parent folder
+            # current folder relative
+            current_folder = os.path.dirname(__file__)
+            # parent folder
+            parent_folder = os.path.dirname(current_folder)
+            # data folder
+            src_folder = os.path.join(parent_folder, target_folder)
+            # yml file
+            yml_file = os.path.join(src_folder, target_file)
+
+            # NOTE: check file exists
+            if os.path.exists(yml_file):
+                # load yml
+                with open(yml_file, 'r') as f:
+                    return yaml.load(f, Loader=yaml.FullLoader)
+            else:
+                raise Exception('Reference file not found!')
+        except Exception as e:
+            raise Exception('Loading yml failed! ', e)
+
     def load_yml_references(
         self,
         target_folder: str,
@@ -33,34 +83,13 @@ class Loader:
             reference yml files
         '''
         try:
-            # NOTE: check if target_folder and target_file are provided
-            if not target_folder or not target_file:
-                raise ValueError(
-                    "Both target_folder and target_file must be provided.")
+            ref = self.load_yml(
+                target_folder=target_folder,
+                target_file=target_file
+            )
 
-            # target file format
-            if not target_file.endswith('.yml'):
-                raise ValueError("The target_file must be a .yml file.")
-
-            # NOTE: get the current folder and parent folder
-            # current folder relative
-            current_folder = os.path.dirname(__file__)
-            # parent folder
-            parent_folder = os.path.dirname(current_folder)
-            # data folder
-            data_folder = os.path.join(parent_folder, target_folder)
-            # reference yml file
-            reference_file = os.path.join(data_folder, target_file)
-
-            # NOTE: check file exists
-            if os.path.exists(reference_file):
-                # load yml
-                with open(reference_file, 'r') as f:
-                    ref = yaml.load(f, Loader=yaml.FullLoader)
-
-                    return ref['REFERENCES']
-            else:
-                raise Exception('Reference file not found!')
+            # NOTE: get the references
+            return ref['REFERENCE']
         except Exception as e:
             raise Exception('Loading reference failed! ', e)
 

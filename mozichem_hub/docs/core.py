@@ -40,13 +40,13 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             reference_config: Optional[
                 Dict[str, Dict[str, str]]
             ] = None,
-            reference_link: Optional[ReferenceLink] = None,
             component_reference_config: Optional[
                 Union[
-                    ComponentReferenceConfig,
-                    List[ComponentReferenceConfig]
+                    Dict[str, Dict[str, str]],
+                    List[Dict[str, Dict[str, str]]]
                 ]
             ] = None,
+            reference_link: Optional[str] = None,
             local_mcp: Optional[bool] = False,
             **kwargs
     ):
@@ -56,34 +56,46 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         Parameters
         ----------
         name : str
-            Name of the mcp server
-        reference : Optional[Reference]
-            Custom reference for the hub, default is None. It includes
-            - content: str
-            - config: dict
+            Name of the mcp server.
+        description : Optional[str]
+            Description of the mcp server, default is None.
         reference_content : Optional[Union[str, List[str]]]
             Content of the reference, can be a string or a list of strings.
         reference_config : Optional[Dict[str, Dict[str, str]]]
             Configuration for the reference, default is None.
-        reference_link : Optional[ReferenceLink]
-            Custom reference link for the hub, default is None.
         component_reference_config : Optional[Union[ComponentReferenceConfig, List[ComponentReferenceConfig]]]
             Configuration for component references, default is None.
+        reference_link : Optional[ReferenceLink]
+            Custom reference link for the hub, default is None.
+        local_mcp : Optional[bool]
+            If True, the mcp will be configured to run locally with local tools.
         **kwargs : dict
             Additional keyword arguments for hub configuration.
         """
         # NOTE: set
         self._name = name
         self._description = description
+        # ! reference
         self._reference_content = reference_content
         self._reference_config = reference_config
-        self._reference_link = reference_link
         self._component_reference_config = component_reference_config
+        # ! reference link
+        self._reference_link = reference_link
 
         # NOTE: set reference
         self._references = References(
             contents=reference_content,
             config=reference_config
+        )
+
+        # NOTE: set component reference config
+        self._component_reference_config = ComponentReferenceConfig(
+            properties=component_reference_config
+        )
+
+        # NOTE: set reference link
+        self._reference_link = ReferenceLink(
+            rule=reference_link
         )
 
         # NOTE: set the mcp name
