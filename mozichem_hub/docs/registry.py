@@ -14,7 +14,7 @@ class RegistryMixin:
         """
         Initialize the Registry instance.
         """
-        # A dictionary to hold registered methods
+        # NOTE: registered methods
         self._methods = {}
 
     @property

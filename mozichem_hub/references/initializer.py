@@ -1,12 +1,19 @@
 # import libs
-from typing import Optional, Tuple, Dict, List, Union
+from typing import (
+    Optional,
+    Tuple,
+    Dict,
+    List,
+    Union)
 # local
 from .reference import REFERENCE
 from .config import REFERENCE_CONFIG
 from .rules import THERMODB_RULES
 from .models import (
+    References,
     Reference,
     ReferenceLink,
+    ComponentReferenceConfig,
     ReferenceThermoDB
 )
 
@@ -16,24 +23,30 @@ class ReferencesInitializer:
     This class is responsible for setting up the necessary references
     that will be used throughout the hub.
     """
-
     # NOTE: attributes
 
     def __init__(
         self,
-        custom_reference: Optional[Reference] = None,
-        custom_reference_link: Optional[ReferenceLink] = None
+        references: Optional[References] = None,
+        reference_link: Optional[ReferenceLink] = None,
+        component_reference_config: Optional[
+            Dict[str, ComponentReferenceConfig]
+        ] = None
     ):
         """
         Initialize the references.
         """
+        # NOTE:
+        # component reference config
+        self._component_reference_config = component_reference_config
+
         # SECTION: set reference
         (
             self._reference,  # ! PyThermoDB reference
             self._reference_content,  # ! PyThermoDB reference
             self._reference_config,  # ! PyThermoDB reference configuration
             self._rule  # ! PyThermoLinkDB rule
-        ) = self.initialize_references(custom_reference, custom_reference_link)
+        ) = self.initialize_references(references, reference_link)
 
     @property
     def reference_content(self) -> str:
@@ -58,8 +71,8 @@ class ReferencesInitializer:
 
     def initialize_references(
         self,
-        custom_reference: Optional[Reference] = None,
-        custom_reference_link: Optional[ReferenceLink] = None
+        references: Optional[References] = None,
+        reference_link: Optional[ReferenceLink] = None
     ) -> Tuple[
         ReferenceThermoDB,
         str,
@@ -75,10 +88,34 @@ class ReferencesInitializer:
             The custom reference dictionary.
         """
         try:
-            # NOTE: set default reference
-            reference = ReferenceThermoDB(
+            # SECTION: local reference
+            # NOTE: load local reference
+            local_reference = self._load_local_reference()
+
+            # NOTE: load local rules
+            local_rules = self._load_rules()
+
+            # SECTION: external reference
+            # init
+            external_references = References(contents=[], config={})
+            external_reference_link = None
+
+            # NOTE: load external reference
+            if references is not None:
+                # set external reference
+                external_references = references
+
+            # NOTE: load external reference link
+            if reference_link is not None:
+                # set external reference link
+                external_reference_link = reference_link
+
+            # SECTION: set default reference
+            reference_ = ReferenceThermoDB(
                 reference={
-                    "reference": [REFERENCE]
+                    "reference": [
+                        REFERENCE, external_references.contents
+                    ]
                 }
             )
 
@@ -88,10 +125,44 @@ class ReferencesInitializer:
             rule = THERMODB_RULES
 
             # return
-            return reference, reference_content, reference_config, rule
+            return reference_, reference_content, reference_config, rule
         except Exception as e:
             raise ValueError(
                 f"Failed to analyze custom reference: {e}") from e
+
+    def _load_local_reference(self):
+        """
+        Load the local reference content, configuration, and rule.
+
+        Returns
+        -------
+        Tuple[str, Dict[str, Dict[str, str]]]
+            The local reference content, configuration, and rule.
+        """
+        try:
+            # Load the local reference content
+            reference_content = REFERENCE
+
+            # Load the local reference configuration
+            reference_config = REFERENCE_CONFIG
+
+            return reference_content, reference_config
+        except Exception as e:
+            raise ValueError(f"Failed to load local reference: {e}") from e
+
+    def _load_rules(self) -> str:
+        """
+        Load the rules for the reference.
+
+        Returns
+        -------
+        str
+            The rule for the reference.
+        """
+        try:
+            return THERMODB_RULES
+        except Exception as e:
+            raise ValueError(f"Failed to load rules: {e}") from e
 
     def _get_reference(
         self,

@@ -7,7 +7,8 @@ from typing import (
     Callable,
     Any,
     Literal,
-    Set
+    Set,
+    Union
 )
 # local
 from .registry import RegistryMixin
@@ -15,10 +16,11 @@ from .services import ReferenceServices
 from .server import MoziServer
 from ..tools import ToolManager
 from ..references import (
+    References,
     Reference,
     ReferenceLink,
+    ComponentReferenceConfig
 )
-from ..config import MCP_MODULES
 
 
 class MoziChemMCP(RegistryMixin, ReferenceServices):
@@ -32,8 +34,19 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             self,
             name: str,
             description: Optional[str] = None,
-            reference: Optional[Reference] = None,
+            reference_content: Optional[
+                Union[str, List[str]]
+            ] = None,
+            reference_config: Optional[
+                Dict[str, Dict[str, str]]
+            ] = None,
             reference_link: Optional[ReferenceLink] = None,
+            component_reference_config: Optional[
+                Union[
+                    ComponentReferenceConfig,
+                    List[ComponentReferenceConfig]
+                ]
+            ] = None,
             local_mcp: Optional[bool] = False,
             **kwargs
     ):
@@ -48,16 +61,30 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             Custom reference for the hub, default is None. It includes
             - content: str
             - config: dict
+        reference_content : Optional[Union[str, List[str]]]
+            Content of the reference, can be a string or a list of strings.
+        reference_config : Optional[Dict[str, Dict[str, str]]]
+            Configuration for the reference, default is None.
         reference_link : Optional[ReferenceLink]
             Custom reference link for the hub, default is None.
+        component_reference_config : Optional[Union[ComponentReferenceConfig, List[ComponentReferenceConfig]]]
+            Configuration for component references, default is None.
         **kwargs : dict
             Additional keyword arguments for hub configuration.
         """
         # NOTE: set
         self._name = name
         self._description = description
-        self._reference = reference
+        self._reference_content = reference_content
+        self._reference_config = reference_config
         self._reference_link = reference_link
+        self._component_reference_config = component_reference_config
+
+        # NOTE: set reference
+        self._references = References(
+            contents=reference_content,
+            config=reference_config
+        )
 
         # NOTE: set the mcp name
         self.local_mcp = local_mcp
