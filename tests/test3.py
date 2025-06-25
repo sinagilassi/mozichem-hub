@@ -20,14 +20,14 @@ print(f"mcp names: {mcp_names}")
 thermo_models_mcp = create_mozichem_mcp(name="thermo-models-mcp")
 
 # NOTE: mcp tools
-tools_info = thermo_models_mcp.tools_info()
-print(f"Tools available in 'thermo-models-mcp': {tools_info}")
+# tools_info = thermo_models_mcp.tools_info()
+# print(f"Tools available in 'thermo-models-mcp': {tools_info}")
 
 # SECTION: Create a ToolExecuter instance
 tool_executer = ToolExecuter(mozichem_mcp=thermo_models_mcp)
 # all tools
-all_tools = tool_executer.list_tools()
-print(f"All tools in 'thermo-models-mcp': {all_tools}")
+tools_ = tool_executer.get_tools()
+print(f"All tools in 'thermo-models-mcp': {tools_}")
 
 # select a tool to execute
 tool_name = "cal_fugacity"
@@ -44,9 +44,9 @@ pressure = Pressure(
 )
 
 component = Component(
-    name="carbon dioxide",
-    formula="CO2",
-    state="g"
+    name="propane",
+    formula="C3H8",
+    state="l"
 )
 
 eos_model = "SRK"

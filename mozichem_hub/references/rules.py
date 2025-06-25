@@ -1,6 +1,6 @@
 # CONTENT: content
 THERMODB_RULES = """
-carbon dioxide:
+carbon dioxide-g:
   DATA:
     Pc: Pc
     Tc: Tc
@@ -72,7 +72,7 @@ C2H6:
   EQUATIONS:
     vapor-pressure: VaPr
     heat-capacity: Cp_IG
-propane:
+propane-l:
   DATA:
     Pc: Pc
     Tc: Tc

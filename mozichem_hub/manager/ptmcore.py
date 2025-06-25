@@ -65,6 +65,9 @@ class PTMCore:
                 component_name, _, _
             ) = component.name, component.formula, component.state
 
+            # component name - state
+            component_ = f"{component_name}-{component.state}"
+
             # SECTION: build model source
             model_source = self.hub.build_component_model_source(
                 component=component
@@ -72,12 +75,10 @@ class PTMCore:
 
             # SECTION: model input
             model_inputs = {
-                "component": component_name,
+                "component": component_,
                 "pressure": [pressure.value, pressure.unit],
                 "temperature": [temperature.value, temperature.unit]
             }
-
-            print(f"Model inputs: {model_inputs}")
 
             # SECTION: calc
             res = self.eos.cal_fugacity(
