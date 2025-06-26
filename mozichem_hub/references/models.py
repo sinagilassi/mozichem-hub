@@ -28,8 +28,15 @@ class ComponentProperty(BaseModel):
     {
         "databook": "databook 1",
         "table": "table 1",
-        "symbol": "Cp_IG"
+        "label": "Cp_IG"
     }
+
+    Notes
+    -----
+    - `databook`: Name of the databook where the property is defined.
+    - `table`: Name of the table where the property is defined.
+    - `label`: Optional label for the property used in the script, e.g., 'Cp_IG'.
+    - `labels`: Optional dictionary of labels for the property used in the script,
     """
     databook: str = Field(
         ...,
@@ -39,9 +46,37 @@ class ComponentProperty(BaseModel):
         ...,
         description="Table name where the property is defined"
     )
-    symbol: Optional[str] = Field(
+    label: Optional[str] = Field(
         None,
-        description="Symbol for the property, e.g., 'Cp_IG'"
+        description="label for the property used in the script, e.g., 'Cp_IG'"
+    )
+    labels: Optional[Dict[str, str]] = Field(
+        None,
+        description=(
+            "Dictionary of labels for the property used in the script, "
+            "e.g., {'Pc': 'Pc', 'Tc': 'Tc', 'AcFa': 'AcFa'}"
+        )
+    )
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [
+                {
+                    "databook": "databook 1",
+                    "table": "table 1",
+                    "label": "Cp_IG"
+                },
+                {
+                    "databook": "databook 2",
+                    "table": "table 2",
+                    "labels": {
+                        "Pc": "Pc",
+                        "Tc": "Tc",
+                        "AcFa": "AcFa"
+                    }
+                }
+            ]
+        }
     )
 
 
@@ -70,14 +105,21 @@ class ComponentReferenceConfig(BaseModel):
                         "heat-capacity": {
                             "databook": "databook 1",
                             "table": "table 1",
+                            "": "Cp_IG"
                         },
                         "vapor-pressure": {
                             "databook": "databook 2",
                             "table": "table 2",
+                            "symbol": "VaPr"
                         },
                         "general": {
                             "databook": "databook 3",
-                            "table": "table 3"
+                            "table": "table 3",
+                            "symbols": {
+                                "Pc": "Pc",
+                                "Tc": "Tc",
+                                "AcFa": "AcFa"
+                            }
                         }
                     }
                 }
