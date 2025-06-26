@@ -38,13 +38,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
                 Union[str, List[str]]
             ] = None,
             reference_config: Optional[
-                Dict[str, Dict[str, str]]
-            ] = None,
-            component_reference_config: Optional[
-                Union[
-                    Dict[str, Dict[str, str]],
-                    List[Dict[str, Dict[str, str]]]
-                ]
+                Union[str, List[str]]
             ] = None,
             reference_link: Optional[str] = None,
             local_mcp: Optional[bool] = False,
@@ -63,14 +57,43 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             Content of the reference, can be a string or a list of strings.
         reference_config : Optional[Dict[str, Dict[str, str]]]
             Configuration for the reference, default is None.
-        component_reference_config : Optional[Union[ComponentReferenceConfig, List[ComponentReferenceConfig]]]
-            Configuration for component references, default is None.
         reference_link : Optional[ReferenceLink]
             Custom reference link for the hub, default is None.
         local_mcp : Optional[bool]
             If True, the mcp will be configured to run locally with local tools.
         **kwargs : dict
             Additional keyword arguments for hub configuration.
+
+        Notes
+        -----
+        - Reference content accepts a string or a list of strings. The acceptable format is taken from the PyThermoDB.
+        - Reference config accepts a dictionary or a list of dictionaries. For instance,
+
+        ```python
+        my_config = {
+            "CO2" : {
+                "heat-capacity": {
+                    "databook": "databook 1",
+                    "table": "table 1",
+                    "label": "Cp_IG"
+                },
+                "vapor-pressure": {
+                    "databook": "databook 2",
+                    "table": "table 2",
+                    "label": "VaPr"
+                },
+                "general":{
+                    "databook": "databook 2",
+                    "table": "table 2",
+                    "labels": {
+                        "Pc": "Pc",
+                        "Tc": "Tc",
+                        "AcFa": "AcFa"
+                    }
+                }
+            }
+        }
+        ```
         """
         # NOTE: set
         self._name = name
@@ -78,7 +101,6 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         # ! reference
         self._reference_content = reference_content
         self._reference_config = reference_config
-        self._component_reference_config = component_reference_config
         # ! reference link
         self._reference_link = reference_link
 

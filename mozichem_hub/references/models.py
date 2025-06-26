@@ -158,8 +158,12 @@ class References(BaseModel):
             "PyThermoDB"
         )
     )
-    config: Optional[Dict[str, Any]] = Field(
-        {},
+    config: Optional[
+        Union[
+            Dict[str, Dict[str, str]],
+            List[Dict[str, Dict[str, str]]]
+        ]] = Field(
+        [],
         description=(
             "Configuration for the thermodynamic database, "
             "which properties should be included"
@@ -172,6 +176,15 @@ class References(BaseModel):
         if v is None:
             return []
         if isinstance(v, str):
+            return [v]
+        return v
+
+    @field_validator("config", mode="before")
+    @classmethod
+    def convert_dict_to_list(cls, v):
+        if v is None:
+            return []
+        if isinstance(v, dict):
             return [v]
         return v
 
