@@ -4,9 +4,9 @@
 
 MCP_MODULES = [
     {
-        'name': 'thermo-models-mcp',
+        'name': 'eos-models-mcp',
         'version': '0.1.0',
-        'description': 'Thermodynamic models including equations of state, activity coefficient models, and more.',
+        'description': 'EOS Models for MCP, a module for calculating thermodynamic properties using EOS models.',
         'package': 'PyThermoModels',
         'class': 'MCP_PTMCore',
         'descriptor': 'ptmcore.yml',

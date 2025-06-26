@@ -89,9 +89,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         )
 
         # NOTE: set component reference config
-        self._component_reference_config = ComponentReferenceConfig(
-            properties=component_reference_config
-        )
+        self._component_reference_config = ComponentReferenceConfig()
 
         # NOTE: set reference link
         self._reference_link = ReferenceLink(
@@ -112,8 +110,8 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         # SECTION: initialize the ReferenceServices
         ReferenceServices.__init__(
             self,
-            reference=reference,
-            reference_link=reference_link
+            references=self._references,
+            reference_link=self._reference_link
         )
 
         # SECTION: initialize the MoziServer

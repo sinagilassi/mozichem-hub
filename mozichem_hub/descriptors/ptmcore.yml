@@ -23,6 +23,19 @@ REFERENCES:
   TOOL2:
     NAME: cal_fugacity_mixture
     DESCRIPTION: "This function calculates the fugacity of a mixture of gases using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW)."
+    ARGS:
+      - name: temperature
+        type: Temperature
+        description: "Temperature of the system."
+      - name: pressure
+        type: Pressure
+        description: "Pressure of the system."
+      - name: components
+        type: Components
+        description: "Chemical components for which the fugacity is calculated."
+      - name: eos_model
+        type: str
+        description: "Equation of state to use for the calculation. Options are 'PR' for Peng-Robinson, 'SRK' for Soave-Redlich-Kwong, 'RK' for Redlich-Kwong, and 'vdW' for van der Waals."
     TAGS:
       - thermodynamics
       - fugacity
