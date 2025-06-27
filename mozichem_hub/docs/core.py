@@ -19,7 +19,8 @@ from ..references import (
     References,
     Reference,
     ReferenceLink,
-    ComponentReferenceConfig
+    ComponentReferenceConfig,
+    ReferencesAdapter
 )
 
 
@@ -38,7 +39,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
                 Union[str, List[str]]
             ] = None,
             reference_config: Optional[
-                Union[str, List[str]]
+                Union[str, Dict[str, Dict[str, str]]]
             ] = None,
             reference_link: Optional[str] = None,
             local_mcp: Optional[bool] = False,
@@ -53,16 +54,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             Name of the mcp server.
         description : Optional[str]
             Description of the mcp server, default is None.
-        reference_content : Optional[Union[str, List[str]]]
-            Content of the reference, can be a string or a list of strings.
-        reference_config : Optional[Dict[str, Dict[str, str]]]
-            Configuration for the reference, default is None.
-        reference_link : Optional[ReferenceLink]
-            Custom reference link for the hub, default is None.
-        local_mcp : Optional[bool]
-            If True, the mcp will be configured to run locally with local tools.
-        **kwargs : dict
-            Additional keyword arguments for hub configuration.
+
 
         Notes
         -----
@@ -96,6 +88,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         ```
         """
         # NOTE: set
+        # ! name and description
         self._name = name
         self._description = description
         # ! reference
@@ -104,14 +97,25 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         # ! reference link
         self._reference_link = reference_link
 
+        # SECTION: standardize the reference content and config
+        # init the ReferencesAdapter
+        adapter = ReferencesAdapter()
+
+        # NOTE: config conversion
+        if (
+            isinstance(reference_config, str)
+            and reference_config is not None
+        ):
+            reference_config = adapter.adapt_reference_config(
+                reference_config=reference_config
+            )
+
+        # SECTION: set the reference
         # NOTE: set reference
         self._references = References(
             contents=reference_content,
             config=reference_config
         )
-
-        # NOTE: set component reference config
-        self._component_reference_config = ComponentReferenceConfig()
 
         # NOTE: set reference link
         self._reference_link = ReferenceLink(
@@ -127,9 +131,11 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             self._mcp_name = name
 
         # SECTION: initialize the registry
+        # NOTE: create the RegistryMixin instance
         RegistryMixin.__init__(self)
 
         # SECTION: initialize the ReferenceServices
+        # NOTE: create the ReferenceServices instance
         ReferenceServices.__init__(
             self,
             references=self._references,
@@ -137,9 +143,11 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         )
 
         # SECTION: initialize the MoziServer
+        # NOTE: create the MoziServer instance
         self.MoziServer_ = MoziServer(name=name)
 
         # SECTION: initialize the ToolManager with references
+        # NOTE: create the ToolManager instance
         self.ToolManager_ = ToolManager(
             reference_thermodb=self.reference_thermodb,
             reference=self.reference,

@@ -6,6 +6,7 @@ from .models import (
     ReferenceThermoDB,
     ComponentReferenceConfig
 )
+from .adapter import ReferencesAdapter
 
 
 __all__ = [
@@ -14,5 +15,6 @@ __all__ = [
     "Reference",
     "ReferenceLink",
     "ReferenceThermoDB",
-    "ComponentReferenceConfig"
+    "ComponentReferenceConfig",
+    "ReferencesAdapter"
 ]

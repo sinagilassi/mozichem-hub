@@ -26,20 +26,14 @@ class ReferenceServices:
         self,
         references: Optional[References] = None,
         reference_link: Optional[ReferenceLink] = None,
-        component_reference_config: Optional[
-            Union[
-                ComponentReferenceConfig,
-                List[ComponentReferenceConfig]
-            ]
-        ] = None,
     ):
         """
         Initialize the ReferenceServices.
         """
         # SECTION: configure the reference
         self.ReferencesInitializer_ = ReferencesInitializer(
-            reference,
-            reference_link
+            references=references,
+            reference_link=reference_link,
         )
 
         # NOTE: initialize references

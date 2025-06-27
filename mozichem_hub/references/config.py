@@ -1,22 +1,23 @@
 # import libs
-from typing import Dict
-from .models import ComponentProperty
+from typing import Dict, List
+from .models import ComponentPropertySource
+# locals
 
 # SECTION: default reference config
-REFERENCE_CONFIG: Dict[str, ComponentProperty] = {
-    'heat-capacity': ComponentProperty(
+REFERENCE_CONFIG: Dict[str, ComponentPropertySource] = {
+    'heat-capacity': ComponentPropertySource(
         databook='CUSTOM-REF-1',
         table='ideal-gas-molar-heat-capacity',
         label='Cp_IG',
         labels=None
     ),
-    'vapor-pressure': ComponentProperty(
+    'vapor-pressure': ComponentPropertySource(
         databook='CUSTOM-REF-1',
         table='vapor-pressure',
         label='VaPr',
         labels=None
     ),
-    'general': ComponentProperty(
+    'general': ComponentPropertySource(
         databook='CUSTOM-REF-1',
         table='general-data',
         label=None,
@@ -28,22 +29,22 @@ REFERENCE_CONFIG: Dict[str, ComponentProperty] = {
     )
 }
 
-REFERENCE_CONFIGS: Dict[str, Dict[str, ComponentProperty]] = {
+REFERENCE_CONFIGS: Dict[str, Dict[str, ComponentPropertySource]] = {
     "ALL": REFERENCE_CONFIG,
     "CO2": {
-        'heat-capacity': ComponentProperty(
+        'heat-capacity': ComponentPropertySource(
             databook='CUSTOM-REF-1',
             table='ideal-gas-molar-heat-capacity',
             label='Cp_IG',
             labels=None
         ),
-        'vapor-pressure': ComponentProperty(
+        'vapor-pressure': ComponentPropertySource(
             databook='CUSTOM-REF-1',
             table='vapor-pressure',
             label='VaPr',
             labels=None
         ),
-        'general': ComponentProperty(
+        'general': ComponentPropertySource(
             databook='CUSTOM-REF-1',
             table='general-data',
             label=None,

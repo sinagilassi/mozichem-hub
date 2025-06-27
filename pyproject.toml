@@ -23,7 +23,7 @@ dependencies = [
     "pydantic-settings",
     "fastmcp",
     "pyyaml",
-    "pythermodb>=1.11.1",
+    "pythermodb>=1.11.3",
     "pythermolinkdb>=1.3.2",
     "pythermomodels>=1.4.8",
 ]

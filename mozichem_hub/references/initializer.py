@@ -29,17 +29,10 @@ class ReferencesInitializer:
         self,
         references: Optional[References] = None,
         reference_link: Optional[ReferenceLink] = None,
-        component_reference_config: Optional[
-            Dict[str, ComponentReferenceConfig]
-        ] = None
     ):
         """
         Initialize the references.
         """
-        # NOTE:
-        # component reference config
-        self._component_reference_config = component_reference_config
-
         # SECTION: set reference
         (
             self._reference,  # ! PyThermoDB reference

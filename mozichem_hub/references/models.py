@@ -18,9 +18,9 @@ from pydantic import (
 # local
 
 
-class ComponentProperty(BaseModel):
+class ComponentPropertySource(BaseModel):
     """
-    Model for component property. This model is used by PyThermoLinkDB.
+    Model for component property source. This model is used by PyThermoLinkDB.
 
     Example
     -------
@@ -28,7 +28,8 @@ class ComponentProperty(BaseModel):
     {
         "databook": "databook 1",
         "table": "table 1",
-        "label": "Cp_IG"
+        "label": "Cp_IG",
+        "labels": None
     }
 
     Notes
@@ -79,6 +80,16 @@ class ComponentProperty(BaseModel):
         }
     )
 
+    @field_validator("label", mode="before")
+    @classmethod
+    def empty_str_to_none(cls, v):
+        return None if v == "" else v
+
+    @field_validator("labels", mode="before")
+    @classmethod
+    def empty_dict_to_none(cls, v):
+        return None if v == {} else v
+
 
 class ComponentReferenceConfig(BaseModel):
     """
@@ -86,12 +97,10 @@ class ComponentReferenceConfig(BaseModel):
     """
     properties: Optional[
         Dict[
-            str, ComponentProperty
-        ] | List[
-            Dict[str, ComponentProperty]
+            str, ComponentPropertySource
         ]
     ] = Field(
-        default_factory=list,
+        default_factory=dict,
         description=(
             "Set of properties to be included in the reference."
         )
@@ -105,17 +114,17 @@ class ComponentReferenceConfig(BaseModel):
                         "heat-capacity": {
                             "databook": "databook 1",
                             "table": "table 1",
-                            "": "Cp_IG"
+                            "label": "Cp_IG"
                         },
                         "vapor-pressure": {
                             "databook": "databook 2",
                             "table": "table 2",
-                            "symbol": "VaPr"
+                            "label": "VaPr"
                         },
                         "general": {
                             "databook": "databook 3",
                             "table": "table 3",
-                            "symbols": {
+                            "labels": {
                                 "Pc": "Pc",
                                 "Tc": "Tc",
                                 "AcFa": "AcFa"
@@ -150,6 +159,12 @@ class Reference(BaseModel):
 class References(BaseModel):
     """
     Model for references thermodynamic database (ThermoDB).
+
+    Notes
+    -----
+    - Case 1: user provides a single reference as a string, the app config is set to the default configuration.
+    - Case 2: user provides a list of references as a list of strings, the app config is set to the default configuration.
+    - case 3: user only provides a configuration without any references, the app references the default configuration.
     """
     contents: Optional[List[str] | str] = Field(
         [],
@@ -159,11 +174,9 @@ class References(BaseModel):
         )
     )
     config: Optional[
-        Union[
-            Dict[str, Dict[str, str]],
-            List[Dict[str, Dict[str, str]]]
-        ]] = Field(
-        [],
+        Dict[str, Dict[str, str]]
+    ] = Field(
+        {},
         description=(
             "Configuration for the thermodynamic database, "
             "which properties should be included"
@@ -176,15 +189,6 @@ class References(BaseModel):
         if v is None:
             return []
         if isinstance(v, str):
-            return [v]
-        return v
-
-    @field_validator("config", mode="before")
-    @classmethod
-    def convert_dict_to_list(cls, v):
-        if v is None:
-            return []
-        if isinstance(v, dict):
             return [v]
         return v
 
