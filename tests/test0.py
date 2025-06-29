@@ -59,7 +59,7 @@ CO:
 # SECTION: Create a ReferencesAdapter instance
 ref_adapter = ReferencesAdapter()
 
-config_ = ref_adapter.set_reference_config(
+config_ = ref_adapter.from_str(
     reference_config=reference_config_yml,
 )
 print(config_)

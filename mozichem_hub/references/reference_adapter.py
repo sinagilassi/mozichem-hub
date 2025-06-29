@@ -72,3 +72,22 @@ class ReferencesAdapter:
         except Exception as e:
             logging.error(f"Failed to adapt reference config: {e}")
             raise ValueError(f"Failed to adapt reference config: {e}") from e
+
+    def build_reference_config(
+        self,
+        reference_config: Dict[str, Dict[str, ComponentPropertySource]]
+    ) -> Dict[str, Dict[str, ComponentPropertySource]]:
+        """
+        Build a ReferenceConfig object from the given reference configuration.
+
+        Parameters
+        ----------
+        reference_config : Dict[str, Dict[str, ComponentPropertySource]]
+            The reference configuration to be adapted.
+
+        Returns
+        -------
+        ReferenceConfig
+            The adapted reference configuration as a ReferenceConfig object.
+        """
+        pass
