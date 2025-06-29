@@ -1,5 +1,4 @@
 # import libs
-from pyThermoDB.references import ReferenceConfig
 from mozichem_hub.references import ReferencesAdapter
 from rich import print
 
@@ -57,16 +56,11 @@ CO:
       AcFa: AcFa
 """
 
-
-# SECTION: Create a ReferenceConfig instance
-# ref_config = ReferenceConfig().set_reference_config(
-#     reference_config=reference_config_yml,)
-# print(ref_config)
-
 # SECTION: Create a ReferencesAdapter instance
 ref_adapter = ReferencesAdapter()
 
-adapted_config = ref_adapter.adapt_reference_config(
+config_ = ref_adapter.set_reference_config(
     reference_config=reference_config_yml,
 )
-print(adapted_config)
+print(config_)
+print(type(config_))

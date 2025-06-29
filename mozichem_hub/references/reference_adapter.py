@@ -17,12 +17,12 @@ class ReferencesAdapter:
         Initialize the ReferencesAdapter.
         """
 
-    def set_reference_config(
+    def from_str(
         self,
         reference_config: str
-    ) -> Dict[str, Any]:
+    ) -> Dict[str, Dict[str, ComponentPropertySource]]:
         """
-        Adapt the reference configuration to the required format.
+        Convert the reference configuration to the required format.
 
         Parameters
         ----------
@@ -32,9 +32,8 @@ class ReferencesAdapter:
 
         Returns
         -------
-        Dict[str, Any]
-            The adapted reference configuration as a dictionary, or None if the input
-            was None.
+        Dict[str, Dict[str, ComponentPropertySource]]
+            The adapted reference configuration as a dictionary.
         """
         # SECTION: check if the reference_config is a string
         # NOTE: set the reference config

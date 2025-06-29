@@ -14,7 +14,7 @@ mcp_names = get_mozichem_mcp()
 print(f"mcp names: {mcp_names}")
 
 # SECTION: Build the MCP server
-thermo_models_mcp = create_mozichem_mcp(name="thermo-models-mcp")
+thermo_models_mcp = create_mozichem_mcp(name="eos-models-mcp")
 
 # NOTE: mcp tools
 # tools_info = thermo_models_mcp.tools_info()
