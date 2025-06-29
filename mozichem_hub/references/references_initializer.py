@@ -6,7 +6,7 @@ from typing import (
     List,
     Union)
 # local
-from .reference import REFERENCE_CONTENT
+from .contents import REFERENCE_CONTENT
 from .config import REFERENCE_CONFIGS
 from .link import REFERENCE_LINK
 from .models import (

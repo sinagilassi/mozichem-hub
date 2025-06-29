@@ -13,7 +13,8 @@ from pydantic import (
     BaseModel,
     Field,
     ConfigDict,
-    field_validator
+    field_validator,
+    model_validator
 )
 # local
 
@@ -47,17 +48,15 @@ class ComponentPropertySource(BaseModel):
         ...,
         description="Table name where the property is defined"
     )
-    label: Optional[str] = Field(
-        None,
-        description="label for the property used in the script, e.g., 'Cp_IG'"
-    )
-    labels: Optional[Dict[str, str]] = Field(
-        None,
+    mode: Literal["DATA", "EQUATIONS"] = Field(
+        ...,
         description=(
-            "Dictionary of labels for the property used in the script, "
-            "e.g., {'Pc': 'Pc', 'Tc': 'Tc', 'AcFa': 'AcFa'}"
+            "Mode of the property, either 'DATA' for data properties or "
+            "'EQUATIONS' for equation properties"
         )
     )
+    label: Optional[str] = None
+    labels: Optional[Dict[str, str]] = None
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -65,11 +64,13 @@ class ComponentPropertySource(BaseModel):
                 {
                     "databook": "databook 1",
                     "table": "table 1",
+                    "mode": "EQUATIONS",
                     "label": "Cp_IG"
                 },
                 {
                     "databook": "databook 2",
                     "table": "table 2",
+                    "mode": "DATA",
                     "labels": {
                         "Pc": "Pc",
                         "Tc": "Tc",
@@ -80,15 +81,14 @@ class ComponentPropertySource(BaseModel):
         }
     )
 
-    @field_validator("label", mode="before")
-    @classmethod
-    def empty_str_to_none(cls, v):
-        return None if v == "" else v
-
-    @field_validator("labels", mode="before")
-    @classmethod
-    def empty_dict_to_none(cls, v):
-        return None if v == {} else v
+    @model_validator(mode="after")
+    def check_exclusive_label_fields(self):
+        if self.label is not None and self.labels is not None:
+            raise ValueError(
+                "Only one of 'label' or 'labels' should be provided.")
+        if self.label is None and self.labels is None:
+            raise ValueError("Either 'label' or 'labels' must be provided.")
+        return self
 
 
 class Reference(BaseModel):
@@ -128,7 +128,7 @@ class References(BaseModel):
         )
     )
     config: Optional[
-        Dict[str, Dict[str, str]]
+        Dict[str, Dict[str, ComponentPropertySource]]
     ] = Field(
         {},
         description=(

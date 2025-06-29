@@ -1,4 +1,5 @@
 # import libs
+import yaml
 import json
 import logging
 from typing import Dict, Any, Literal
@@ -21,7 +22,7 @@ class ReferencesAdapter:
         # NOTE: set the reference config
         self.ReferenceConfig_ = ReferenceConfig()
 
-    def from_str(
+    def config_from_str(
         self,
         reference_config: str,
         reference_config_type: Literal[
@@ -88,7 +89,7 @@ class ReferencesAdapter:
             logging.error(f"Failed to adapt reference config: {e}")
             raise ValueError(f"Failed to adapt reference config: {e}") from e
 
-    def from_dict(
+    def config_from_dict(
         self,
         reference_config: Dict[str, Dict[str, str]]
     ) -> Dict[str, Dict[str, ComponentPropertySource]]:
@@ -116,26 +117,64 @@ class ReferencesAdapter:
         reference_config_str = reference_config_str.replace("'", '"')
 
         # return the adapted reference configuration
-        return self.from_str(
+        return self.config_from_str(
             reference_config_str,
             reference_config_type="dict"
         )
 
-    def build_reference_config(
+    def build_reference_link(
         self,
         reference_config: Dict[str, Dict[str, ComponentPropertySource]]
-    ):
+    ) -> str:
         """
-        Build a ReferenceConfig object from the given reference configuration.
+        Generate a reference link from the provided configuration.
 
         Parameters
         ----------
         reference_config : Dict[str, Dict[str, ComponentPropertySource]]
-            The reference configuration to be adapted.
+            The reference configuration to generate the link from.
 
         Returns
         -------
-        ReferenceConfig
-            The adapted reference configuration as a ReferenceConfig object.
+        str
+            The generated reference link.
         """
-        pass
+        # NOTE: check if the reference config is empty
+        if not reference_config:
+            logging.warning("Reference configuration is empty.")
+            return ""
+
+        # check length of the reference config
+        if len(reference_config) == 0:
+            logging.warning("Reference configuration is empty.")
+            return None
+
+        # NOTE: format the reference config to a dictionary with labels
+        # Initialize the formatted dictionary
+        formatted_dict = {}
+
+        try:
+            for component, sections in reference_config.items():
+                formatted_dict[component] = {}
+                for section, cps in sections.items():
+                    if section.upper() not in ["DATA", "EQUATIONS"]:
+                        continue
+                    # Extract `label` or `labels`
+                    if cps.labels:
+                        formatted_dict[component][section.upper()] = cps.labels
+                    elif cps.label:
+                        formatted_dict[component][section.upper()] = {
+                            cps.label: cps.label}
+
+            # Dump with line breaks between top-level items
+            return yaml.dump(
+                formatted_dict,
+                sort_keys=False,
+                default_flow_style=False
+            )
+        except Exception as e:
+            logging.error(
+                "Failed to generate reference link. "
+                "Please check the provided configuration. Error: %s", e
+            )
+            return ""

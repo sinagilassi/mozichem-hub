@@ -1,5 +1,5 @@
 # import libs
-from typing import Dict, List
+from typing import Dict
 from .models import ComponentPropertySource
 # locals
 
@@ -8,19 +8,19 @@ REFERENCE_CONFIG: Dict[str, ComponentPropertySource] = {
     'heat-capacity': ComponentPropertySource(
         databook='CUSTOM-REF-1',
         table='ideal-gas-molar-heat-capacity',
-        label='Cp_IG',
-        labels=None
+        mode='EQUATIONS',
+        label='Cp_IG'
     ),
     'vapor-pressure': ComponentPropertySource(
         databook='CUSTOM-REF-1',
         table='vapor-pressure',
-        label='VaPr',
-        labels=None
+        mode='EQUATIONS',
+        label='VaPr'
     ),
     'general': ComponentPropertySource(
         databook='CUSTOM-REF-1',
         table='general-data',
-        label=None,
+        mode='DATA',
         labels={
             'Pc': 'Pc',
             'Tc': 'Tc',

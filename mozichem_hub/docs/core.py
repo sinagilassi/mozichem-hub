@@ -104,12 +104,13 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
 
         # NOTE: config conversion
         # ! convert the reference content
-        reference_content, reference_config = ReferenceController_.transformer()
+        reference_content_, reference_config_ = \
+            ReferenceController_.transformer()
 
         # NOTE: set reference
         self._references = References(
-            contents=reference_content,
-            config=reference_config
+            contents=reference_content_,
+            config=reference_config_
         )
 
         # NOTE: set reference link
