@@ -1,11 +1,13 @@
 # import libs
-from typing import Optional, Dict, Any
+from typing import (
+    Optional,
+    Dict,
+    Any,
+    Union,
+    List
+)
 # local
 from .core import MoziChemMCP
-from ..references import (
-    Reference,
-    ReferenceLink
-)
 from ..config import MCP_MODULES
 from ..utils import MCPController
 
@@ -18,12 +20,30 @@ class MCPHub(MoziChemMCP):
     def __init__(
         self,
         mcp: str,
-        reference: Optional[Reference] = None,
-        reference_link: Optional[ReferenceLink] = None,
+        reference_content: Optional[
+            Union[str, List[str]]
+        ] = None,
+        reference_config: Optional[
+            Union[str, Dict[str, Dict[str, str]]]
+        ] = None,
+        reference_link: Optional[str] = None,
         **kwargs
     ):
         """
         Initialize the MCPHub.
+
+        Parameters
+        ----------
+        mcp : str
+            Name of the MCP to be used.
+        reference_content : Optional[Union[str, List[str]]]
+            Content of the reference, can be a string or a list of strings.
+        reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+            Configuration of the reference, can be a string or a dictionary.
+        reference_link : Optional[str]
+            Link to the reference, can be a string.
+        **kwargs : dict
+            Additional keyword arguments for the MCP.
         """
         # SECTION: select the name of the mcp available
         mcp = mcp.strip().lower()
@@ -32,7 +52,8 @@ class MCPHub(MoziChemMCP):
         self._mcp_name = mcp
 
         # NOTE: set the reference and reference link
-        self._reference = reference
+        self._reference_content = reference_content
+        self._reference_config = reference_config
         self._reference_link = reference_link
 
         # NOTE: check if mcp is available
@@ -179,7 +200,8 @@ class MCPHub(MoziChemMCP):
         # NOTE: build the MoziChem MCP server
         return MoziChemMCP(
             name=self.name,
-            reference=self._reference,
+            reference_content=self._reference_content,
+            reference_config=self._reference_config,
             reference_link=self._reference_link,
             local_mcp=True,
             **kwargs

@@ -16,15 +16,30 @@ class ReferencesAdapter:
         """
         Initialize the ReferencesAdapter.
         """
-        # NOTE: set the reference config
-        self.reference_config = ReferenceConfig()
 
-    def adapt_reference_config(
+    def set_reference_config(
         self,
         reference_config: str
     ) -> Dict[str, Any]:
-        """ Adapt the reference configuration to the required format.
         """
+        Adapt the reference configuration to the required format.
+
+        Parameters
+        ----------
+        reference_config : str
+            The reference configuration to be adapted. It can be a dictionary,
+            a string, or None.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The adapted reference configuration as a dictionary, or None if the input
+            was None.
+        """
+        # SECTION: check if the reference_config is a string
+        # NOTE: set the reference config
+        self.reference_config = ReferenceConfig()
+
         # NOTE: set the reference config
         res_dict = self.reference_config.set_reference_config(reference_config)
 

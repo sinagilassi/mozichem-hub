@@ -1,4 +1,4 @@
-from .initializer import ReferencesInitializer
+from .references_initializer import ReferencesInitializer
 from .models import (
     References,
     Reference,
@@ -6,7 +6,8 @@ from .models import (
     ReferenceThermoDB,
     ComponentReferenceConfig
 )
-from .adapter import ReferencesAdapter
+from .reference_adapter import ReferencesAdapter
+from .reference_controller import ReferenceController
 
 
 __all__ = [
@@ -16,5 +17,6 @@ __all__ = [
     "ReferenceLink",
     "ReferenceThermoDB",
     "ComponentReferenceConfig",
-    "ReferencesAdapter"
+    "ReferencesAdapter",
+    "ReferenceController"
 ]

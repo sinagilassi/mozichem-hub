@@ -6,9 +6,9 @@ from typing import (
     List,
     Union)
 # local
-from .reference import REFERENCE
-from .config import REFERENCE_CONFIG
-from .rules import THERMODB_RULES
+from .reference import REFERENCE_CONTENT
+from .config import REFERENCE_CONFIGS
+from .link import REFERENCE_LINK
 from .models import (
     References,
     Reference,
@@ -83,10 +83,11 @@ class ReferencesInitializer:
         try:
             # SECTION: local reference
             # NOTE: load local reference
-            local_reference = self._load_local_reference()
+            local_reference_content, local_reference_config = \
+                self.__load_local_reference()
 
             # NOTE: load local rules
-            local_rules = self._load_rules()
+            local_link_config = self.__load_link_config()
 
             # SECTION: external reference
             # init
@@ -104,48 +105,45 @@ class ReferencesInitializer:
                 external_reference_link = reference_link
 
             # SECTION: set default reference
-            reference_ = ReferenceThermoDB(
-                reference={
-                    "reference": [
-                        REFERENCE, external_references.contents
-                    ]
-                }
+            reference, reference_content = self.__generate_reference_thermodb(
+                local_reference_content=local_reference_content,
+                local_reference_config=local_reference_config,
+                external_references=external_references
             )
 
             # NOTE: set default reference content and config
-            reference_content = REFERENCE
-            reference_config = REFERENCE_CONFIG
-            rule = THERMODB_RULES
+            reference_config = REFERENCE_CONFIGS
+            rule = REFERENCE_LINK
 
             # return
-            return reference_, reference_content, reference_config, rule
+            return reference, reference_content, reference_config, rule
         except Exception as e:
             raise ValueError(
                 f"Failed to analyze custom reference: {e}") from e
 
-    def _load_local_reference(self):
+    def __load_local_reference(self):
         """
         Load the local reference content, configuration, and rule.
 
         Returns
         -------
-        Tuple[str, Dict[str, Dict[str, str]]]
+        str | Dict[str, Dict[str, ComponentPropertySource]]
             The local reference content, configuration, and rule.
         """
         try:
             # Load the local reference content
-            reference_content = REFERENCE
+            reference_content = REFERENCE_CONTENT
 
             # Load the local reference configuration
-            reference_config = REFERENCE_CONFIG
+            reference_config = REFERENCE_CONFIGS
 
             return reference_content, reference_config
         except Exception as e:
             raise ValueError(f"Failed to load local reference: {e}") from e
 
-    def _load_rules(self) -> str:
+    def __load_reference_link(self) -> str:
         """
-        Load the rules for the reference.
+        Load the link config for the reference.
 
         Returns
         -------
@@ -153,13 +151,56 @@ class ReferencesInitializer:
             The rule for the reference.
         """
         try:
-            return THERMODB_RULES
+            return REFERENCE_LINK
         except Exception as e:
             raise ValueError(f"Failed to load rules: {e}") from e
 
+    def __generate_reference_thermodb(
+        self,
+        local_reference_content: str,
+        local_reference_config: Dict[str, ComponentReferenceConfig],
+        external_references: References
+    ) -> ReferenceThermoDB:
+        """
+        Generate the ReferenceThermoDB object.
+
+        Parameters
+        ----------
+        local_reference_content : str
+            The local reference content.
+        local_reference_config : Dict[str, Dict[str, str]]
+            The local reference configuration.
+        external_references : References
+            The external references to be included in the ReferenceThermoDB.
+
+        """
+        try:
+            # NOTE: extract the reference content from the external references
+            external_references_content = external_references.contents if external_references.contents else []
+
+            # NOTE: extract the reference config from the external references
+            external_references_config = external_references.config if external_references.config else {}
+
+            # SECTION: merge local and external references
+            # Combine local reference content with external references
+
+            # Create the ReferenceThermoDB object
+            reference_thermodb = ReferenceThermoDB(
+                reference=[local_reference_content] +
+                external_references_content,
+                config={
+                    **local_reference_config,
+                    **external_references_config
+                }
+            )
+            return reference_thermodb
+        except Exception as e:
+            raise ValueError(
+                f"Failed to generate ReferenceThermoDB: {e}") from e
+
     def _get_reference(
         self,
-    ) -> Reference:
+    ) -> References:
         """
         Get the reference content and config.
 
@@ -174,7 +215,7 @@ class ReferencesInitializer:
             The list of reference content for the given property.
         """
         try:
-            return Reference(
+            return References(
                 content=self._reference_content,
                 config=self._reference_config
             )

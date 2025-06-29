@@ -1,5 +1,5 @@
 # SECTION: default reference for the ThermoDB
-REFERENCE = """
+REFERENCE_CONTENT = """
 # REFERENCES
 
 ## CUSTOM-REF-1

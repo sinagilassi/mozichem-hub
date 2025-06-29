@@ -1,4 +1,4 @@
-from .adapter import MCPHub
+from .mcp_hub import MCPHub
 from .core import MoziChemMCP
 
 __all__ = [

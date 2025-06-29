@@ -2,13 +2,15 @@
 from typing import (
     Optional,
     Union,
-    List
+    List,
+    Dict
 )
 import logging
 # locals
+from .reference_adapter import ReferencesAdapter
 
 
-class ReferenceController:
+class ReferenceController(ReferencesAdapter):
     """
     Controller for transforming and managing references in the MoziChem MCP.
     """
@@ -20,12 +22,18 @@ class ReferenceController:
             Union[str, List[str]]
         ] = None,
         reference_config: Optional[
-            Union[str, List[str]]
-        ] = None,
+            Union[str, Dict[str, Dict[str, str]]]
+        ] = None
     ):
-        # NOTE: reference_content and reference_config are optional
-        self.reference_content = reference_content
-        self.reference_config = reference_config
+        """
+        Initialize the ReferenceController.
+        """
+        # LINK: initialize the transformer
+        ReferencesAdapter.__init__(self)
+
+        # NOTE: set the reference content and config
+        self._reference_content = reference_content
+        self._reference_config = reference_config
 
     def transformer(self):
         """
@@ -44,10 +52,10 @@ class ReferenceController:
         """
         Transform the reference content into a usable format.
         """
-        if isinstance(self.reference_content, str):
-            return [self.reference_content]
-        elif isinstance(self.reference_content, list):
-            return self.reference_content
+        if isinstance(self._reference_content, str):
+            return [self._reference_content]
+        elif isinstance(self._reference_content, list):
+            return self._reference_content
         else:
             logging.warning("Reference content is not in a valid format.")
             return None
@@ -58,7 +66,7 @@ class ReferenceController:
         """
         if isinstance(self.reference_config, str):
             return [self.reference_config]
-        elif isinstance(self.reference_config, list):
+        elif isinstance(self.reference_config, dict):
             return self.reference_config
         else:
             logging.warning("Reference config is not in a valid format.")

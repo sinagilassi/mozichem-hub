@@ -12,14 +12,13 @@ from typing import (
 )
 # local
 from .registry import RegistryMixin
-from .services import ReferenceServices
+from .reference_services import ReferenceServices
 from .server import MoziServer
 from ..tools import ToolManager
 from ..references import (
     References,
-    Reference,
     ReferenceLink,
-    ComponentReferenceConfig,
+    ReferenceController,
     ReferencesAdapter
 )
 
@@ -98,19 +97,16 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         self._reference_link = reference_link
 
         # SECTION: standardize the reference content and config
-        # init the ReferencesAdapter
-        adapter = ReferencesAdapter()
+        # NOTE: init the ReferencesAdapter
+        ReferenceController_ = ReferenceController(
+            reference_content=reference_content,
+            reference_config=reference_config
+        )
 
         # NOTE: config conversion
-        if (
-            isinstance(reference_config, str)
-            and reference_config is not None
-        ):
-            reference_config = adapter.adapt_reference_config(
-                reference_config=reference_config
-            )
+        # ! convert the reference content
+        reference_content, reference_config = ReferenceController_.transformer()
 
-        # SECTION: set the reference
         # NOTE: set reference
         self._references = References(
             contents=reference_content,
@@ -131,11 +127,11 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             self._mcp_name = name
 
         # SECTION: initialize the registry
-        # NOTE: create the RegistryMixin instance
+        # LINK: create the RegistryMixin instance
         RegistryMixin.__init__(self)
 
         # SECTION: initialize the ReferenceServices
-        # NOTE: create the ReferenceServices instance
+        # LINK: create the ReferenceServices instance
         ReferenceServices.__init__(
             self,
             references=self._references,

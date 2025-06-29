@@ -166,7 +166,7 @@ class References(BaseModel):
     - Case 2: user provides a list of references as a list of strings, the app config is set to the default configuration.
     - case 3: user only provides a configuration without any references, the app references the default configuration.
     """
-    contents: Optional[List[str] | str] = Field(
+    contents: Optional[List[str]] = Field(
         [],
         description=(
             "List of references for the thermodynamic database provided by "
@@ -216,4 +216,5 @@ class ReferenceThermoDB(BaseModel):
     """
     Model for component thermodynamic database (ThermoDB).
     """
-    reference: Dict[str, List[str]]
+    reference: List[str]
+    config: Dict[str, ComponentPropertySource]

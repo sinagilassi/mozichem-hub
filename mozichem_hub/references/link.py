@@ -1,5 +1,5 @@
 # CONTENT: content
-THERMODB_RULES = """
+REFERENCE_LINK = """
 carbon dioxide-g:
   DATA:
     Pc: Pc
