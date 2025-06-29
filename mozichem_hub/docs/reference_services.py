@@ -11,8 +11,7 @@ from ..references import (
     References,
     Reference,
     ReferenceLink,
-    ReferenceThermoDB,
-    ComponentReferenceConfig
+    ReferenceThermoDB
 )
 
 

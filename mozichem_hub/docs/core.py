@@ -19,7 +19,6 @@ from ..references import (
     References,
     ReferenceLink,
     ReferenceController,
-    ReferencesAdapter
 )
 
 

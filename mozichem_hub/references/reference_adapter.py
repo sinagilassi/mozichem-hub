@@ -1,6 +1,7 @@
 # import libs
+import json
 import logging
-from typing import Dict, Any
+from typing import Dict, Any, Literal
 from pyThermoDB.references import ReferenceConfig
 # local
 from .models import ComponentPropertySource
@@ -16,10 +17,16 @@ class ReferencesAdapter:
         """
         Initialize the ReferencesAdapter.
         """
+        # SECTION: check if the reference_config is a string
+        # NOTE: set the reference config
+        self.ReferenceConfig_ = ReferenceConfig()
 
     def from_str(
         self,
-        reference_config: str
+        reference_config: str,
+        reference_config_type: Literal[
+            "str", "dict"
+        ] = "str",
     ) -> Dict[str, Dict[str, ComponentPropertySource]]:
         """
         Convert the reference configuration to the required format.
@@ -35,12 +42,20 @@ class ReferencesAdapter:
         Dict[str, Dict[str, ComponentPropertySource]]
             The adapted reference configuration as a dictionary.
         """
-        # SECTION: check if the reference_config is a string
         # NOTE: set the reference config
-        self.reference_config = ReferenceConfig()
-
-        # NOTE: set the reference config
-        res_dict = self.reference_config.set_reference_config(reference_config)
+        if reference_config_type == "str":
+            # ! convert string to dictionary
+            res_dict = self.ReferenceConfig_.set_reference_config(
+                reference_config)
+        elif reference_config_type == "dict":
+            # ! convert string-dictionary to dictionary
+            reference_config = json.loads(reference_config)
+            res_dict = reference_config
+        else:
+            logging.error(
+                "Invalid reference_config_type: %s. "
+                "Expected 'str' or 'dict'.", reference_config_type
+            )
 
         try:
             # NOTE: check if the result is a valid dictionary
@@ -73,10 +88,43 @@ class ReferencesAdapter:
             logging.error(f"Failed to adapt reference config: {e}")
             raise ValueError(f"Failed to adapt reference config: {e}") from e
 
+    def from_dict(
+        self,
+        reference_config: Dict[str, Dict[str, str]]
+    ) -> Dict[str, Dict[str, ComponentPropertySource]]:
+        """
+        Convert the reference configuration from a dictionary to the required format (dictionary).
+
+        Parameters
+        ----------
+        reference_config : Dict[str, Dict[str, str]]
+            The reference configuration to be adapted.
+
+        Returns
+        -------
+        Dict[str, Dict[str, ComponentPropertySource]]
+            The adapted reference configuration as a dictionary.
+        """
+        # SECTION: check if the reference_config is a dictionary
+        if not isinstance(reference_config, dict):
+            raise ValueError(
+                "The reference configuration must be a dictionary.")
+
+        # NOTE: convert the dictionary to the required format
+        # Convert single quotes to double quotes
+        reference_config_str = str(reference_config)
+        reference_config_str = reference_config_str.replace("'", '"')
+
+        # return the adapted reference configuration
+        return self.from_str(
+            reference_config_str,
+            reference_config_type="dict"
+        )
+
     def build_reference_config(
         self,
         reference_config: Dict[str, Dict[str, ComponentPropertySource]]
-    ) -> Dict[str, Dict[str, ComponentPropertySource]]:
+    ):
         """
         Build a ReferenceConfig object from the given reference configuration.
 

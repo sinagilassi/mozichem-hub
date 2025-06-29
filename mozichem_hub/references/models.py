@@ -91,52 +91,6 @@ class ComponentPropertySource(BaseModel):
         return None if v == {} else v
 
 
-class ComponentReferenceConfig(BaseModel):
-    """
-    Model for component reference. This model is used by PyThermoLinkDB.
-    """
-    properties: Optional[
-        Dict[
-            str, ComponentPropertySource
-        ]
-    ] = Field(
-        default_factory=dict,
-        description=(
-            "Set of properties to be included in the reference."
-        )
-    )
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "examples": [
-                {
-                    "properties": {
-                        "heat-capacity": {
-                            "databook": "databook 1",
-                            "table": "table 1",
-                            "label": "Cp_IG"
-                        },
-                        "vapor-pressure": {
-                            "databook": "databook 2",
-                            "table": "table 2",
-                            "label": "VaPr"
-                        },
-                        "general": {
-                            "databook": "databook 3",
-                            "table": "table 3",
-                            "labels": {
-                                "Pc": "Pc",
-                                "Tc": "Tc",
-                                "AcFa": "AcFa"
-                            }
-                        }
-                    }
-                }
-            ]
-        }
-    )
-
-
 class Reference(BaseModel):
     """
     Model for reference thermodynamic database (ThermoDB).

@@ -13,8 +13,8 @@ from .models import (
     References,
     Reference,
     ReferenceLink,
-    ComponentReferenceConfig,
-    ReferenceThermoDB
+    ReferenceThermoDB,
+    ComponentPropertySource
 )
 
 
@@ -158,7 +158,7 @@ class ReferencesInitializer:
     def __generate_reference_thermodb(
         self,
         local_reference_content: str,
-        local_reference_config: Dict[str, ComponentReferenceConfig],
+        local_reference_config: Dict[str, Dict[str, ComponentPropertySource]],
         external_references: References
     ) -> ReferenceThermoDB:
         """
