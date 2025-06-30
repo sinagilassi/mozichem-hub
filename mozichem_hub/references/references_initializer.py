@@ -193,9 +193,10 @@ class ReferencesInitializer:
                 }
 
                 # NOTE: transform reference config
-                reference_config = self.ReferencesAdapter_.to_reference_config(
-                    reference_config
-                )
+                reference_config = \
+                    self.ReferencesAdapter_.to_reference_config(
+                        reference_config
+                    )
 
                 # Create the ReferenceThermoDB object
                 reference_thermodb = ReferenceThermoDB(
