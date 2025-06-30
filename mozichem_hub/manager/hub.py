@@ -64,12 +64,6 @@ class Hub:
             The reference configuration for the specified component.
         """
         try:
-            # SECTION: check if the component exists in the reference
-            if component_id not in self.reference:
-                raise ValueError(
-                    f"Component '{component_id}' not found in the reference."
-                )
-
             # SECTION: get the reference configuration for the component
             component_reference_config = self.reference_config.get(
                 component_id, None)
@@ -90,6 +84,34 @@ class Hub:
         except Exception as e:
             raise ValueError(
                 f"Failed to set component reference configuration: {e}"
+            ) from e
+
+    def _set_component_reference_rule(
+        self,
+        component_id: str
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Set the reference rule for a specific component.
+
+        Parameters
+        ----------
+        component_id : str
+            The ID of the component for which to set the reference rule.
+
+        Returns
+        -------
+        Optional[Dict[str, Any]]
+            The reference rule for the specified component, or None if not found.
+        """
+        try:
+            # SECTION: get the reference rule for the component
+            component_reference_rule = self.thermodb_rule.get(
+                component_id, None)
+
+            return component_reference_rule
+        except Exception as e:
+            raise ValueError(
+                f"Failed to set component reference rule: {e}"
             ) from e
 
     def build_thermo_hub(self):

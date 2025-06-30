@@ -154,24 +154,48 @@ class ReferencesAdapter:
         formatted_dict = {}
 
         try:
+            # iterate over the reference config
             for component, sections in reference_config.items():
+
+                # init the component in the formatted dictionary
                 formatted_dict[component] = {}
+
+                # ! build DATA
+                formatted_dict[component]['DATA'] = {}
+                # ! build EQUATIONS
+                formatted_dict[component]['EQUATIONS'] = {}
+
+                # iterate over the sections of the component
                 for section, cps in sections.items():
-                    if section.upper() not in ["DATA", "EQUATIONS"]:
-                        continue
-                    # Extract `label` or `labels`
+
+                    # NOTE: Extract `label` or `labels`
                     if cps.labels:
-                        formatted_dict[component][section.upper()] = cps.labels
-                    elif cps.label:
-                        formatted_dict[component][section.upper()] = {
-                            cps.label: cps.label}
+                        sets_ = cps.labels
+                        formatted_dict[component]['EQUATIONS'].update(sets_)
+
+                    if cps.label:
+                        set_ = {section: cps.label}
+                        formatted_dict[component]['DATA'].update(set_)
+
+                # NOTE: check if the DATA section is empty
+                if not formatted_dict[component]['DATA']:
+                    # None
+                    formatted_dict[component]['DATA'] = None
+
+                # NOTE: check if the EQUATIONS section is empty
+                if not formatted_dict[component]['EQUATIONS']:
+                    # None
+                    formatted_dict[component]['EQUATIONS'] = None
 
             # Dump with line breaks between top-level items
-            return yaml.dump(
+            formatted_str = yaml.dump(
                 formatted_dict,
                 sort_keys=False,
                 default_flow_style=False
             )
+
+            # NOTE: return the formatted string
+            return formatted_str.strip()
         except Exception as e:
             logging.error(
                 "Failed to generate reference link. "
