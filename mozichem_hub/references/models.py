@@ -149,4 +149,4 @@ class ReferenceThermoDB(BaseModel):
     reference: Dict[str, List[str]]
     contents: List[str]
     config: Dict[str, Dict[str, Dict[str, str]]]
-    link: str
+    link: Dict[str, Dict[str, Dict[str, str]]]

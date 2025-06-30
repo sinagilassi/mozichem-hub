@@ -88,7 +88,7 @@ class Hub:
     def _set_component_reference_rule(
         self,
         component_id: str
-    ) -> None:
+    ) -> Dict[str, Dict[str, str]]:
         """
         Set the reference rule for a specific component.
 
@@ -99,17 +99,27 @@ class Hub:
 
         Returns
         -------
-        Optional[Dict[str, Any]]
+        Dict[str, Dict[str, str]]
             The reference rule for the specified component, or None if not found.
         """
         try:
-            # FIXME
-            # SECTION: get the reference rule for the component
-            # component_reference_rule = self.thermodb_rule.get(
-            #     component_id, None)
 
-            # return component_reference_rule
-            pass
+            # SECTION: get the reference rule for the component
+            component_reference_rule = self.thermodb_rule.get(
+                component_id, None)
+
+            # NOTE: if not found, get ALL
+            if component_reference_rule is None:
+                component_reference_rule = self.thermodb_rule.get(
+                    'ALL', None)
+
+                # check if ALL is also not found
+                if component_reference_rule is None:
+                    raise ValueError(
+                        f"Component '{component_id}' not found in the reference rule."
+                    )
+
+            return component_reference_rule
         except Exception as e:
             raise ValueError(
                 f"Failed to set component reference rule: {e}"
@@ -173,17 +183,30 @@ class Hub:
             name_ = f"{component_name}-{component_state}"
             formula_ = f"{component_formula}-{component_state}"
 
+            # SECTION: create component reference rule
+            component_reference_rule_by_name = \
+                self._set_component_reference_rule(
+                    component_id=name_
+                )
+
+            component_reference_rule_by_formula = \
+                self._set_component_reference_rule(
+                    component_id=formula_
+                )
+
             # SECTION: register the component thermodynamic database
             # NOTE: by name
             self.thermo_hub.add_thermodb(
-                name_,
-                thermodb
+                name=name_,
+                data=thermodb,
+                rules=component_reference_rule_by_name
             )
 
             # NOTE: by formula
             self.thermo_hub.add_thermodb(
-                formula_,
-                thermodb
+                name=formula_,
+                data=thermodb,
+                rules=component_reference_rule_by_formula
             )
 
             return True

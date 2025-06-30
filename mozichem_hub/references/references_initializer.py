@@ -11,7 +11,6 @@ from .config import REFERENCE_CONFIGS
 from .models import (
     References,
     ReferenceThermoDB,
-    ComponentPropertySource
 )
 from .reference_adapter import ReferencesAdapter
 
@@ -55,7 +54,7 @@ class ReferencesInitializer:
         return self.reference_thermodb.config
 
     @property
-    def reference_link(self) -> str:
+    def reference_link(self) -> Dict[str, Dict[str, Dict[str, str]]]:
         """
         Get the reference rule.
         """
@@ -102,18 +101,25 @@ class ReferencesInitializer:
             The local reference content, configuration, and rule.
         """
         try:
-            # Load the local reference content
+            # NOTE: Load the local reference content
             reference_content = REFERENCE_CONTENT
 
-            # Load the local reference configuration
+            # NOTE: Load the local reference configuration
             reference_config = REFERENCE_CONFIGS
 
-            # load the local reference link
+            # NOTE: load the local reference link
             # reference_link = REFERENCE_LINK
             # ? from reference config
             reference_link = self.ReferencesAdapter_.build_reference_link(
                 reference_config=reference_config
             )
+
+            if reference_link is not None:
+                # ? convert reference link to string
+                reference_link = \
+                    self.ReferencesAdapter_.str_from_reference_link(
+                        reference_link=reference_link
+                    )
 
             # local references
             local_references = References(
@@ -157,12 +163,19 @@ class ReferencesInitializer:
                     self.ReferencesAdapter_.to_reference_config(
                         local_reference_config
                     )
-                # Create the ReferenceThermoDB object
+
+                # NOTE: reference link
+                local_reference_link_ = \
+                    self.ReferencesAdapter_.dict_from_reference_link(
+                        reference_link=local_reference_link
+                    )
+
+                # LINK: Create the ReferenceThermoDB object
                 reference_thermodb = ReferenceThermoDB(
                     reference=reference,
                     contents=local_reference_content,
                     config=local_reference_config,
-                    link=local_reference_link
+                    link=local_reference_link_
                 )
             else:
                 # SECTION: external reference
@@ -198,12 +211,18 @@ class ReferencesInitializer:
                         reference_config
                     )
 
-                # Create the ReferenceThermoDB object
+                # NOTE: reference link
+                reference_link_ = \
+                    self.ReferencesAdapter_.dict_from_reference_link(
+                        reference_link=reference_link
+                    )
+
+                # LINK: Create the ReferenceThermoDB object
                 reference_thermodb = ReferenceThermoDB(
                     reference=reference,
                     contents=reference_contents,
                     config=reference_config,
-                    link=reference_link
+                    link=reference_link_
                 )
 
             # res

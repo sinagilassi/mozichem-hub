@@ -125,7 +125,7 @@ class ReferencesAdapter:
     def build_reference_link(
         self,
         reference_config: Dict[str, Dict[str, ComponentPropertySource]]
-    ) -> Union[str, None]:
+    ) -> Union[Dict[str, Dict[str, Dict[str, str]]], None]:
         """
         Generate a reference link from the provided configuration.
 
@@ -171,11 +171,11 @@ class ReferencesAdapter:
                     # NOTE: Extract `label` or `labels`
                     if cps.labels:
                         sets_ = cps.labels
-                        formatted_dict[component]['EQUATIONS'].update(sets_)
+                        formatted_dict[component]['DATA'].update(sets_)
 
                     if cps.label:
                         set_ = {section: cps.label}
-                        formatted_dict[component]['DATA'].update(set_)
+                        formatted_dict[component]['EQUATIONS'].update(set_)
 
                 # NOTE: check if the DATA section is empty
                 if not formatted_dict[component]['DATA']:
@@ -187,9 +187,35 @@ class ReferencesAdapter:
                     # None
                     formatted_dict[component]['EQUATIONS'] = None
 
+            # NOTE: return the formatted dictionary
+            return formatted_dict
+        except Exception as e:
+            logging.error(
+                "Failed to generate reference link. "
+                "Please check the provided configuration. Error: %s", e
+            )
+            return None
+
+    def str_from_reference_link(
+            self,
+            reference_link: Dict[str, Dict[str, Dict[str, str]]]):
+        """
+        Convert the reference link to a string format.
+
+        Parameters
+        ----------
+        reference_link : Dict[str, Dict[str, str]]
+            The reference link to be converted.
+
+        Returns
+        -------
+        str
+            The reference link as a string.
+        """
+        try:
             # Dump with line breaks between top-level items
             formatted_str = yaml.dump(
-                formatted_dict,
+                reference_link,
                 sort_keys=False,
                 default_flow_style=False
             )
@@ -198,10 +224,39 @@ class ReferencesAdapter:
             return formatted_str.strip()
         except Exception as e:
             logging.error(
-                "Failed to generate reference link. "
-                "Please check the provided configuration. Error: %s", e
+                "Failed to convert reference link to string. "
+                "Please check the provided link. Error: %s", e
             )
-            return None
+            raise ValueError(
+                f"Failed to convert reference link to string: {e}") from e
+
+    def dict_from_reference_link(
+            self,
+            reference_link: str
+    ) -> Dict[str, Dict[str, Dict[str, str]]]:
+        """
+        Convert the reference link from a string to a dictionary format.
+
+        Parameters
+        ----------
+        reference_link : str
+            The reference link to be converted.
+
+        Returns
+        -------
+        Dict[str, Dict[str, Dict[str, str]]]
+            The reference link as a dictionary.
+        """
+        try:
+            # Load the YAML string into a dictionary
+            return yaml.safe_load(reference_link)
+        except yaml.YAMLError as e:
+            logging.error(
+                "Failed to convert reference link from string to dict. "
+                "Please check the provided link. Error: %s", e
+            )
+            raise ValueError(
+                f"Failed to convert reference link from string to dict: {e}") from e
 
     def to_reference_config(
         self,
