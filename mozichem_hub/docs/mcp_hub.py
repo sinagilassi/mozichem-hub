@@ -26,7 +26,6 @@ class MCPHub(MoziChemMCP):
         reference_config: Optional[
             Union[str, Dict[str, Dict[str, str]]]
         ] = None,
-        reference_link: Optional[str] = None,
         **kwargs
     ):
         """
@@ -40,8 +39,6 @@ class MCPHub(MoziChemMCP):
             Content of the reference, can be a string or a list of strings.
         reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
             Configuration of the reference, can be a string or a dictionary.
-        reference_link : Optional[str]
-            Link to the reference, can be a string.
         **kwargs : dict
             Additional keyword arguments for the MCP.
         """
@@ -52,9 +49,8 @@ class MCPHub(MoziChemMCP):
         self._mcp_name = mcp
 
         # NOTE: set the reference and reference link
-        self._reference_content = reference_content
-        self._reference_config = reference_config
-        self._reference_link = reference_link
+        self.reference_content = reference_content
+        self.reference_config = reference_config
 
         # NOTE: check if mcp is available
         # mcp names
@@ -200,9 +196,9 @@ class MCPHub(MoziChemMCP):
         # NOTE: build the MoziChem MCP server
         return MoziChemMCP(
             name=self.name,
-            reference_content=self._reference_content,
-            reference_config=self._reference_config,
-            reference_link=self._reference_link,
+            description=self.description,
+            reference_content=self.reference_content,
+            reference_config=self.reference_config,
             local_mcp=True,
             **kwargs
         )

@@ -2,7 +2,7 @@
 import yaml
 import json
 import logging
-from typing import Dict, Any, Literal
+from typing import Dict, Any, Literal, Union
 from pyThermoDB.references import ReferenceConfig
 # local
 from .models import ComponentPropertySource
@@ -125,7 +125,7 @@ class ReferencesAdapter:
     def build_reference_link(
         self,
         reference_config: Dict[str, Dict[str, ComponentPropertySource]]
-    ) -> str:
+    ) -> Union[str, None]:
         """
         Generate a reference link from the provided configuration.
 
@@ -142,7 +142,7 @@ class ReferencesAdapter:
         # NOTE: check if the reference config is empty
         if not reference_config:
             logging.warning("Reference configuration is empty.")
-            return ""
+            return None
 
         # check length of the reference config
         if len(reference_config) == 0:
@@ -177,4 +177,4 @@ class ReferencesAdapter:
                 "Failed to generate reference link. "
                 "Please check the provided configuration. Error: %s", e
             )
-            return ""
+            return None

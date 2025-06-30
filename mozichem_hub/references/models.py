@@ -120,22 +120,9 @@ class References(BaseModel):
     - Case 2: user provides a list of references as a list of strings, the app config is set to the default configuration.
     - case 3: user only provides a configuration without any references, the app references the default configuration.
     """
-    contents: Optional[List[str]] = Field(
-        [],
-        description=(
-            "List of references for the thermodynamic database provided by "
-            "PyThermoDB"
-        )
-    )
-    config: Optional[
-        Dict[str, Dict[str, ComponentPropertySource]]
-    ] = Field(
-        {},
-        description=(
-            "Configuration for the thermodynamic database, "
-            "which properties should be included"
-        )
-    )
+    contents: Optional[List[str]] = None
+    config: Optional[Dict[str, Dict[str, ComponentPropertySource]]] = None
+    link: Optional[str] = None
 
     @field_validator("contents", mode="before")
     @classmethod
@@ -146,29 +133,20 @@ class References(BaseModel):
             return [v]
         return v
 
-
-class ReferenceLink(BaseModel):
-    """
-    Model for references to functions (tools). This model is used by PyThermoLinkDB.
-
-    Attributes
-    ----------
-    rule: str
-        Reference rule to link between the reference and functions (tools).
-
-    """
-    rule: Optional[str] = Field(
-        None,
-        description=(
-            "Reference rule to link between the custom reference "
-            "and application"
-        )
-    )
+    @field_validator("config", mode="before")
+    @classmethod
+    def convert_str_to_dict(cls, v):
+        if v is None:
+            return {}
+        if isinstance(v, dict):
+            return v
 
 
 class ReferenceThermoDB(BaseModel):
     """
     Model for component thermodynamic database (ThermoDB).
     """
-    reference: List[str]
-    config: Dict[str, ComponentPropertySource]
+    reference: Dict[str, List[str]]
+    contents: List[str]
+    config: Dict[str, Dict[str, Dict[str, str]]]
+    link: str

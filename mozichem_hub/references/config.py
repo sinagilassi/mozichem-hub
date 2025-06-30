@@ -31,4 +31,5 @@ REFERENCE_CONFIG: Dict[str, ComponentPropertySource] = {
 
 REFERENCE_CONFIGS: Dict[str, Dict[str, ComponentPropertySource]] = {
     "ALL": REFERENCE_CONFIG,
+    "carbon dioxide-g": REFERENCE_CONFIG
 }

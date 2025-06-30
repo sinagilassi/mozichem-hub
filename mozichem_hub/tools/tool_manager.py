@@ -1,4 +1,5 @@
 # import libs
+import logging
 from fastmcp.tools import Tool
 from typing import (
     Dict,
@@ -9,12 +10,10 @@ from typing import (
     Set
 )
 # local
-from .builder import ToolBuilder
+from .tool_builder import ToolBuilder
 from ..manager import FunctionDispatcher, MoziTool
 from ..references import (
     ReferenceThermoDB,
-    Reference,
-    ReferenceLink
 )
 
 
@@ -28,8 +27,6 @@ class ToolManager(ToolBuilder):
     def __init__(
         self,
         reference_thermodb: ReferenceThermoDB,
-        reference: Reference,
-        reference_link: ReferenceLink
     ):
         """
         Initialize the ToolManager instance.
@@ -39,14 +36,10 @@ class ToolManager(ToolBuilder):
 
         # SECTION: set references
         self._reference_thermodb = reference_thermodb
-        self._reference = reference
-        self._reference_link = reference_link
 
         # SECTION: init FunctionDispatcher
         self.FunctionDispatcher_ = FunctionDispatcher(
-            reference_thermodb=self._reference_thermodb,
-            reference=self._reference,
-            reference_link=self._reference_link
+            reference_thermodb=self._reference_thermodb
         )
 
     def _retrieve_all_local_functions(self) -> Dict[str, List[MoziTool]]:
@@ -117,7 +110,8 @@ class ToolManager(ToolBuilder):
         """
         try:
             # SECTION: local resources
-            local_tools = []  # Ensure local_tools is always initialized
+            # Ensure local_tools is always initialized
+            local_tools: List[Tool] = []
 
             # Retrieve functions
             # ! get MoziTool
@@ -125,8 +119,11 @@ class ToolManager(ToolBuilder):
 
             # check if functions are empty
             if not _functions:
-                raise ValueError(
-                    f"No functions found for MCP '{mcp_name}' in local resources.")
+                logging.warning(
+                    f"No local functions found for mcp '{mcp_name}'. "
+                    "Please ensure the mcp is registered correctly."
+                )
+                return local_tools
 
             # NOTE: Build local tools
             # ! convert MoziTool to FastMCP Tool

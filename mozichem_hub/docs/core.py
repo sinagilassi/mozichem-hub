@@ -17,7 +17,6 @@ from .server import MoziServer
 from ..tools import ToolManager
 from ..references import (
     References,
-    ReferenceLink,
     ReferenceController,
 )
 
@@ -39,7 +38,6 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             reference_config: Optional[
                 Union[str, Dict[str, Dict[str, str]]]
             ] = None,
-            reference_link: Optional[str] = None,
             local_mcp: Optional[bool] = False,
             **kwargs
     ):
@@ -52,7 +50,12 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             Name of the mcp server.
         description : Optional[str]
             Description of the mcp server, default is None.
-
+        reference_content : Optional[Union[str, List[str]]]
+            Reference content for the mcp server, default is None.
+        reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+            Reference configuration for the mcp server, default is None.
+        local_mcp : Optional[bool]
+            If True, the mcp server will be configured to run locally.
 
         Notes
         -----
@@ -92,8 +95,6 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         # ! reference
         self._reference_content = reference_content
         self._reference_config = reference_config
-        # ! reference link
-        self._reference_link = reference_link
 
         # SECTION: standardize the reference content and config
         # NOTE: init the ReferencesAdapter
@@ -104,18 +105,19 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
 
         # NOTE: config conversion
         # ! convert the reference content
-        reference_content_, reference_config_ = \
-            ReferenceController_.transformer()
+        # ! convert the reference config
+        # ! build the reference link
+        (
+            reference_content_,
+            reference_config_,
+            reference_link_
+        ) = ReferenceController_.transformer()
 
         # NOTE: set reference
         self._references = References(
             contents=reference_content_,
-            config=reference_config_
-        )
-
-        # NOTE: set reference link
-        self._reference_link = ReferenceLink(
-            rule=reference_link
+            config=reference_config_,
+            link=reference_link_
         )
 
         # NOTE: set the mcp name
@@ -135,7 +137,6 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         ReferenceServices.__init__(
             self,
             references=self._references,
-            reference_link=self._reference_link
         )
 
         # SECTION: initialize the MoziServer
@@ -146,8 +147,6 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         # NOTE: create the ToolManager instance
         self.ToolManager_ = ToolManager(
             reference_thermodb=self.reference_thermodb,
-            reference=self.reference,
-            reference_link=self.reference_link
         )
 
         # SECTION: configure the MCP server

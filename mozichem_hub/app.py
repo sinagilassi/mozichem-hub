@@ -3,12 +3,11 @@ from typing import (
     Optional,
     Dict,
     List,
-    Callable,
+    Union,
     Any
 )
 # local
 from .docs import MCPHub, MoziChemMCP
-from .references import Reference, ReferenceLink
 from .utils import MCPController
 
 
@@ -43,8 +42,12 @@ def get_mozichem_mcp_info(mcp_name: str) -> Optional[Dict[str, Any]]:
 
 def create_mozichem_mcp(
     name: str,
-    reference: Optional[Reference] = None,
-    reference_link: Optional[ReferenceLink] = None,
+    reference_content: Optional[
+        Union[str, List[str]]
+    ] = None,
+    reference_config: Optional[
+        Union[str, Dict[str, Dict[str, str]]]
+    ] = None,
     **kwargs
 ) -> MoziChemMCP:
     """
@@ -54,13 +57,10 @@ def create_mozichem_mcp(
     ----------
     name : str
         Name of the mcp server, default is "MoziChemHub"
-    reference : Reference
-        Custom reference for the mcp calculation based on PyThermoDB.
-        It includes:
-        - content: str
-        - config: dict
-    reference_link : ReferenceLink
-        Custom reference link for the mcp calculation based on PyThermoLinkDB.
+    reference_content : Optional[Union[str, List[str]]]
+        Reference content for the mcp server, default is None.
+    reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+        Reference configuration for the mcp server, default is None.
     **kwargs : dict
         Additional keyword arguments for mcp configuration.
 
@@ -86,8 +86,8 @@ def create_mozichem_mcp(
         # SECTION: Initialize the MoziChemHub instance
         MCPHub_ = MCPHub(
             mcp=name,
-            reference=reference,
-            reference_link=reference_link,
+            reference_content=reference_content,
+            reference_config=reference_config,
             **kwargs
         )
 

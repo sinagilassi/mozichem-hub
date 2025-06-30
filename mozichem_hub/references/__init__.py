@@ -2,7 +2,6 @@ from .references_initializer import ReferencesInitializer
 from .models import (
     References,
     Reference,
-    ReferenceLink,
     ReferenceThermoDB,
 )
 from .reference_adapter import ReferencesAdapter
@@ -13,7 +12,6 @@ __all__ = [
     "ReferencesInitializer",
     "References",
     "Reference",
-    "ReferenceLink",
     "ReferenceThermoDB",
     "ReferencesAdapter",
     "ReferenceController"

@@ -1,16 +1,12 @@
 # import libs
 from typing import (
     Optional,
-    Dict,
-    List,
-    Union
 )
 # local
 from ..references import (
     ReferencesInitializer,
     References,
     Reference,
-    ReferenceLink,
     ReferenceThermoDB
 )
 
@@ -24,7 +20,6 @@ class ReferenceServices:
     def __init__(
         self,
         references: Optional[References] = None,
-        reference_link: Optional[ReferenceLink] = None,
     ):
         """
         Initialize the ReferenceServices.
@@ -32,26 +27,10 @@ class ReferenceServices:
         # SECTION: configure the reference
         self.ReferencesInitializer_ = ReferencesInitializer(
             references=references,
-            reference_link=reference_link,
         )
 
         # NOTE: initialize references
-        self._reference_thermodb, self._reference, self._reference_link = \
-            self._initialize_references()
-
-    @property
-    def reference(self) -> Reference:
-        """
-        Get the reference of the hub.
-        """
-        return self._reference
-
-    @property
-    def reference_link(self) -> ReferenceLink:
-        """
-        Get the reference link of the hub.
-        """
-        return self._reference_link
+        self._reference_thermodb = self._initialize_references()
 
     @property
     def reference_thermodb(self) -> ReferenceThermoDB:
@@ -69,22 +48,15 @@ class ReferenceServices:
             _reference_thermodb = \
                 self.ReferencesInitializer_._get_reference_thermodb()
 
-            # NOTE: reference
-            _reference = self.ReferencesInitializer_._get_reference()
-
-            # NOTE: reference link
-            _reference_link = \
-                self.ReferencesInitializer_._get_reference_link()
-
             # return
-            return _reference_thermodb, _reference, _reference_link
+            return _reference_thermodb
         except Exception as e:
             raise Exception("Failed to initialize references.") from e
 
     def add_reference(
         self,
         reference: Reference,
-        reference_link: ReferenceLink
+        reference_link: str
     ):
         """
         Add a custom reference to the hub.
@@ -93,7 +65,7 @@ class ReferenceServices:
         ----------
         reference : Reference
             The custom reference to add.
-        reference_link : ReferenceLink
+        reference_link : str
             The custom reference link to add.
         """
         self._reference = reference

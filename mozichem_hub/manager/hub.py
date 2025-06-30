@@ -16,8 +16,7 @@ from .models import (
     ComponentThermoDB,
 )
 from ..references import (
-    Reference,
-    ReferenceLink,
+    References,
     ReferenceThermoDB
 )
 
@@ -31,25 +30,67 @@ class Hub:
     def __init__(
             self,
             reference_thermodb: ReferenceThermoDB,
-            reference: Reference,
-            reference_link: ReferenceLink
     ):
         """
         Initialize the Hub instance.
         """
         # NOTE: set
         self.reference_thermodb = reference_thermodb
-        # Reference for the thermodynamic database
-        self.reference = reference
-        # content of the reference thermodynamic database
-        self.reference_content = reference.content
-        # Configuration for the thermodynamic database
-        self.reference_config = reference.config
-        # Rule for the thermodynamic database
-        self.thermodb_rule = reference_link.rule
+        # LINK: set the references
+        self.reference = reference_thermodb.reference
+        # LINK: content of the reference thermodynamic database
+        self.reference_contents = reference_thermodb.contents
+        # LINK: configuration for the thermodynamic database
+        self.reference_config = reference_thermodb.config
+        # LINK: rule for the thermodynamic database
+        self.thermodb_rule = reference_thermodb.link
 
         # SECTION: Initialize the ThermoHub
         self.thermo_hub = self.build_thermo_hub()
+
+    def _set_component_reference_config(
+        self,
+        component_id: str
+    ) -> Dict[str, Dict[str, str]]:
+        """
+        Set the reference configuration for a specific component.
+        Parameters
+        ----------
+        component_id : str
+            The ID of the component for which to set the reference configuration.
+        Returns
+        -------
+        Dict[str, Dict[str, str]]
+            The reference configuration for the specified component.
+        """
+        try:
+            # SECTION: check if the component exists in the reference
+            if component_id not in self.reference:
+                raise ValueError(
+                    f"Component '{component_id}' not found in the reference."
+                )
+
+            # SECTION: get the reference configuration for the component
+            component_reference_config = self.reference_config.get(
+                component_id, None)
+
+            # NOTE: if not found, get ALL
+            if component_reference_config is None:
+                component_reference_config = self.reference_config.get(
+                    'ALL', None)
+
+                # check if ALL is also not found
+                if component_reference_config is None:
+                    raise ValueError(
+                        f"Component '{component_id}' not found in the reference configuration."
+                    )
+
+            # SECTION: return the reference configuration
+            return component_reference_config
+        except Exception as e:
+            raise ValueError(
+                f"Failed to set component reference configuration: {e}"
+            ) from e
 
     def build_thermo_hub(self):
         """
@@ -186,19 +227,37 @@ class Hub:
                 # SECTION: build the component thermodynamic database
                 # NOTE: check build mode
                 if build_mode == 'name':
+                    # NOTE: component reference config
+                    component_id = f"{component_name}-{component_state}"
+
+                    # get the component reference config
+                    component_reference_config = \
+                        self._set_component_reference_config(
+                            component_id=component_id
+                        )
+
                     # ! by name
                     component_thermodb = ptdb.build_component_thermodb(
                         component_name=component_name,
-                        property_source=self.reference_config,
-                        custom_reference=self.reference_thermodb.reference
+                        reference_config=component_reference_config,
+                        custom_reference=self.reference
 
                     )
                 elif build_mode == 'formula':
+                    # NOTE: component reference config
+                    component_id = f"{component_formula}-{component_state}"
+
+                    # get the component reference config
+                    component_reference_config = \
+                        self._set_component_reference_config(
+                            component_id=component_id
+                        )
+
                     # ! by formula
                     component_thermodb = ptdb.build_component_thermodb(
                         component_name=component_formula,
-                        property_source=self.reference_config,
-                        custom_reference=self.reference_thermodb.reference
+                        reference_config=component_reference_config,
+                        custom_reference=self.reference
                     )
                 else:
                     raise ValueError(

@@ -1,4 +1,4 @@
-from .dispatcher import FunctionDispatcher
+from .function_dispatcher import FunctionDispatcher
 from .models import (
     MoziTool,
     MoziToolArg,

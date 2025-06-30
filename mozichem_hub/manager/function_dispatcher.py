@@ -10,13 +10,11 @@ from typing import (
 )
 # locals
 from ..references import (
-    Reference,
-    ReferenceLink,
     ReferenceThermoDB
 )
 from .hub import Hub
 from .ptmcore import PTMCore
-from .builder import MoziToolBuilder
+from .mozi_tool_builder import MoziToolBuilder
 from ..config import MCP_MODULES
 from .models import MoziTool
 
@@ -30,8 +28,6 @@ class FunctionDispatcher(MoziToolBuilder):
     def __init__(
         self,
         reference_thermodb: ReferenceThermoDB,
-        reference: Reference,
-        reference_link: ReferenceLink
     ):
         """
         Initialize the Dispatcher instance.
@@ -42,17 +38,13 @@ class FunctionDispatcher(MoziToolBuilder):
             ReferenceThermoDB instance containing the thermodynamic database.
         reference : Reference
             Reference instance containing the reference data.
-        reference_link : ReferenceLink
-            ReferenceLink instance containing the reference link data.
         """
         # SECTION: Initialize the MoziToolBuilder
         MoziToolBuilder.__init__(self)
 
         # SECTION: Initialize the Hub
         self.Hub_ = Hub(
-            reference_thermodb=reference_thermodb,
-            reference=reference,
-            reference_link=reference_link
+            reference_thermodb=reference_thermodb
         )
 
         # SECTION: Initialize function source
@@ -69,11 +61,20 @@ class FunctionDispatcher(MoziToolBuilder):
             Dictionary of MCP names and their implementations.
         """
         try:
+            # REVIEW: get all classes starts with 'MCP_' from MCP_MODULES
             # SECTION: get all classes starts with 'MCP_'
+            # ! method 1
+            # mcp_registered = {
+            #     name: getattr(self, name)
+            #     for name in dir(self)
+            #     if name.startswith("MCP_") and not name.startswith("__")
+            # }
+
+            # ! method 2
             mcp_registered = {
-                name: getattr(self, name)
-                for name in dir(self)
-                if name.startswith("MCP_") and not name.startswith("__")
+                mcp['class']: getattr(self, mcp['class'])
+                for mcp in MCP_MODULES
+                if 'name' in mcp and 'class' in mcp
             }
 
             # return
@@ -82,7 +83,9 @@ class FunctionDispatcher(MoziToolBuilder):
             raise Exception(f"Failed to get MCP registered list: {e}") from e
 
     def _select_mcp_registered(
-            self, mcp_name: str):
+            self,
+            mcp_name: str
+    ):
         """
         Select a specific MCP registered by its name.
         """
@@ -104,7 +107,7 @@ class FunctionDispatcher(MoziToolBuilder):
     def _select_mcp_by_class(
             self,
             mcp_class: str
-    ):
+    ) -> Dict[str, Any]:
         """
         Select a specific MCP registered by its class name.
         """
@@ -154,7 +157,8 @@ class FunctionDispatcher(MoziToolBuilder):
                 f"Failed to check MCP class '{mcp_class}': {e}") from e
 
     def _get_local_functions(
-        self, mcp_name: str
+        self,
+        mcp_name: str
     ) -> Dict[str, Callable[..., Any]]:
         """
         Get all local functions registered for the given mcp.

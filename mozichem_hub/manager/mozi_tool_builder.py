@@ -1,7 +1,6 @@
 # import libs
 from typing import List, Dict, Callable, Any
 # local
-from ..utils import Loader
 from ..descriptors import MCPDescriptor
 from .models import MoziTool, MoziToolArg
 

@@ -89,7 +89,7 @@ class Loader:
             )
 
             # NOTE: get the references
-            return ref['REFERENCE']
+            return ref['REFERENCES']
         except Exception as e:
             raise Exception('Loading reference failed! ', e)
 

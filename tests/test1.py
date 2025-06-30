@@ -25,6 +25,6 @@ thermo_models_mcp = create_mozichem_mcp(name="eos-models-mcp")
 
 if __name__ == "__main__":
     # run the MCP server
-    # thermo_models_mcp.run(transport='stdio')
+    thermo_models_mcp.run(transport='stdio')
     # http transport
-    thermo_models_mcp.run(transport='streamable-http')
+    # thermo_models_mcp.run(transport='streamable-http')

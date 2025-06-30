@@ -39,7 +39,11 @@ class ReferenceController(ReferencesAdapter):
 
     def transformer(
         self
-    ) -> Tuple[List[str], Dict[str, Dict[str, ComponentPropertySource]]]:
+    ) -> Tuple[
+        Union[List[str], None],
+        Union[Dict[str, Dict[str, ComponentPropertySource]], None],
+        Union[str, None]
+    ]:
         """
         transformer for the reference content and configuration.
         """
@@ -51,8 +55,15 @@ class ReferenceController(ReferencesAdapter):
             # SECTION: transform the reference config
             reference_config = self.__transform_reference_config()
 
+            # SECTION: build the reference link
+            reference_link = self.__build_reference_link(reference_config)
+
             # result
-            return reference_content, reference_config
+            return (
+                reference_content,
+                reference_config,
+                reference_link
+            )
         except Exception as e:
             logging.error(
                 "Failed to transform references. "
@@ -60,11 +71,15 @@ class ReferenceController(ReferencesAdapter):
             )
             raise
 
-    def __transform_reference_content(self) -> List[str]:
+    def __transform_reference_content(self) -> Union[List[str], None]:
         """
         Transform the reference content into a list of strings.
         """
         try:
+            # SECTION: no reference content provided
+            if self._reference_content is None:
+                return None
+
             # NOTE: init
             res = []
 
@@ -87,6 +102,7 @@ class ReferenceController(ReferencesAdapter):
                     "Invalid reference content type: %s. Expected str or list of str.",
                     type(self._reference_content)
                 )
+                return None
 
             # NOTE: return the result
             return res
@@ -95,15 +111,22 @@ class ReferenceController(ReferencesAdapter):
                 "Failed to transform reference content. "
                 "Please check the provided content. Error: %s", e
             )
-            return []
+            return None
 
     def __transform_reference_config(
         self
-    ) -> Dict[str, Dict[str, ComponentPropertySource]]:
+    ) -> Union[Dict[str, Dict[str, ComponentPropertySource]], None]:
         """
         Transform the reference configuration into the required format.
         """
         try:
+
+            # SECTION: no reference config provided
+            if self._reference_config is None:
+                logging.warning("No reference config provided.")
+                return None
+
+            # SECTION: reference config is provided
             # NOTE: init the reference config
             res: Dict[str, Dict[str, ComponentPropertySource]] = {}
 
@@ -127,11 +150,13 @@ class ReferenceController(ReferencesAdapter):
                 "Failed to transform reference config. "
                 "Please check the provided configuration. Error: %s", e
             )
-            return {}
+            return None
 
     def __build_reference_link(
         self,
-        reference_config: Dict[str, Dict[str, ComponentPropertySource]]
+        reference_config: Optional[
+            Dict[str, Dict[str, ComponentPropertySource]]
+        ] = None
     ):
         """
         Build the reference link for the MCP server.
@@ -147,13 +172,13 @@ class ReferenceController(ReferencesAdapter):
             The reference link if provided, otherwise None.
         """
         try:
-            # NOTE: check if the reference config is empty
+            # SECTION: reference config is empty
             if not reference_config:
                 logging.warning(
                     "Reference config is empty. No link will be built.")
                 return None
 
-            # NOTE: build the reference link
+            # SECTION: build the reference link
             reference_link = self.build_reference_link(reference_config)
 
             # return the reference link

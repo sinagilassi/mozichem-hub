@@ -1,4 +1,4 @@
-from .manager import ToolManager
+from .tool_manager import ToolManager
 
 __all__ = [
     "ToolManager",
