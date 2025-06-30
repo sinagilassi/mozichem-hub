@@ -12,12 +12,12 @@ from typing import (
 )
 # local
 from .registry import RegistryMixin
-from .reference_services import ReferenceServices
 from .server import MoziServer
 from ..tools import ToolManager
 from ..references import (
     References,
     ReferenceController,
+    ReferenceServices
 )
 
 

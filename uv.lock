@@ -385,7 +385,7 @@ requires-dist = [
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pythermodb", specifier = ">=1.11.1" },
-    { name = "pythermolinkdb", specifier = ">=1.3.2" },
+    { name = "pythermolinkdb", specifier = ">=1.3.3" },
     { name = "pythermomodels", specifier = ">=1.4.8" },
     { name = "pyyaml" },
 ]
@@ -746,7 +746,7 @@ wheels = [
 
 [[package]]
 name = "pythermolinkdb"
-version = "1.3.2"
+version = "1.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pythermodb" },

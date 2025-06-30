@@ -6,6 +6,7 @@ from .models import (
 )
 from .reference_adapter import ReferencesAdapter
 from .reference_controller import ReferenceController
+from .reference_services import ReferenceServices
 
 
 __all__ = [
@@ -14,5 +15,6 @@ __all__ = [
     "Reference",
     "ReferenceThermoDB",
     "ReferencesAdapter",
-    "ReferenceController"
+    "ReferenceController",
+    "ReferenceServices",
 ]

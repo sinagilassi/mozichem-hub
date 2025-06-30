@@ -16,7 +16,6 @@ from .models import (
     ComponentThermoDB,
 )
 from ..references import (
-    References,
     ReferenceThermoDB
 )
 
@@ -89,7 +88,7 @@ class Hub:
     def _set_component_reference_rule(
         self,
         component_id: str
-    ) -> Optional[Dict[str, Any]]:
+    ) -> None:
         """
         Set the reference rule for a specific component.
 
@@ -104,11 +103,13 @@ class Hub:
             The reference rule for the specified component, or None if not found.
         """
         try:
+            # FIXME
             # SECTION: get the reference rule for the component
-            component_reference_rule = self.thermodb_rule.get(
-                component_id, None)
+            # component_reference_rule = self.thermodb_rule.get(
+            #     component_id, None)
 
-            return component_reference_rule
+            # return component_reference_rule
+            pass
         except Exception as e:
             raise ValueError(
                 f"Failed to set component reference rule: {e}"

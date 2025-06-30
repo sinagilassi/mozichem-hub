@@ -202,3 +202,89 @@ class ReferencesAdapter:
                 "Please check the provided configuration. Error: %s", e
             )
             return None
+
+    def to_reference_config(
+        self,
+        reference_config: Dict[str, Dict[str, ComponentPropertySource]]
+    ) -> Dict[str, Dict[str, Dict[str, str]]]:
+        """
+        Build the reference configuration from a string or dictionary.
+
+        Parameters
+        ----------
+        reference_config : Dict[str, Dict[str, ComponentPropertySource]]
+            The reference configuration to be built.
+
+        Returns
+        -------
+        Dict[str, Dict[str, str]]
+            The built reference configuration as a dictionary.
+
+        Notes
+        -----
+        The reference configuration is used by PyThermoDB to access the databook, table as:
+        ```python
+        {
+            "CO2": {
+                "heat-capacity": {
+                    "databook": "databook 1",
+                    "table": "table 1",
+                },
+                "vapor-pressure": {
+                    "databook": "databook 2",
+                    "table": "table 2",
+                },
+                "general": {
+                    "databook": "databook 2",
+                    "table": "table 2",
+                }
+            }
+        }
+        ```
+        """
+        # NOTE: check if the reference config is empty
+        if not reference_config:
+            logging.warning("Reference configuration is empty.")
+            return {}
+
+        # NOTE: convert the dictionary to the required format
+        try:
+            # NOTE: initialize the result dictionary
+            res: Dict[str, Dict[str, Dict[str, str]]] = {}
+
+            # Iterate over components and sections
+            for component, sections in reference_config.items():
+                res[component] = {}
+                # Iterate over sections and extract databook and table
+                for section, cps in sections.items():
+                    # property name
+                    prop_name = section
+                    # Extract databook and table
+                    if isinstance(cps, ComponentPropertySource):
+                        # databook
+                        databook = cps.databook
+                        # table
+                        table = cps.table
+
+                        # prop
+                        prop_ = {
+                            'databook': databook,
+                            'table': table
+                        }
+
+                        # add to component
+                        res[component][prop_name] = prop_
+
+                    else:
+                        logging.warning(
+                            f"Invalid ComponentPropertySource for {component} in section {section}. "
+                            "Expected ComponentPropertySource instance."
+                        )
+
+            return res
+        except Exception as e:
+            logging.error(
+                "Failed to build reference configuration. "
+                "Please check the provided configuration. Error: %s", e
+            )
+            raise

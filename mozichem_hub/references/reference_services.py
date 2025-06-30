@@ -3,12 +3,12 @@ from typing import (
     Optional,
 )
 # local
-from ..references import (
-    ReferencesInitializer,
+from .models import (
     References,
     Reference,
     ReferenceThermoDB
 )
+from .references_initializer import ReferencesInitializer
 
 
 class ReferenceServices:
