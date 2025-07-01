@@ -1,0 +1,13 @@
+{
+    "mcpServers": {
+        "mozilla": {
+            "command": "uv",
+            "args": [
+                "--directory",
+                "C:\\My Drive\\apps\\mozichem-hub\\tests",
+                "run",
+                "test1.py"
+            ]
+        }
+    }
+}
