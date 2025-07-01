@@ -11,7 +11,7 @@ from typing import (
 )
 # local
 from .tool_builder import ToolBuilder
-from ..manager import FunctionDispatcher, MoziTool
+from ..resources import FunctionDispatcher, MoziTool
 from ..references import (
     ReferenceThermoDB,
 )

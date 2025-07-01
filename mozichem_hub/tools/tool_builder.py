@@ -3,7 +3,7 @@ from typing import List, Dict, Callable, Any, Set
 from fastmcp.tools import Tool
 # local
 from ..config import app_settings
-from ..manager import MoziTool
+from ..resources import MoziTool
 
 
 class ToolBuilder():

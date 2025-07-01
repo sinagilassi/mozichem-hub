@@ -51,6 +51,10 @@ class Component(BaseModel):
         ...,
         description="State of the component: 'g' for gas, 'l' for liquid, 's' for solid"
     )
+    mole_fraction: Optional[float] = Field(
+        None,
+        description="Mole fraction of the component in a mixture, if applicable"
+    )
 
 
 class ComponentThermoDB(BaseModel):

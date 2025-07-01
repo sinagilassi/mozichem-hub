@@ -1,5 +1,5 @@
 # import libs
-from typing import Dict, Any, Callable
+from typing import Dict, Any, Callable, List
 import inspect
 from typing import Annotated, Literal
 from pydantic import Field
@@ -10,6 +10,7 @@ from .models import (
     Pressure,
     Component,
 )
+from .utils import set_feed_specification
 from .hub import Hub
 
 
@@ -92,18 +93,52 @@ class PTMCore:
         except Exception as e:
             raise ValueError(f"Failed to calculate fugacity: {e}") from e
 
-    def cal_fugacity_mixture(self, a: float, b: float, c: float) -> dict:
-        """
-        Calculates the fugacity of a mixture given the coefficients a, b, and c.
-        This is a placeholder function for demonstration purposes.
-        """
+    def cal_fugacity_mixture(
+        self,
+        components: Annotated[
+            List[Component],
+            Field(..., description="List of components with their properties")
+        ],
+        temperature: Annotated[
+            Temperature,
+            Field(..., description="Temperature of the system")
+        ],
+        pressure: Annotated[
+            Pressure,
+            Field(..., description="Pressure of the system")],
+        eos_model: Annotated[
+            Literal['PR', 'SRK', 'RK', 'vdW'],
+            Field(description="EOS model to use, e.g., 'SRK', 'PR'", default="SRK")
+        ],
+    ) -> dict:
+        """Calculates the fugacity of a component at given temperature and pressure"""
         try:
-            # NOTE: Placeholder logic for mixture calculation
-            result = {
-                "fugacity": a + b + c,
-                "status": "success"
+            # SECTION: set feed specification
+            N0s = set_feed_specification(
+                components=components,
+                feed_mode="formula"
+            )
+
+            # SECTION: build model source
+            model_source = self.hub.build_components_model_source(
+                components=components
+            )
+
+            # SECTION: model input
+            model_inputs = {
+                "feed-specification": N0s,
+                "pressure": [pressure.value, pressure.unit],
+                "temperature": [temperature.value, temperature.unit]
             }
-            return result
+
+            # SECTION: calc
+            res = self.eos.cal_fugacity_mixture(
+                model_name=eos_model,
+                model_input=model_inputs,
+                model_source=model_source
+            )
+
+            # return
+            return res
         except Exception as e:
-            raise ValueError(
-                f"Failed to calculate fugacity mixture: {e}") from e
+            raise ValueError(f"Failed to calculate fugacity: {e}") from e

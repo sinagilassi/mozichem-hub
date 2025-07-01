@@ -5,7 +5,7 @@ from mozichem_hub import (
     get_mozichem_mcp,
 )
 from mozichem_hub.executors import ToolExecuter
-from mozichem_hub.manager import Temperature, Pressure, Component
+from mozichem_hub.resources import Temperature, Pressure, Component
 # log
 from rich import print
 
@@ -60,10 +60,3 @@ result = tool_executer.execute_tool(
     eos_model=eos_model
 )
 print(f"Result of '{tool_name}': {result}")
-
-# SECTION: Serve the MCP server
-# thermo_models_mcp.run(transport='streamable-http')
-
-# if __name__ == "__main__":
-#     # run the MCP server
-#     thermo_models_mcp.run(transport='streamable-http')
