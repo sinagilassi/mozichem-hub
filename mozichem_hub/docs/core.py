@@ -19,6 +19,7 @@ from ..references import (
     ReferenceController,
     ReferenceServices
 )
+from ..descriptors import MCPDescriptor
 
 
 class MoziChemMCP(RegistryMixin, ReferenceServices):
@@ -32,6 +33,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             self,
             name: str,
             description: Optional[str] = None,
+            instructions: Optional[str] = None,
             reference_content: Optional[
                 Union[str, List[str]]
             ] = None,
@@ -50,6 +52,8 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             Name of the mcp server.
         description : Optional[str]
             Description of the mcp server, default is None.
+        instructions : Optional[str]
+            Instructions for the mcp server, default is None.
         reference_content : Optional[Union[str, List[str]]]
             Reference content for the mcp server, default is None.
         reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
@@ -92,6 +96,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         # ! name and description
         self._name = name
         self._description = description
+        self._instructions = instructions
         # ! reference
         self._reference_content = reference_content
         self._reference_config = reference_config
@@ -123,10 +128,13 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         # NOTE: set the mcp name
         self.local_mcp = local_mcp
 
-        # check
+        # ! check
         if local_mcp is True:
             # if local_mcp is True, set the mcp name to the name of the hub
             self._mcp_name = name
+            # update instructions
+            if instructions is None:
+                self._instructions = MCPDescriptor.mcp_instructions(name)
 
         # SECTION: initialize the registry
         # LINK: create the RegistryMixin instance
@@ -141,7 +149,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
 
         # SECTION: initialize the MoziServer
         # NOTE: create the MoziServer instance
-        self.MoziServer_ = MoziServer(name=name)
+        self.MoziServer_ = MoziServer(name=name, instructions=instructions)
 
         # SECTION: initialize the ToolManager with references
         # NOTE: create the ToolManager instance
@@ -190,7 +198,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         """
         try:
             # SECTION: manage tools
-            # collect the registered functions
+            # LINK: collect the registered functions
             custom_functions: Dict[
                 str, Dict[str, Callable[..., Any | str | Set]]
             ] = self._methods

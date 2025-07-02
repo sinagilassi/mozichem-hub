@@ -66,6 +66,10 @@ class MoziToolBuilder:
 
             # loop through each tool reference
             for tool_ref, tool_value in tool_references.items():
+                # NOTE: check if tool_value is a dict
+                if not isinstance(tool_value, dict):
+                    continue  # skip if not a dict
+
                 # Create MoziTool instance
                 # NOTE: name
                 name_ = tool_value.get('NAME', None)
@@ -119,11 +123,10 @@ class MoziToolBuilder:
                 # NOTE: Create MoziTool instance
                 mozi_tool = MoziTool(
                     name=name_,
-                    fn=fn,  # Use a dummy function for now
+                    fn=fn,
                     description=description_,
                     tags=tags_,
                     args=args_
-
                 )
 
                 # Append to the list of Mozi tools

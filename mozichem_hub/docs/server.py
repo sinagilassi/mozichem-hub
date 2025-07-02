@@ -1,27 +1,35 @@
 # import libs
 from typing import (
     List,
-    Dict,
-    Callable,
     Optional
 )
 from fastmcp.tools import Tool
-from fastmcp import FastMCP
 # local
 from .mcp import MCP
 
 
 class MoziServer(MCP):
     """
-    MoziServer class for managing the core functionalities of the MoziChem Hub.
+    MoziServer class for managing the core functionalities of the MoziChem MCP.
     """
 
-    def __init__(self, name: str = "MoziChemHub"):
+    def __init__(
+        self,
+        name: str = "MoziChemMCP",
+        instructions: Optional[str] = None
+    ):
         """
         Initialize the MoziServer instance.
+
+        Parameters
+        ----------
+        name : str
+            Name of the MoziChem server, default is "MoziChemMCP".
+        instructions : Optional[str]
+            Instructions for the MoziChem server, default is None.
         """
         # SECTION: initialize MCP
-        MCP.__init__(self, name=name)
+        MCP.__init__(self, name=name, instructions=instructions)
 
     @property
     def name(self) -> str:
@@ -33,14 +41,19 @@ class MoziServer(MCP):
     def _update_mcp_with_tools(
         self,
         tools: List[Tool]
-    ) -> FastMCP:
+    ):
         """
         Update the MCP server with tools.
 
-        Returns
-        -------
-        FastMCP
-            The MCP server instance.
+        Parameters
+        ----------
+        tools : List[Tool]
+            List of tools to be added to the MCP server.
+
+        Raises
+        ------
+        Exception
+            If there is an error while adding tools to the MCP server.
         """
         try:
             # SECTION: add tools to the MCP server

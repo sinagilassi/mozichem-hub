@@ -1,6 +1,27 @@
 REFERENCES:
+  INSTRUCTIONS: |
+    This MCP server provides tools for computing thermodynamic fugacity using a variety of equations of state (EOS). It supports both component-level and mixture-level calculations in gas and liquid phases.
+
+    🔧 Available Tools:
+    • `calc_gas_component_fugacity`
+      → Calculates the fugacity of a gas-phase component at a given temperature and pressure.
+
+    • `calc_liquid_component_fugacity`
+      → Calculates the fugacity of a liquid-phase component at a given temperature and pressure.
+
+    • `calc_fugacity_gas_mixture`
+      → Computes the fugacity of a gas-phase mixture of components under specified conditions.
+
+    📦 Backend:
+    • Powered by the `PyThermoModels` package.
+    • Implements the `MCP_PTMCore` class described in `ptmcore.yml`.
+
+    📌 Usage Tips:
+    • Inputs must include valid temperature, pressure, and composition data.
+    • Each tool is independent—call the one appropriate to your task.
+    • Results are optimized for process modeling and engineering applications.
   TOOL1:
-    NAME: cal_fugacity
+    NAME: calc_gas_component_fugacity
     DESCRIPTION: "This function calculates the fugacity of single-gas component using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW)."
     TAGS:
       - thermodynamics
@@ -20,8 +41,38 @@ REFERENCES:
       - name: eos_model
         type: str
         description: "Equation of state to use for the calculation. Options are 'PR' for Peng-Robinson, 'SRK' for Soave-Redlich-Kwong, 'RK' for Redlich-Kwong, and 'vdW' for van der Waals."
+      - name: solver_method
+        type: str
+        description: "Solver method for fugacity calculation. Options are 'ls' for least-square method, 'fsolve' for fsolve, and 'root' for root."
   TOOL2:
-    NAME: cal_fugacity_mixture
+    NAME: calc_liquid_component_fugacity
+    DESCRIPTION: "This function calculates the fugacity of single-liquid component using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW). The fugacity is calculated based on the EOS used for the gas phase and Poynting correction."
+    TAGS:
+      - thermodynamics
+      - fugacity
+      - equation of state
+      - liquid-phase
+    ARGS:
+      - name: temperature
+        type: Temperature
+        description: "Temperature of the system."
+      - name: pressure
+        type: Pressure
+        description: "Pressure of the system."
+      - name: component
+        type: Component
+        description: "Chemical component for which the fugacity is calculated."
+      - name: eos_model
+        type: str
+        description: "Equation of state to use for the calculation. Options are 'PR' for Peng-Robinson, 'SRK' for Soave-Redlich-Kwong, 'RK' for Redlich-Kwong, and 'vdW' for van der Waals."
+      - name: solver_method
+        type: str
+        description: "Solver method for fugacity calculation. Options are 'ls' for least-square method, 'fsolve' for fsolve, and 'root' for root."
+      - name: liquid_fugacity_mode
+        type: str
+        description: "The fugacity is calculated based using eos used for gas phase and Poynting correction. Options are 'gas' for gas phase EOS and 'poiynting' for Poynting correction."
+  TOOL3:
+    NAME: calc_fugacity_gas_mixture
     DESCRIPTION: "This function calculates the fugacity of a mixture of gases using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW)."
     ARGS:
       - name: temperature

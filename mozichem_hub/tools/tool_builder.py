@@ -35,6 +35,12 @@ class ToolBuilder():
         -------
         List[Tool]
             List of Tool instances built from the provided functions.
+
+        Notes
+        -----
+        This method converts a list of MoziTool instances to Tool instances.
+        The original function arguments are not used in this conversion,
+        as the MoziTool instances already contain the necessary function references.
         """
         try:
             # SECTION: Convert MoziTool instances to Tool instances

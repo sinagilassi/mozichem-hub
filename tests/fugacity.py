@@ -30,7 +30,7 @@ tools_ = tool_executer.get_tools()
 print(f"All tools in 'eos-models-mcp': {tools_}")
 
 # select a tool to execute
-tool_name = "cal_fugacity"
+tool_name = "calc_liquid_component_fugacity"
 
 # arguments for the tool
 temperature = Temperature(

@@ -1,6 +1,7 @@
 # import libs
-from ..utils import Loader
+import logging
 # locals
+from ..utils import Loader
 from ..config import MCP_MODULES
 
 
@@ -106,3 +107,41 @@ class MCPDescriptor:
             return descriptor
         except Exception as e:
             raise ValueError(f"Failed to load tool descriptor: {e}") from e
+
+    @staticmethod
+    def mcp_instructions(mcp_name: str) -> str:
+        """
+        Get the instructions for a specific mcp.
+
+        Parameters
+        ----------
+        mcp_name : str
+            The name of the mcp to get the instructions for.
+
+        Returns
+        -------
+        str
+            Instructions for the specified mcp.
+        """
+        try:
+            # NOTE: load the mcp descriptor
+            mcp_descriptor = MCPDescriptor().mcp_descriptor(mcp_name)
+
+            # NOTE: check if instructions exist
+            instructions = mcp_descriptor.get('INSTRUCTIONS', None)
+
+            if not instructions:
+                logging.warning(
+                    f"No instructions found for MCP '{mcp_name}'. "
+                    "Returning default instructions."
+                )
+
+                return (
+                    "This is a MoziChem MCP server. "
+                    "It is configured to run with the name: "
+                    f"{mcp_name}."
+                )
+
+            return instructions
+        except Exception as e:
+            raise ValueError(f"Failed to load MCP instructions: {e}") from e

@@ -26,12 +26,17 @@ class MCP():
         "log_level": "DEBUG"
     }
 
-    def __init__(self, name: str):
+    def __init__(
+        self,
+        name: str,
+        instructions: Optional[str] = None
+    ):
         """
         Initialize the MCP instance.
         """
         # NOTE: set attributes
         self._name = name
+        self._instructions = instructions
 
         # NOTE: Load settings
         self._settings = app_settings
@@ -116,7 +121,8 @@ class MCP():
         try:
             # NOTE: Initialize the MCP instance
             return FastMCP(
-                name=self._name
+                name=self._name,
+                instructions=self._instructions
             )
         except ToolError as e:
             raise RuntimeError(f"Failed to register tools: {e}") from e
