@@ -1,4 +1,5 @@
 # import libs
+import logging
 from typing import (
     Optional,
     Dict,
@@ -20,13 +21,14 @@ class MCPHub(MoziChemMCP):
     def __init__(
         self,
         mcp: str,
+        instructions: Optional[str] = None,
         reference_content: Optional[
             Union[str, List[str]]
         ] = None,
         reference_config: Optional[
             Union[str, Dict[str, Dict[str, str]]]
         ] = None,
-        **kwargs
+        **kwargs: Dict[str, Any]
     ):
         """
         Initialize the MCPHub.
@@ -35,6 +37,8 @@ class MCPHub(MoziChemMCP):
         ----------
         mcp : str
             Name of the MCP to be used.
+        instructions : Optional[str]
+            Instructions for the MCP, default is None.
         reference_content : Optional[Union[str, List[str]]]
             Content of the reference, can be a string or a list of strings.
         reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
@@ -47,6 +51,9 @@ class MCPHub(MoziChemMCP):
         # set the name of the mcp
         self._name = mcp
         self._mcp_name = mcp
+
+        # instructions
+        self.instructions = instructions
 
         # NOTE: set the reference and reference link
         self.reference_content = reference_content
@@ -193,12 +200,19 @@ class MCPHub(MoziChemMCP):
         MoziChemMCP
             The MoziChem MCP server instance.
         """
-        # NOTE: build the MoziChem MCP server
-        return MoziChemMCP(
-            name=self.name,
-            description=self.description,
-            reference_content=self.reference_content,
-            reference_config=self.reference_config,
-            local_mcp=True,
-            **kwargs
-        )
+        try:
+            # NOTE: build the MoziChem MCP server
+            return MoziChemMCP(
+                name=self.name,
+                description=self.description,
+                instructions=self.instructions,
+                reference_content=self.reference_content,
+                reference_config=self.reference_config,
+                local_mcp=True,
+                **kwargs
+            )
+        except Exception as e:
+            logging.error(f"Failed to build MoziChem MCP: {e}")
+            raise RuntimeError(
+                f"Failed to build MoziChem MCP '{self.name}': {e}"
+            ) from e
