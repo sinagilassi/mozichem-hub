@@ -41,7 +41,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
                 Union[str, Dict[str, Dict[str, str]]]
             ] = None,
             local_mcp: Optional[bool] = False,
-            **kwargs
+            **kwargs: Dict[str, Any]
     ):
         """
         Initialize the MoziChem MCP.
@@ -60,6 +60,8 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             Reference configuration for the mcp server, default is None.
         local_mcp : Optional[bool]
             If True, the mcp server will be configured to run locally.
+        **kwargs : dict
+            Additional keyword arguments for the MCP.
 
         Notes
         -----
