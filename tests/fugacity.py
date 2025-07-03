@@ -53,6 +53,10 @@ component = Component(
 
 eos_model = "SRK"
 
+# NOTE: prompt for the tool
+prompt = f"Calculate the fugacity of {component.name} at {temperature.value} {temperature.unit} and {pressure.value} {pressure.unit} using the {eos_model} EOS model."
+print(f"Prompt for '{tool_name}': {prompt}")
+
 # SECTION: Execute the tool
 result = tool_executer.execute_tool(
     tool_name=tool_name,
