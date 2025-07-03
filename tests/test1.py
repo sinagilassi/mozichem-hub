@@ -1,6 +1,8 @@
 # import libs
 from mozichem_hub import (
     __version__,
+)
+from mozichem_hub.prebuilt import (
     create_mozichem_mcp,
     get_mozichem_mcp
 )
