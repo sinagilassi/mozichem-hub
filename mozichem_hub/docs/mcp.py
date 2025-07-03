@@ -119,10 +119,14 @@ class MCP():
             The MCP instance with registered tools.
         """
         try:
+            # NOTE: dependencies
+            dependencies = self._settings.dependencies
+
             # NOTE: Initialize the MCP instance
             return FastMCP(
                 name=self._name,
-                instructions=self._instructions
+                instructions=self._instructions,
+                dependencies=dependencies
             )
         except ToolError as e:
             raise RuntimeError(f"Failed to register tools: {e}") from e

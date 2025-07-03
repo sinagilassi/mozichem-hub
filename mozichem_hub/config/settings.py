@@ -19,6 +19,20 @@ class Settings(BaseSettings):
     description: str = __description__
     author: str = __author__
 
+    # NOTE: dependencies
+    dependencies: list[str] = Field(
+        default_factory=lambda: [
+            "pydantic",
+            "pydantic-settings",
+            "fastmcp",
+            "pyyaml",
+            "pythermodb",
+            "pythermolinkdb",
+            "pythermomodels",
+        ],
+        description="List of dependencies required by the application."
+    )
+
     # Directory where the application is running
     base_dir: Path = Field(
         default_factory=lambda: Path(__file__).parent.parent)
@@ -71,3 +85,6 @@ app_settings = get_config()
 # res_ = app_settings.data_dir
 # print(f"Data directory: {res_}")
 # print(type(res_))
+
+# dependencies = app_settings.dependencies
+# print(f"Dependencies: {dependencies}, {type(dependencies)}")
