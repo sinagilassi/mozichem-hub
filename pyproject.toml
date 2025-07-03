@@ -26,6 +26,7 @@ dependencies = [
     "pythermodb",
     "pythermolinkdb",
     "pythermomodels",
+    "rich>=14.0.0",
 ]
 
 [project.urls]

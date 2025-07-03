@@ -1,11 +1,13 @@
 # import libs
 from mozichem_hub import (
     __version__,
-    create_mozichem_mcp,
-    get_mozichem_mcp,
 )
 from mozichem_hub.executors import ToolExecuter
 from mozichem_hub.resources import Temperature, Pressure, Component
+from mozichem_hub.prebuilt import (
+    create_mozichem_mcp,
+    get_mozichem_mcp
+)
 # log
 from rich import print
 

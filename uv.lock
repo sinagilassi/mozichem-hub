@@ -377,6 +377,7 @@ dependencies = [
     { name = "pythermolinkdb" },
     { name = "pythermomodels" },
     { name = "pyyaml" },
+    { name = "rich" },
 ]
 
 [package.metadata]
@@ -388,6 +389,7 @@ requires-dist = [
     { name = "pythermolinkdb" },
     { name = "pythermomodels" },
     { name = "pyyaml" },
+    { name = "rich", specifier = ">=14.0.0" },
 ]
 
 [[package]]

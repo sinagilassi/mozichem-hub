@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     # NOTE: dependencies
     dependencies: list[str] = Field(
         default_factory=lambda: [
+            "rich",
             "pydantic",
             "pydantic-settings",
             "fastmcp",
