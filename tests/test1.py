@@ -22,6 +22,8 @@ thermo_models_mcp = create_mozichem_mcp(name="eos-models-mcp")
 # tools_info = thermo_models_mcp.tools_info()
 # print(f"Tools available in 'thermo-models-mcp': {tools_info}")
 
+# SECTION: add custom references
+
 # SECTION: Serve the MCP server
 # thermo_models_mcp.run(transport='streamable-http')
 

@@ -233,7 +233,7 @@ class ReferencesInitializer:
 
     def _get_reference_link(
         self,
-    ) -> str:
+    ) -> Dict[str, Dict[str, Dict[str, str]]]:
         """
         Get the reference link.
 

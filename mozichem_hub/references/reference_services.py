@@ -1,6 +1,9 @@
 # import libs
 from typing import (
     Optional,
+    Dict,
+    List,
+    Union
 )
 # local
 from .models import (
@@ -17,33 +20,25 @@ class ReferenceServices:
     It provides access to the thermodb reference, reference, and reference link.
     """
 
-    def __init__(
-        self,
-        references: Optional[References] = None,
-    ):
+    def __init__(self):
         """
         Initialize the ReferenceServices.
         """
-        # SECTION: configure the reference
-        self.ReferencesInitializer_ = ReferencesInitializer(
-            references=references,
-        )
+        pass
 
-        # NOTE: initialize references
-        self._reference_thermodb = self._initialize_references()
-
-    @property
-    def reference_thermodb(self) -> ReferenceThermoDB:
-        """
-        Get the reference thermodb of the hub.
-        """
-        return self._reference_thermodb
-
-    def _initialize_references(self):
+    def _generate_references(
+        self,
+        references: Optional[References] = None
+    ) -> ReferenceThermoDB:
         """
         Initialize the references.
         """
         try:
+            # SECTION: configure the reference
+            self.ReferencesInitializer_ = ReferencesInitializer(
+                references=references,
+            )
+
             # NOTE: reference thermodb
             _reference_thermodb = \
                 self.ReferencesInitializer_._get_reference_thermodb()
@@ -53,20 +48,20 @@ class ReferenceServices:
         except Exception as e:
             raise Exception("Failed to initialize references.") from e
 
-    def add_reference(
+    def _set_custom_references(
         self,
-        reference: Reference,
-        reference_link: str
+        references: References,
     ):
         """
-        Add a custom reference to the hub.
+        Add a custom reference to the mcp server.
 
         Parameters
         ----------
-        reference : Reference
-            The custom reference to add.
-        reference_link : str
-            The custom reference link to add.
+        references : References
+            The custom references to be added to the mcp server.
+
+        Returns
+        -------
+        None
         """
-        self._reference = reference
-        self._reference_link = reference_link
+        pass

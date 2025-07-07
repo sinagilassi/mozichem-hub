@@ -1,4 +1,5 @@
 # import libs
+import logging
 from fastmcp import FastMCP
 from typing import (
     Optional,
@@ -17,7 +18,8 @@ from ..tools import ToolManager
 from ..references import (
     References,
     ReferenceController,
-    ReferenceServices
+    ReferenceServices,
+    ReferenceThermoDB
 )
 from ..descriptors import MCPDescriptor
 
@@ -103,31 +105,8 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         self._reference_content = reference_content
         self._reference_config = reference_config
 
-        # SECTION: standardize the reference content and config
-        # NOTE: init the ReferencesAdapter
-        ReferenceController_ = ReferenceController(
-            reference_content=reference_content,
-            reference_config=reference_config
-        )
-
-        # NOTE: config conversion
-        # ! convert the reference content
-        # ! convert the reference config
-        # ! build the reference link
-        (
-            reference_content_,
-            reference_config_,
-            reference_link_
-        ) = ReferenceController_.transformer()
-
-        # NOTE: set reference
-        self._references = References(
-            contents=reference_content_,
-            config=reference_config_,
-            link=reference_link_
-        )
-
         # NOTE: set the mcp name
+        # local mcp is True, the mcp name is set to the name of the hub
         self.local_mcp = local_mcp
 
         # ! check
@@ -142,21 +121,32 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         # LINK: create the RegistryMixin instance
         RegistryMixin.__init__(self)
 
-        # SECTION: initialize the ReferenceServices
         # LINK: create the ReferenceServices instance
-        ReferenceServices.__init__(
-            self,
-            references=self._references,
+        ReferenceServices.__init__(self)
+
+        # SECTION: standardize the reference content and config
+        # NOTE: set the references
+        _references = self._reference_input_settings(
+            reference_content=reference_content,
+            reference_config=reference_config
+        )
+
+        # NOTE: set the reference thermodb
+        _reference_thermodb = self._reference_thermodb_settings(
+            references=_references
         )
 
         # SECTION: initialize the MoziServer
         # NOTE: create the MoziServer instance
-        self.MoziServer_ = MoziServer(name=name, instructions=instructions)
+        self.MoziServer_ = MoziServer(
+            name=name,
+            instructions=instructions
+        )
 
         # SECTION: initialize the ToolManager with references
         # NOTE: create the ToolManager instance
         self.ToolManager_ = ToolManager(
-            reference_thermodb=self.reference_thermodb,
+            reference_thermodb=_reference_thermodb,
         )
 
         # SECTION: configure the MCP server
@@ -251,7 +241,9 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
 
     def run(
         self,
-        transport: Optional[Literal['stdio', 'streamable-http']] = None,
+        transport: Optional[
+            Literal['stdio', 'streamable-http']
+        ] = None,
         **transport_kwargs
     ):
         """
@@ -275,3 +267,153 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
             )
         except Exception as e:
             raise RuntimeError(f"Failed to run {self.name}: {e}") from e
+
+    def _reference_input_settings(
+        self,
+        reference_content: Optional[
+            Union[str, List[str]]
+        ] = None,
+        reference_config: Optional[
+            Union[str, Dict[str, Dict[str, str]]]
+        ] = None
+    ) -> References:
+        """
+        Set the reference content and configuration for the MCP.
+
+        Parameters
+        ----------
+        reference_content : Optional[Union[str, List[str]]]
+            Reference content for the MCP.
+        reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+            Reference configuration for the MCP.
+        """
+        try:
+            # SECTION: standardize the reference content and config
+            # NOTE: init the ReferencesAdapter
+            ReferenceController_ = ReferenceController(
+                reference_content=reference_content,
+                reference_config=reference_config
+            )
+
+            # NOTE: config conversion
+            # ! convert the reference content
+            # ! convert the reference config
+            # ! build the reference link
+            (
+                reference_content_,
+                reference_config_,
+                reference_link_
+            ) = ReferenceController_.transformer()
+
+            # NOTE: set reference
+            references = References(
+                contents=reference_content_,
+                config=reference_config_,
+                link=reference_link_
+            )
+
+            # return
+            return references
+        except Exception as e:
+            logging.error(
+                f"Failed to transform reference content and config: {e}"
+            )
+            raise RuntimeError(
+                "Failed to transform reference content and config."
+            ) from e
+
+    def _reference_thermodb_settings(
+        self,
+        references: References
+    ) -> ReferenceThermoDB:
+        """
+        Get the reference thermodb settings for the MCP.
+
+        Returns
+        -------
+        ReferenceThermoDB
+            The reference thermodb settings for the MCP.
+        """
+        try:
+            # NOTE: get the reference thermodb
+            return self._generate_references(
+                references=references
+            )
+        except Exception as e:
+            logging.error(f"Failed to get reference thermodb: {e}")
+            raise RuntimeError("Failed to get reference thermodb.") from e
+
+    def update_references(
+        self,
+        reference_content: Optional[
+            Union[str, List[str]]
+        ] = None,
+        reference_config: Optional[
+            Union[str, Dict[str, Dict[str, str]]]
+        ] = None,
+    ) -> str:
+        """
+        Add custom references to the MoziChem MCP.
+
+        Parameters
+        ----------
+        reference_content : Optional[Union[str, List[str]]]
+            The content of the reference, can be a string or a list of strings.
+        reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+            The configuration of the reference, can be a string or a dictionary.
+        """
+        try:
+            # NOTE: set the references
+            _references = self._reference_input_settings(
+                reference_content=reference_content,
+                reference_config=reference_config
+            )
+
+            # NOTE: set the reference thermodb
+            _reference_thermodb = self._reference_thermodb_settings(
+                references=_references
+            )
+
+            # SECTION: reinitialize the ToolManager with new references
+            self.ToolManager_ = ToolManager(
+                reference_thermodb=_reference_thermodb,
+            )
+
+            # SECTION: update the MCP server with new references
+            # ! update the mcp server with local tools
+            if self.local_mcp is True:
+                # call
+                self._update()
+
+            return "Custom references added successfully."
+        except Exception as e:
+            logging.error(f"Failed to add custom references: {e}")
+            raise RuntimeError("Failed to add custom references.") from e
+
+    def update_instructions(
+        self,
+        instructions: str
+    ) -> str:
+        """
+        Update the instructions for the MoziChem MCP.
+
+        Parameters
+        ----------
+        instructions : str
+            The new instructions for the MCP.
+        """
+        try:
+            # NOTE: update the instructions
+            if instructions is not None:
+                self._instructions = instructions
+
+            # SECTION: reinitialize the MoziServer with new instructions
+            self.MoziServer_ = MoziServer(
+                name=self.name,
+                instructions=instructions
+            )
+
+            return "Instructions updated successfully."
+        except Exception as e:
+            logging.error(f"Failed to update instructions: {e}")
+            raise RuntimeError("Failed to update instructions.") from e
