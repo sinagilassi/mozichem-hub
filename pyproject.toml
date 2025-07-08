@@ -19,15 +19,15 @@ classifiers = [
 ]
 
 dependencies = [
-    "pydantic",
-    "pydantic-settings",
-    "fastmcp",
-    "pyyaml",
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.1",
+    "fastmcp>=2.10.2",
+    "rich>=14.0.0",
+    "fastapi[standard]>=0.116.0",
+    "pyyaml>=6.0.2",
     "pythermodb",
     "pythermolinkdb",
     "pythermomodels",
-    "rich>=14.0.0",
-    "fastapi[standard]>=0.116.0",
 ]
 
 [project.urls]

@@ -1,3 +1,5 @@
-# import libs
+from .main import MoziChemHubAPI
 
-# local
+__all__ = [
+    "MoziChemHubAPI",
+]
