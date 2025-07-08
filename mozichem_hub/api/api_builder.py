@@ -55,20 +55,20 @@ class MoziChemAPI:
         # Store additional FastAPI configuration parameters
         self._kwargs = kwargs
 
-        # SECTION: Create FastAPI app with given configuration
-        self.app = FastAPI(**self._kwargs)
-
         # SECTION: mcps setup
         self.mcp_apps = {
             name: mcp.http_app(path="/mcp") for name, mcp in self.mcps.items()
         }
+
+        # SECTION: Create FastAPI app with lifespan passed to constructor
+        self.app = FastAPI(lifespan=self._combined_lifespan, **self._kwargs)
 
         # Mount MCP apps dynamically
         self._mount_mcp_apps()
 
         # SECTION: Async context manager for cleanup
         # Set combined lifespan
-        self.app.router.lifespan_context = self._combined_lifespan
+        # self.app.router.lifespan_context = self._combined_lifespan
 
     def _mount_mcp_apps(self):
         """
