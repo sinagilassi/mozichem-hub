@@ -223,7 +223,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         except Exception as e:
             raise RuntimeError(f"Failed to launch {self.name}: {e}") from e
 
-    def _retrieve_mcp(self) -> FastMCP:
+    def get_mcp(self) -> FastMCP:
         """
         Retrieve the mcp server.
         """
@@ -258,7 +258,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
         """
         try:
             # NOTE: retrieve the mcp server
-            mcp = self._retrieve_mcp()
+            mcp = self.get_mcp()
 
             # NOTE: run the MCP server
             mcp.run(
