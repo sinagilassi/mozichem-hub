@@ -262,7 +262,7 @@ class MoziChemMCP(RegistryMixin, ReferenceServices):
 
             # NOTE: run the MCP server
             mcp.run(
-                transport=transport or 'stdio',
+                transport=transport,
                 **transport_kwargs
             )
         except Exception as e:
