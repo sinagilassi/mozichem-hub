@@ -1,0 +1,24 @@
+REFERENCES:
+  INSTRUCTIONS: |
+    This MCP server provides tools for computing vapor-liquid equilibrium (VLE) calculations using the Raoult's law and modified Raoult's law models.
+
+    🔧 Available Tools:
+    • `calc_bubble_pressure`
+      → Calculates the bubble pressure of a liquid mixture at a specified temperature using Raoult's law or modified Raoult's law.
+  TOOL1:
+    NAME: calc_bubble_pressure
+    DESCRIPTION: The Bubble-Pressure (BP) calculation determines the pressure at which the first bubble of vapor forms when a liquid mixture is heated at a constant temperature. It is used to find the pressure for a given temperature at which the liquid will begin to vaporize.
+    ARGS:
+      - name: temperature
+        type: Temperature
+        description: "Temperature at which the bubble pressure is calculated."
+      - name: components
+        type: Components
+        description: "Chemical components for which the fugacity is calculated."
+      - name: equilibrium_model
+        type: str
+        description: "Equilibrium model to use for the calculation. Options are 'raoult' for Raoult's law and 'modified_raoult' for modified Raoult's law."
+    TAGS:
+      - thermodynamics
+      - vapor-liquid equilibrium
+      - bubble pressure
