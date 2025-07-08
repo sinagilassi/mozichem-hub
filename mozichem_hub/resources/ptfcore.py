@@ -13,6 +13,7 @@ from .models import (
 from .utils import (
     set_feed_specification,
     get_components_formulas,
+    get_components_names,
 )
 from .hub import Hub
 
@@ -23,11 +24,11 @@ class PTFCore:
     This class serves as a central point for PTF-related operations.
     """
     # NOTE: attributes
-    id = "PTMCore"
+    id = "PTFCore"
 
     def __init__(self, hub: Hub):
         """
-        Initialize the PTMCore instance.
+        Initialize the PTFCore instance.
         """
         # NOTE: store the hub instance
         self.hub = hub
@@ -59,11 +60,13 @@ class PTFCore:
             )
         ] = 'raoult'
     ) -> dict:
-        """Calculates the fugacity of a gaseous mixture of components at given temperature and pressure."""
+        """Calculates the bubble pressure of a mixture of components at a given temperature."""
         try:
             # SECTION: components id
             # NOTE: formulas
             component_formulas = get_components_formulas(components)
+            # NOTE: names
+            component_names = get_components_names(components)
 
             # SECTION: build model source
             model_source = self.hub.build_components_model_source(
@@ -76,7 +79,7 @@ class PTFCore:
             # SECTION: set feed specification
             N0s = set_feed_specification(
                 components=components,
-                feed_mode="formula"
+                feed_mode="formula"  # or 'name'
             )
 
             # SECTION: model input
@@ -94,4 +97,6 @@ class PTFCore:
             # return
             return res
         except Exception as e:
-            raise ValueError(f"Failed to calculate fugacity: {e}") from e
+            raise RuntimeError(
+                f"Error calculating bubble pressure: {e}"
+            ) from e

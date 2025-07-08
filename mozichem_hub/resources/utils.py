@@ -54,11 +54,14 @@ def get_components_formulas(
     components: List[Component]
 ) -> List[str]:
     """
-    Get formulas of components.
+    Get formulas of components as formula-state.
     """
     try:
         # NOTE: Extract formulas from components
-        return [component.formula for component in components]
+        return [
+            f"{component.formula}-{component.state}"
+            for component in components
+        ]
     except Exception as e:
         logging.error(f"Failed to get component formulas: {e}")
         raise ValueError(f"Failed to get component formulas: {e}") from e
@@ -68,11 +71,14 @@ def get_components_names(
     components: List[Component]
 ) -> List[str]:
     """
-    Get names of components.
+    Get names of components as name-state.
     """
     try:
         # NOTE: Extract names from components
-        return [component.name for component in components]
+        return [
+            f"{component.name}-{component.state}"
+            for component in components
+        ]
     except Exception as e:
         logging.error(f"Failed to get component names: {e}")
         raise ValueError(f"Failed to get component names: {e}") from e
