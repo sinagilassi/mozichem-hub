@@ -59,7 +59,7 @@ class PTFCore:
                 description="Equilibrium model to use for bubble pressure calculation"
             )
         ] = 'raoult'
-    ) -> dict:
+    ) -> str:
         """Calculates the bubble pressure of a mixture of components at a given temperature."""
         try:
             # SECTION: components id
@@ -95,7 +95,7 @@ class PTFCore:
             )
 
             # return
-            return res
+            return str(res)
         except Exception as e:
             raise RuntimeError(
                 f"Error calculating bubble pressure: {e}"
