@@ -222,3 +222,102 @@ class PTMCore:
             return res
         except Exception as e:
             raise ValueError(f"Failed to calculate fugacity: {e}") from e
+
+    def component_eos_roots_analysis(
+        self,
+        component: Annotated[
+            Component,
+            Field(..., description="Component name and properties")
+        ],
+        temperature: Annotated[
+            Temperature,
+            Field(..., description="Temperature of the system")
+        ],
+        pressure: Annotated[
+            Pressure,
+            Field(..., description="Pressure of the system")],
+        eos_model: Annotated[
+            Literal['PR', 'SRK', 'RK', 'vdW'],
+            Field(description="EOS model to use, e.g., 'SRK', 'PR'", default="SRK")
+        ]
+    ) -> dict:
+        """Analyzes the roots of the EOS for a given component at specified temperature and pressure."""
+        try:
+            # NOTE: extract component name
+            (
+                component_name, _, _
+            ) = component.name, component.formula, component.state
+
+            # SECTION: build model source
+            model_source = self.hub.build_component_model_source(
+                component=component
+            )
+
+            # SECTION: model input
+            model_inputs = {
+                "component": f"{component_name}-{component.state}",
+                "pressure": [pressure.value, pressure.unit],
+                "temperature": [temperature.value, temperature.unit]
+            }
+
+            # SECTION: calc
+            res = self.eos.check_eos_roots_single_component(
+                model_name=eos_model,
+                model_input=model_inputs,
+                model_source=model_source
+            )
+
+            # return
+            return res
+        except Exception as e:
+            raise ValueError(f"Failed to analyze EOS roots: {e}") from e
+
+    def multi_component_eos_roots_analysis(
+        self,
+        components: Annotated[
+            List[Component],
+            Field(..., description="List of components with their properties")
+        ],
+        temperature: Annotated[
+            Temperature,
+            Field(..., description="Temperature of the system")
+        ],
+        pressure: Annotated[
+            Pressure,
+            Field(..., description="Pressure of the system")],
+        eos_model: Annotated[
+            Literal['PR', 'SRK', 'RK', 'vdW'],
+            Field(description="EOS model to use, e.g., 'SRK', 'PR'", default="SRK")
+        ]
+    ) -> dict:
+        """Analyzes the roots of the EOS for a mixture of components at specified temperature and pressure."""
+        try:
+            # SECTION: set feed specification
+            N0s = set_feed_specification(
+                components=components,
+                feed_mode="formula"
+            )
+
+            # SECTION: build model source
+            model_source = self.hub.build_components_model_source(
+                components=components
+            )
+
+            # SECTION: model input
+            model_inputs = {
+                "feed-specification": N0s,
+                "pressure": [pressure.value, pressure.unit],
+                "temperature": [temperature.value, temperature.unit]
+            }
+
+            # SECTION: calc
+            res = self.eos.check_eos_roots_multi_component(
+                model_name=eos_model,
+                model_input=model_inputs,
+                model_source=model_source
+            )
+
+            # return
+            return res
+        except Exception as e:
+            raise ValueError(f"Failed to analyze EOS roots: {e}") from e

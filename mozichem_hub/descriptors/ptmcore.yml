@@ -70,7 +70,7 @@ REFERENCES:
         description: "Solver method for fugacity calculation. Options are 'ls' for least-square method, 'fsolve' for fsolve, and 'root' for root."
       - name: liquid_fugacity_mode
         type: str
-        description: "The fugacity is calculated based using eos used for gas phase and Poynting correction. Options are 'gas' for gas phase EOS and 'poiynting' for Poynting correction."
+        description: "The fugacity is calculated based using eos used for gas phase and Poynting correction. Options are 'gas' for gas phase EOS and 'poynting' for Poynting correction."
   TOOL3:
     NAME: calc_fugacity_gas_mixture
     DESCRIPTION: "This function calculates the fugacity of a mixture of gases using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW)."
@@ -92,3 +92,41 @@ REFERENCES:
       - fugacity
       - equation of state
       - gas-phase
+  TOOL4:
+    NAME: component_eos_roots_analysis
+    DESCRIPTION: "This function analyzes the roots of the EOS for a given component at specified temperature and pressure."
+    ARGS:
+      - name: temperature
+        type: Temperature
+        description: "Temperature of the system."
+      - name: pressure
+        type: Pressure
+        description: "Pressure of the system."
+      - name: component
+        type: Component
+        description: "Chemical component for which the EOS roots are analyzed."
+      - name: eos_model
+        type: str
+        description: "Equation of state to use for the analysis. Options are 'PR' for Peng-Robinson, 'SRK' for Soave-Redlich-Kwong, 'RK' for Redlich-Kwong, and 'vdW' for van der Waals."
+    TAGS:
+      - thermodynamics
+      - eos analysis
+  TOOL5:
+    NAME: multi_component_eos_roots_analysis
+    DESCRIPTION: "This function analyzes the roots of the EOS for a mixture of components at specified temperature and pressure."
+    ARGS:
+      - name: temperature
+        type: Temperature
+        description: "Temperature of the system."
+      - name: pressure
+        type: Pressure
+        description: "Pressure of the system."
+      - name: components
+        type: Components
+        description: "Chemical components for which the EOS roots are analyzed."
+      - name: eos_model
+        type: str
+        description: "Equation of state to use for the analysis. Options are 'PR' for Peng-Robinson, 'SRK' for Soave-Redlich-Kwong, 'RK' for Redlich-Kwong, and 'vdW' for van der Waals."
+    TAGS:
+      - thermodynamics
+      - eos analysis

@@ -174,8 +174,8 @@ class MoziChemHubAPI:
                 raise ValueError("No FastMCP instances available.")
 
             # SECTION: Create APIBuilder instance
-            APIBuilder_ = MoziChemAPI(mcps=mcps, **self._kwargs)
+            MoziChemAPI_ = MoziChemAPI(mcps=mcps, **self._kwargs)
 
-            return APIBuilder_.app
+            return MoziChemAPI_.app
         except Exception as e:
             raise RuntimeError(f"Failed to create API: {str(e)}") from e

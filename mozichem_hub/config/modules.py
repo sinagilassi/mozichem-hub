@@ -25,6 +25,14 @@ MCP_MODULES = [
             {
                 'name': 'calc_fugacity_gas_mixture',
                 'description': 'Calculates the fugacity of a gaseous mixture of components at given temperature and pressure.',
+            },
+            {
+                'name': 'component_eos_roots_analysis',
+                'description': 'Analyzes the roots of the EOS for a given component at specified temperature and pressure.'
+            },
+            {
+                'name': 'multi_component_eos_roots_analysis',
+                'description': 'Analyzes the roots of the EOS for a mixture of components at specified temperature and pressure.'
             }
         ],
     }
