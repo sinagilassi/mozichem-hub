@@ -1,11 +1,12 @@
 # import libs
 import logging
-from typing import Any, List, Set, Callable, Literal, Optional, Dict
+from typing import (
+    List,
+    Literal,
+    Dict)
 # locals
 from .models import (
     Component,
-    Temperature,
-    Pressure,
 )
 
 
@@ -14,7 +15,7 @@ def set_feed_specification(
     feed_mode: Literal['name', 'formula'] = 'name'
 ) -> Dict[str, float]:
     """
-    Set feed specification for a list of components.
+    Set feed specification for a list of components with their mole fractions.
     """
     try:
         # NOTE: Initialize feed specification dictionary
@@ -47,3 +48,31 @@ def set_feed_specification(
     except Exception as e:
         logging.error(f"Failed to set feed specification: {e}")
         raise ValueError(f"Failed to set feed specification: {e}") from e
+
+
+def get_components_formulas(
+    components: List[Component]
+) -> List[str]:
+    """
+    Get formulas of components.
+    """
+    try:
+        # NOTE: Extract formulas from components
+        return [component.formula for component in components]
+    except Exception as e:
+        logging.error(f"Failed to get component formulas: {e}")
+        raise ValueError(f"Failed to get component formulas: {e}") from e
+
+
+def get_components_names(
+    components: List[Component]
+) -> List[str]:
+    """
+    Get names of components.
+    """
+    try:
+        # NOTE: Extract names from components
+        return [component.name for component in components]
+    except Exception as e:
+        logging.error(f"Failed to get component names: {e}")
+        raise ValueError(f"Failed to get component names: {e}") from e
