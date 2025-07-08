@@ -13,10 +13,12 @@ from ..references import (
     ReferenceThermoDB
 )
 from .hub import Hub
-from .ptmcore import PTMCore
 from .mozi_tool_builder import MoziToolBuilder
 from ..config import MCP_MODULES
 from .models import MoziTool
+# class lists
+from .ptmcore import PTMCore
+from .ptfcore import PTFCore
 
 
 class FunctionDispatcher(MoziToolBuilder):
@@ -48,8 +50,10 @@ class FunctionDispatcher(MoziToolBuilder):
         )
 
         # SECTION: Initialize function source
-        # ptm
+        # LINK: pyThermoModels
         self.MCP_PTMCore = PTMCore(self.Hub_)
+        # LINK: pyThermoFlash
+        self.MCP_PTFCore = PTFCore(self.Hub_)
 
     def _get_mcp_registered(self) -> Dict[str, Any]:
         """

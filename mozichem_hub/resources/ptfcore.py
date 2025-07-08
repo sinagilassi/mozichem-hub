@@ -13,12 +13,11 @@ from .models import (
 from .utils import (
     set_feed_specification,
     get_components_formulas,
-    get_components_names
 )
 from .hub import Hub
 
 
-class PTMCore:
+class PTFCore:
     """
     Core class for managing pyThermoFlash (PTF) functionalities.
     This class serves as a central point for PTF-related operations.

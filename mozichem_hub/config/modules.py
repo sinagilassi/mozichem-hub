@@ -35,5 +35,38 @@ MCP_MODULES = [
                 'description': 'Analyzes the roots of the EOS for a mixture of components at specified temperature and pressure.'
             }
         ],
+    },
+    {
+        'name': 'flash-calculations-mcp',
+        'version': '0.1.0',
+        'description': 'The module for performing flash calculations using pyThermoFlash.',
+        'instructions': 'This module provides tools for performing flash calculations using pyThermoFlash. Bubble pressure, dew pressure, bubble temperature, dew temperature, and flash calculations are all supported.',
+        'package': 'PyThermoFlash',
+        'class': 'MCP_PTFCore',
+        'descriptor': 'ptfcore.yml',
+        'resources': [],
+        'prompts': [],
+        'tools': [
+            {
+                'name': 'calc_bubble_pressure',
+                'description': 'Calculates the bubble pressure of a mixture at a given temperature using specified equilibrium model.'
+            },
+            # {
+            #     'name': 'calc_dew_pressure',
+            #     'description': 'Calculates the dew pressure of a mixture at a given temperature using specified equilibrium model.'
+            # },
+            # {
+            #     'name': 'calc_bubble_temperature',
+            #     'description': 'Calculates the bubble temperature of a mixture at a given pressure using specified equilibrium model.'
+            # },
+            # {
+            #     'name': 'calc_dew_temperature',
+            #     'description': 'Calculates the dew temperature of a mixture at a given pressure using specified equilibrium model.'
+            # },
+            # {
+            #     'name': 'flash_calculation',
+            #     'description': 'Performs flash calculations for a mixture at given temperature and pressure.'
+            # }
+        ],
     }
 ]
