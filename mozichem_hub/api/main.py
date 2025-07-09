@@ -6,6 +6,7 @@ from typing import Dict
 from ..docs import MoziChemMCP
 # local
 from .api_builder import MoziChemAPI
+from ..utils import print_ascii_art
 
 
 class MoziChemHubAPI:
@@ -154,7 +155,7 @@ class MoziChemHubAPI:
         """
         return list(self.mcps.keys())
 
-    def create_api(self) -> FastAPI:
+    def create_api(self, welcome_message: bool = True) -> FastAPI:
         """
         Create a FastAPI instance with the registered MoziChem MCPs.
 
@@ -175,6 +176,13 @@ class MoziChemHubAPI:
 
             # SECTION: Create APIBuilder instance
             MoziChemAPI_ = MoziChemAPI(mcps=mcps, **self._kwargs)
+
+            # NOTE: print welcome message
+            if welcome_message:
+                print_ascii_art()
+                print("[bold green]MoziChemHub API is ready![/bold green]")
+                print(
+                    f"[bold blue]Available MCPs: {', '.join(self._get_all_mcps())}[/bold blue]")
 
             return MoziChemAPI_.app
         except Exception as e:
