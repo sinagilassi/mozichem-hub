@@ -22,6 +22,9 @@ print(f"mcp names: {mcp_names}")
 thermo_models_mcp = create_mozichem_mcp(name="eos-models-mcp")
 # NOTE: flash-calculation-mcp
 flash_calculations_mcp = create_mozichem_mcp(name="flash-calculations-mcp")
+# NOTE: thermodynamic-properties-mcp
+thermodynamic_properties_mcp = create_mozichem_mcp(
+    name="thermodynamic-properties-mcp")
 
 # NOTE: mcp tools
 # tools_info = thermo_models_mcp.tools_info()
@@ -33,6 +36,7 @@ mozichem_api = MoziChemHubAPI()
 # NOTE: add the MCP to the API
 mozichem_api.add_mozichem_mcp(thermo_models_mcp)
 mozichem_api.add_mozichem_mcp(flash_calculations_mcp)
+mozichem_api.add_mozichem_mcp(thermodynamic_properties_mcp)
 
 # NOTE: create the API
 mcp_api = mozichem_api.create_api()

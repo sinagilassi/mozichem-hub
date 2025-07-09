@@ -19,6 +19,7 @@ from .models import MoziTool
 # class lists
 from .ptmcore import PTMCore
 from .ptfcore import PTFCore
+from .ptdbcore import PTDBCore
 
 
 class FunctionDispatcher(MoziToolBuilder):
@@ -54,6 +55,8 @@ class FunctionDispatcher(MoziToolBuilder):
         self.MCP_PTMCore = PTMCore(self.Hub_)
         # LINK: pyThermoFlash
         self.MCP_PTFCore = PTFCore(self.Hub_)
+        # LINK: pyThermoDB
+        self.MCP_PTDBCore = PTDBCore(self.Hub_)
 
     def _get_mcp_registered(self) -> Dict[str, Any]:
         """

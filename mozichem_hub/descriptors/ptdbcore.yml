@@ -1,0 +1,16 @@
+REFERENCES:
+  INSTRUCTIONS: |
+    This MCP server provides tools for accessing thermodynamic properties for components.
+
+    🔧 Available Tools:
+    • `verify_component_thermodynamic_properties_availability`
+      → Verifies the availability of thermodynamic properties for a given component in the database.
+  TOOL1:
+    NAME: verify_component_thermodynamic_properties_availability
+    DESCRIPTION: This tool checks if the thermodynamic properties of a specified chemical component are available in the database. It returns a string indicating the availability status of the component's properties. Normally, it returns a list of available properties with its name, symbol, databook, and table name.
+    ARGS:
+      - name: component
+        type: Component
+        description: "Chemical component for which the thermodynamic properties are verified."
+    TAGS:
+      - thermodynamic properties

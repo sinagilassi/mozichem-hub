@@ -68,5 +68,22 @@ MCP_MODULES = [
             #     'description': 'Performs flash calculations for a mixture at given temperature and pressure.'
             # }
         ],
+    },
+    {
+        'name': 'thermodynamic-properties-mcp',
+        'version': '0.1.0',
+        'description': 'The module for accessing thermodynamic properties of components from different sources.',
+        'instructions': 'This module provides tools for accessing thermodynamic properties of components from different sources. It includes properties from different thermodynamic books and databases.',
+        'package': 'PyThermoDB',
+        'class': 'MCP_PTDBCore',
+        'descriptor': 'ptdbcore.yml',
+        'resources': [],
+        'prompts': [],
+        'tools': [
+            {
+                'name': 'verify_component_thermodynamic_properties_availability',
+                'description': 'Verify the availability of thermodynamic properties for a given component in the database. It returns a list of available properties and their sources.'
+            }
+        ]
     }
 ]
