@@ -7,6 +7,7 @@ from ..docs import MoziChemMCP
 # local
 from .api_builder import MoziChemAPI
 from ..utils import print_ascii_art
+from ..config import __version__
 
 
 class MoziChemHubAPI:
@@ -179,10 +180,11 @@ class MoziChemHubAPI:
 
             # NOTE: print welcome message
             if welcome_message:
-                print_ascii_art()
-                print("[bold green]MoziChemHub API is ready![/bold green]")
-                print(
-                    f"[bold blue]Available MCPs: {', '.join(self._get_all_mcps())}[/bold blue]")
+                # line
+                line_1 = f"Welcome to MoziChemHub API {__version__}."
+                line_2 = f"Available MCPs: {', '.join(self._get_all_mcps())}"
+                lines = [line_1, line_2]
+                print_ascii_art(lines)
 
             return MoziChemAPI_.app
         except Exception as e:

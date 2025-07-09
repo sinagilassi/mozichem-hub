@@ -19,12 +19,17 @@ print(f"mcp names: {mcp_names}")
 
 # SECTION: Build the MCP server
 # NOTE: eos-models-mcp
-thermo_models_mcp = create_mozichem_mcp(name="eos-models-mcp")
+thermo_models_mcp = create_mozichem_mcp(
+    name="eos-models-mcp"
+)
 # NOTE: flash-calculation-mcp
-flash_calculations_mcp = create_mozichem_mcp(name="flash-calculations-mcp")
+flash_calculations_mcp = create_mozichem_mcp(
+    name="flash-calculations-mcp"
+)
 # NOTE: thermodynamic-properties-mcp
 thermodynamic_properties_mcp = create_mozichem_mcp(
-    name="thermodynamic-properties-mcp")
+    name="thermodynamic-properties-mcp"
+)
 
 # NOTE: mcp tools
 # tools_info = thermo_models_mcp.tools_info()
