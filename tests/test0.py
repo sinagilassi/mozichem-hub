@@ -1,6 +1,10 @@
 # import libs
 from mozichem_hub.references import ReferencesAdapter
 from rich import print
+import pyThermoDB as ptdb
+
+# SECTION: check versions
+print(f"pyThermoDB version: {ptdb.__version__}")
 
 # NOTE:
 reference_config = {
