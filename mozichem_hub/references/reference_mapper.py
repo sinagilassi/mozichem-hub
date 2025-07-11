@@ -107,3 +107,36 @@ class ReferenceMapper(ReferenceServices):
         except Exception as e:
             logging.error(f"Failed to get reference thermodb: {e}")
             raise RuntimeError("Failed to get reference thermodb.") from e
+
+    def generate_reference_thermodb(
+        self,
+        reference_content: Optional[
+            Union[str, List[str]]
+        ] = None,
+        reference_config: Optional[
+            Union[
+                str,
+                Dict[str, Dict[str, str | Dict[str, str]]]
+            ]
+        ] = None
+    ) -> ReferenceThermoDB:
+        """
+        Generate the reference thermodb for the MCP.
+
+        Parameters
+        ----------
+        reference_content : Optional[Union[str, List[str]]]
+            Reference content for the MCP.
+        reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+            Reference configuration for the MCP.
+        """
+        # SECTION: standardize the reference content and config
+        _references: References = self._reference_input_settings(
+            reference_content=reference_content,
+            reference_config=reference_config
+        )
+
+        # NOTE: set the reference thermodb
+        return self._reference_thermodb_settings(
+            references=_references
+        )

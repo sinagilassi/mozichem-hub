@@ -1,5 +1,11 @@
 # import libs
-from typing import Dict, Any, Callable, List
+from typing import (
+    Dict,
+    Any,
+    Callable,
+    List,
+    Optional
+)
 import inspect
 from typing import Annotated, Literal
 from pydantic import Field
@@ -64,7 +70,7 @@ class PTMCore:
                 description="Solver method for fugacity calculation, e.g., 'least-square method', 'fsolve', 'root'",
                 default="fsolve"
             )
-        ] = "ls"
+        ] = "ls",
     ) -> dict:
         """Calculates the fugacity of a gas-phase component at given temperature and pressure"""
         try:
@@ -75,6 +81,10 @@ class PTMCore:
 
             # component name - state
             component_ = f"{component_name}-{component.state}"
+
+            # SECTION: reinitialize hub if needed
+            # build reference_thermodb
+            # self.hub = Hub(reference_thermodb)
 
             # SECTION: build model source
             model_source = self.hub.build_component_model_source(
