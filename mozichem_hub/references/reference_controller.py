@@ -4,7 +4,8 @@ from typing import (
     Union,
     List,
     Dict,
-    Tuple
+    Tuple,
+    Literal
 )
 import logging
 # locals
@@ -24,7 +25,10 @@ class ReferenceController(ReferencesAdapter):
             Union[str, List[str]]
         ] = None,
         reference_config: Optional[
-            Union[str, Dict[str, Dict[str, str]]]
+            Union[
+                str,
+                Dict[str, Dict[str, str | Dict[str, str]]]
+            ]
         ] = None
     ):
         """
@@ -56,7 +60,9 @@ class ReferenceController(ReferencesAdapter):
             reference_config = self.__transform_reference_config()
 
             # SECTION: build the reference link
-            reference_link = self.__build_reference_link(reference_config)
+            reference_link = self.__build_reference_link(
+                reference_config,
+            )
 
             # result
             return (
@@ -115,7 +121,9 @@ class ReferenceController(ReferencesAdapter):
 
     def __transform_reference_config(
         self
-    ) -> Union[Dict[str, Dict[str, ComponentPropertySource]], None]:
+    ) -> Union[
+        Dict[str, Dict[str, ComponentPropertySource]], None
+    ]:
         """
         Transform the reference configuration into the required format.
         """
@@ -132,10 +140,10 @@ class ReferenceController(ReferencesAdapter):
 
             # NOTE: check if the reference config is a string
             if isinstance(self._reference_config, str):
-                # convert the string to a dictionary
+                # ! convert the string to a dictionary
                 res = self.config_from_str(self._reference_config)
             elif isinstance(self._reference_config, dict):
-                # if it's already a dictionary to the required dictionary format
+                # ! if it's already a dictionary to the required dictionary format
                 res = self.config_from_dict(self._reference_config)
             else:
                 logging.error(
@@ -157,7 +165,7 @@ class ReferenceController(ReferencesAdapter):
         reference_config: Optional[
             Dict[str, Dict[str, ComponentPropertySource]]
         ] = None
-    ):
+    ) -> Optional[str]:
         """
         Build the reference link for the MCP server.
 
@@ -180,6 +188,11 @@ class ReferenceController(ReferencesAdapter):
 
             # SECTION: build the reference link
             reference_link = self.build_reference_link(reference_config)
+
+            # NOTE: check the result format
+            if reference_link is not None:
+                # convert the reference link to a string
+                reference_link = self.str_from_reference_link(reference_link)
 
             # return the reference link
             return reference_link

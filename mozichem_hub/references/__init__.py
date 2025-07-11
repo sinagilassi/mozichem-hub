@@ -7,6 +7,7 @@ from .models import (
 from .reference_adapter import ReferencesAdapter
 from .reference_controller import ReferenceController
 from .reference_services import ReferenceServices
+from .reference_mapper import ReferenceMapper
 
 
 __all__ = [
@@ -17,4 +18,5 @@ __all__ = [
     "ReferencesAdapter",
     "ReferenceController",
     "ReferenceServices",
+    "ReferenceMapper",
 ]

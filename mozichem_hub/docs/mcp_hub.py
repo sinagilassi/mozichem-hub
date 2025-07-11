@@ -26,7 +26,10 @@ class MCPHub(MoziChemMCP):
             Union[str, List[str]]
         ] = None,
         reference_config: Optional[
-            Union[str, Dict[str, Dict[str, str]]]
+            Union[
+                str,
+                Dict[str, Dict[str, str | Dict[str, str]]]
+            ]
         ] = None,
         **kwargs: Dict[str, Any]
     ):
@@ -41,7 +44,7 @@ class MCPHub(MoziChemMCP):
             Instructions for the MCP, default is None.
         reference_content : Optional[Union[str, List[str]]]
             Content of the reference, can be a string or a list of strings.
-        reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+        reference_config : Optional[Union[str, Dict[str, Dict[str, str | Dict[str, str]]]]]
             Configuration of the reference, can be a string or a dictionary.
         **kwargs : dict
             Additional keyword arguments for the MCP.

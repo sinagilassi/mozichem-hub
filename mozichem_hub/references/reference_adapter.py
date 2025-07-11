@@ -91,7 +91,7 @@ class ReferencesAdapter:
 
     def config_from_dict(
         self,
-        reference_config: Dict[str, Dict[str, str]]
+        reference_config: Dict[str, Dict[str, str | Dict[str, str]]]
     ) -> Dict[str, Dict[str, ComponentPropertySource]]:
         """
         Convert the reference configuration from a dictionary to the required format (dictionary).
@@ -198,7 +198,8 @@ class ReferencesAdapter:
 
     def str_from_reference_link(
             self,
-            reference_link: Dict[str, Dict[str, Dict[str, str]]]):
+            reference_link: Dict[str, Dict[str, Dict[str, str]]]
+    ) -> str:
         """
         Convert the reference link to a string format.
 

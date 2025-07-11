@@ -8,7 +8,6 @@ from typing import (
 # local
 from .models import (
     References,
-    Reference,
     ReferenceThermoDB
 )
 from .references_initializer import ReferencesInitializer

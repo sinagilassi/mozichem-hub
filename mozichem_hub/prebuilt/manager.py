@@ -47,7 +47,10 @@ def create_mozichem_mcp(
         Union[str, List[str]]
     ] = None,
     reference_config: Optional[
-        Union[str, Dict[str, Dict[str, str]]]
+        Union[
+            str,
+            Dict[str, Dict[str, str | Dict[str, str]]]
+        ]
     ] = None,
     **kwargs
 ) -> MoziChemMCP:
@@ -60,7 +63,7 @@ def create_mozichem_mcp(
         Name of the mcp server, default is "MoziChemHub"
     reference_content : Optional[Union[str, List[str]]]
         Reference content for the mcp server, default is None.
-    reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+    reference_config : Optional[Union[str, Dict[str, Dict[str, str | Dict[str, str]]]
         Reference configuration for the mcp server, default is None.
     **kwargs : dict
         Additional keyword arguments for mcp configuration.
