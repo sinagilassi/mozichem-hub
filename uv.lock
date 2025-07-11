@@ -449,6 +449,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pythermodb" },
+    { name = "pythermoflash" },
     { name = "pythermolinkdb" },
     { name = "pythermomodels" },
     { name = "pyyaml" },
@@ -464,6 +465,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pydantic-settings", specifier = ">=2.10.1" },
     { name = "pythermodb", specifier = ">=1.11.5" },
+    { name = "pythermoflash", specifier = ">=0.1.5" },
     { name = "pythermolinkdb" },
     { name = "pythermomodels" },
     { name = "pyyaml", specifier = ">=6.0.2" },
@@ -828,6 +830,28 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/9b/4d/84bd7326b7d98a446d5bb3dfc9ae21d0dece7000ad7bef3ca4877f9c4abb/pythermodb-1.11.5.tar.gz", hash = "sha256:837da8c4adf022c99e6faa584f190682bf7ee296425c37c2e3d4bdfce430d252", size = 313533, upload-time = "2025-07-10T00:00:33.307Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/fb/24/50a86a0bd5c6c2fced7d730e0ba32eee3c02a38d1473de6f8e4a7d3c802b/pythermodb-1.11.5-py3-none-any.whl", hash = "sha256:6794ca465b12b9687509cec13553611fda20fe0f8f3ddace1ef7eb8928e7f06d", size = 344726, upload-time = "2025-07-10T00:00:31.836Z" },
+]
+
+[[package]]
+name = "pythermoflash"
+version = "0.1.5"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "numpy", version = "2.3.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "pandas" },
+    { name = "pycuc" },
+    { name = "pythermolinkdb" },
+    { name = "pythermomodels" },
+    { name = "pyyaml" },
+    { name = "requests" },
+    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "scipy", version = "1.16.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2a/4f/e9f6ba6f72ca587382f3faab2131ebc0d2ec7800837896644a30e77f7e58/pythermoflash-0.1.5.tar.gz", hash = "sha256:47684e78ab121c4bec32b891cc4a7136740003cca40e3a55c229f6e4827ede26", size = 31434, upload-time = "2025-05-29T01:44:25.073Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/75/ae/55a1e9925689e62918048d7dd0e3457992e5a891a3cdb3becac5458ec76e/pythermoflash-0.1.5-py3-none-any.whl", hash = "sha256:9be0c8cd2c292bebc6ec6dcb5791f0b1bae6cb2224f8d16facd9cf8acc8ce772", size = 34250, upload-time = "2025-05-29T01:44:23.546Z" },
 ]
 
 [[package]]

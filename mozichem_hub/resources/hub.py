@@ -276,7 +276,7 @@ class Hub:
                     # NOTE: component reference config
                     component_id = f"{component_name}-{component_state}"
 
-                    # get the component reference config
+                    # !get the component reference config
                     component_reference_config = \
                         self._set_component_reference_config(
                             component_id=component_id

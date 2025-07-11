@@ -28,8 +28,9 @@ dependencies = [
     "websockets>=11.0.0",
     "pyyaml>=6.0.2",
     "pythermodb>=1.11.5",
-    "pythermolinkdb",
-    "pythermomodels",
+    "pythermolinkdb>=1.3.6",
+    "pythermomodels>=1.4.8",
+    "pythermoflash>=0.1.5",
 ]
 
 [project.urls]
