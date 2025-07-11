@@ -127,18 +127,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
         ReferenceMapper.__init__(self)
 
         # SECTION: standardize the reference content and config
-        # # NOTE: set the references
-        # _references: References = self._reference_input_settings(
-        #     reference_content=reference_content,
-        #     reference_config=reference_config
-        # )
-
-        # # NOTE: set the reference thermodb
-        # _reference_thermodb: ReferenceThermoDB = \
-        #     self._reference_thermodb_settings(
-        #         references=_references
-        #     )
-
+        # # NOTE: generate the reference thermodb
         _reference_thermodb: ReferenceThermoDB = \
             self.generate_reference_thermodb(
                 reference_content=reference_content,
