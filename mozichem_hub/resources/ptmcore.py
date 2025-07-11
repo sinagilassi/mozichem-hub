@@ -18,6 +18,8 @@ from .models import (
 )
 from .utils import set_feed_specification
 from .hub import Hub
+from ..references import Reference, ReferenceMapper
+from ..descriptors import MCPDescriptor
 
 
 class PTMCore:
@@ -28,9 +30,17 @@ class PTMCore:
     # NOTE: attributes
     id = "PTMCore"
 
-    def __init__(self, hub: Hub):
+    def __init__(
+        self,
+        hub: Hub
+    ):
         """
         Initialize the PTMCore instance.
+
+        Parameters
+        ----------
+        hub : Hub
+            Instance of the Hub class to manage references and models.
         """
         # NOTE: store the hub instance
         self.hub = hub
@@ -71,6 +81,15 @@ class PTMCore:
                 default="fsolve"
             )
         ] = "ls",
+        custom_reference: Annotated[
+            Optional[Reference],
+            Field(
+                default=None,
+                description=(
+                    "Custom reference for the thermodynamic database provided by PyThermoDB, it is string (yml format) consisting of the reference for data and equations for the component."
+                )
+            )
+        ] = None
     ) -> dict:
         """Calculates the fugacity of a gas-phase component at given temperature and pressure"""
         try:
@@ -83,10 +102,21 @@ class PTMCore:
             component_ = f"{component_name}-{component.state}"
 
             # SECTION: reinitialize hub if needed
-            # build reference_thermodb
-            # self.hub = Hub(reference_thermodb)
+            if custom_reference is not None:
+                # LINK: initialize reference mapper
+                ReferenceMapper_ = ReferenceMapper()
 
-            # SECTION: build model source
+                # NOTE:  build reference_thermodb
+                reference_thermodb = \
+                    ReferenceMapper_.generate_reference_thermodb(
+                        reference_content=custom_reference.content,
+                        reference_config=custom_reference.config
+                    )
+
+                # NOTE: reinitialize hub with the new reference thermodb
+                self.hub = Hub(reference_thermodb)
+
+                # SECTION: build model source
             model_source = self.hub.build_component_model_source(
                 component=component
             )

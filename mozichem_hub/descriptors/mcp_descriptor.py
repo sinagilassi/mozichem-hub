@@ -145,3 +145,28 @@ class MCPDescriptor:
             return instructions
         except Exception as e:
             raise ValueError(f"Failed to load MCP instructions: {e}") from e
+
+    @staticmethod
+    def mcp_method(mcp_name: str, method_name: str) -> dict:
+        """
+        Get the method descriptor for a specific mcp and method.
+
+        Parameters
+        ----------
+        mcp_name : str
+            The name of the mcp to get the method for.
+        method_name : str
+            The name of the method to get the descriptor for.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the method descriptor.
+        """
+        try:
+            # NOTE: load the mcp descriptor
+            mcp_descriptor = MCPDescriptor().mcp_descriptor(mcp_name)
+
+            return mcp_descriptor[method_name]
+        except Exception as e:
+            raise ValueError(f"Failed to load MCP method: {e}") from e
