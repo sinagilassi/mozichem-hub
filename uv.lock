@@ -464,10 +464,10 @@ requires-dist = [
     { name = "fastmcp", specifier = ">=2.10.2" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pydantic-settings", specifier = ">=2.10.1" },
-    { name = "pythermodb", specifier = ">=1.11.5" },
+    { name = "pythermodb", specifier = ">=1.11.6" },
     { name = "pythermoflash", specifier = ">=0.1.5" },
-    { name = "pythermolinkdb" },
-    { name = "pythermomodels" },
+    { name = "pythermolinkdb", specifier = ">=1.3.6" },
+    { name = "pythermomodels", specifier = ">=1.4.8" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "rich", specifier = ">=14.0.0" },
     { name = "uvicorn", specifier = ">=0.35.0" },
@@ -818,7 +818,7 @@ wheels = [
 
 [[package]]
 name = "pythermodb"
-version = "1.11.5"
+version = "1.11.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
@@ -827,9 +827,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9b/4d/84bd7326b7d98a446d5bb3dfc9ae21d0dece7000ad7bef3ca4877f9c4abb/pythermodb-1.11.5.tar.gz", hash = "sha256:837da8c4adf022c99e6faa584f190682bf7ee296425c37c2e3d4bdfce430d252", size = 313533, upload-time = "2025-07-10T00:00:33.307Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4f/a8/eb5eb10a388f2eddbaec82c81a80656f36a07aec7227d7156e30d8971393/pythermodb-1.11.6.tar.gz", hash = "sha256:28fd1b2e8c7b2eaf41fae3197b266bcf72630c559e263070a7c5c32bae53cdda", size = 319196, upload-time = "2025-07-11T06:39:50.179Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fb/24/50a86a0bd5c6c2fced7d730e0ba32eee3c02a38d1473de6f8e4a7d3c802b/pythermodb-1.11.5-py3-none-any.whl", hash = "sha256:6794ca465b12b9687509cec13553611fda20fe0f8f3ddace1ef7eb8928e7f06d", size = 344726, upload-time = "2025-07-10T00:00:31.836Z" },
+    { url = "https://files.pythonhosted.org/packages/fe/76/35a49df101963c84b87e409ebb66ec109d596eafc8f12dbd806420827c70/pythermodb-1.11.6-py3-none-any.whl", hash = "sha256:35ccfe793effc88f854694e7004f58b0720d05c21d1a721255ccc024b056701c", size = 354344, upload-time = "2025-07-11T06:39:48.752Z" },
 ]
 
 [[package]]
