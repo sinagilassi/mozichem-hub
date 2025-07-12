@@ -101,8 +101,8 @@ class Reference(BaseModel):
             "Reference for the thermodynamic database provided by PyThermoDB"
         )
     )
-    config: Optional[Dict[str, Any]] = Field(
-        default_factory=dict,
+    config: Optional[Dict[str, Any] | str] = Field(
+        None,
         description=(
             "Configuration for the thermodynamic database, "
             "which properties should be included"

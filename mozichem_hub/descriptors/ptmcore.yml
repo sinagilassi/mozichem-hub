@@ -58,6 +58,14 @@ REFERENCES:
       - name: vapor-pressure
         symbol: VaPr
         description: "Vapor pressure equation for the component."
+    CONFIG:
+      vapor-pressure:
+        label: VaPr
+      general:
+        labels:
+          critical-temperature: Tc
+          critical-pressure: Pc
+          acentric-factor: AcFa
   calc_liquid_component_fugacity:
     NAME: calc_liquid_component_fugacity
     DESCRIPTION: "This function calculates the fugacity of single-liquid component using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW). The fugacity is calculated based on the EOS used for the gas phase and Poynting correction."

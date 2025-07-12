@@ -147,14 +147,17 @@ class MCPDescriptor:
             raise ValueError(f"Failed to load MCP instructions: {e}") from e
 
     @staticmethod
-    def mcp_method(mcp_name: str, method_name: str) -> dict:
+    def mcp_method_dependencies(
+        mcp_id: str,
+        method_name: str
+    ) -> dict:
         """
-        Get the method descriptor for a specific mcp and method.
+        Get the method dependencies for a specific mcp method.
 
         Parameters
         ----------
-        mcp_name : str
-            The name of the mcp to get the method for.
+        mcp_id : str
+            The id of the mcp to get the method for.
         method_name : str
             The name of the method to get the descriptor for.
 
@@ -164,9 +167,82 @@ class MCPDescriptor:
             A dictionary containing the method descriptor.
         """
         try:
+            # NOTE: find mcp name
+            mcp_name = next(
+                (
+                    module['name'] for module in MCP_MODULES
+                    if module['id'] == mcp_id
+                ),
+                None
+            )
+
+            # check if mcp name exists
+            if not mcp_name:
+                raise ValueError(f"MCP with id '{mcp_id}' not found.")
+
             # NOTE: load the mcp descriptor
             mcp_descriptor = MCPDescriptor().mcp_descriptor(mcp_name)
 
             return mcp_descriptor[method_name]
         except Exception as e:
             raise ValueError(f"Failed to load MCP method: {e}") from e
+
+    @staticmethod
+    def mcp_method_reference_config(
+        mcp_id: str,
+        method_name: str
+    ) -> dict:
+        """
+        Get the method config for a specific mcp method.
+
+        Parameters
+        ----------
+        mcp_id : str
+            The id of the mcp to get the method for.
+        method_name : str
+            The name of the method to get the config for.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the method config.
+        """
+        try:
+            # NOTE: find mcp name
+            mcp_name = next(
+                (
+                    module['name'] for module in MCP_MODULES
+                    if module['id'] == mcp_id
+                ),
+                None
+            )
+
+            # check if mcp name exists
+            if not mcp_name:
+                raise ValueError(f"MCP with id '{mcp_id}' not found.")
+
+            # NOTE: load the mcp descriptor
+            mcp_descriptor = MCPDescriptor().mcp_descriptor(mcp_name)
+
+            # NOTE: check if method exists
+            if method_name not in mcp_descriptor:
+                raise ValueError(
+                    f"Method '{method_name}' not found in MCP '{mcp_name}'."
+                )
+
+            # NOTE: get method config
+            config = mcp_descriptor[method_name].get('CONFIG', {})
+            if not config:
+                raise ValueError(
+                    f"No config found for method '{method_name}' in MCP '{mcp_name}'."
+                )
+
+            # ! build config for all components
+            reference_config = {
+                "ALL": config
+            }
+
+            # return the reference config
+            return reference_config
+        except Exception as e:
+            raise ValueError(f"Failed to load MCP method config: {e}") from e

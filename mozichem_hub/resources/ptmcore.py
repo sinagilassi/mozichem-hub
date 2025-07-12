@@ -20,6 +20,7 @@ from .utils import set_feed_specification
 from .hub import Hub
 from ..references import Reference, ReferenceMapper
 from ..descriptors import MCPDescriptor
+from ..config import MCP_MODULES
 
 
 class PTMCore:
@@ -28,7 +29,6 @@ class PTMCore:
     This class serves as a central point for PTM-related operations.
     """
     # NOTE: attributes
-    id = "PTMCore"
 
     def __init__(
         self,
@@ -48,7 +48,12 @@ class PTMCore:
         # SECTION: build eos
         self.eos = ptm.eos()
 
+    @property
+    def id(self):
+        return self.__class__.__name__
+
     def list_functions(self) -> Dict[str, Callable[..., Any]]:
+        """List all functions in the PTMCore class."""
         return {
             name: getattr(self, name)
             for name, obj in inspect.getmembers(
@@ -56,6 +61,64 @@ class PTMCore:
             )
             if not name.startswith('__') and name != 'list_functions'
         }
+
+    def get_method_dependencies(self, method_name: str) -> Dict[str, Any]:
+        """
+        Get the method dependencies for a specific PTMCore method.
+
+        Parameters
+        ----------
+        method_name : str
+            Name of the method to get dependencies for.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A dictionary containing the method dependencies.
+        """
+        # SECTION: get dependencies
+        dependencies = MCPDescriptor.mcp_method_dependencies(
+            mcp_id=self.id,
+            method_name=method_name
+        )
+
+        # NOTE: check if dependencies are empty
+        if not dependencies:
+            raise ValueError(
+                f"No dependencies found for method '{method_name}' in PTMCore."
+            )
+
+        # return dependencies
+        return dependencies
+
+    def get_method_reference_config(self, method_name: str) -> Dict[str, Any]:
+        """
+        Get the method reference config for a specific PTMCore method.
+
+        Parameters
+        ----------
+        method_name : str
+            Name of the method to get configuration for.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A dictionary containing the method configuration.
+        """
+        # SECTION: get config
+        config = MCPDescriptor.mcp_method_reference_config(
+            mcp_id=self.id,
+            method_name=method_name
+        )
+
+        # NOTE: check if config is empty
+        if not config:
+            raise ValueError(
+                f"No configuration found for method '{method_name}' in PTMCore."
+            )
+
+        # return config
+        return config
 
     def calc_gas_component_fugacity(
         self,
@@ -103,14 +166,24 @@ class PTMCore:
 
             # SECTION: reinitialize hub if needed
             if custom_reference is not None:
+                # NOTE: get mcp reference config
+                mcp_reference_config = self.get_method_reference_config(
+                    method_name="calc_gas_component_fugacity"
+                )
+
+                # ! reference content
+                reference_content = custom_reference.content
+                # ! reference config
+                reference_config = custom_reference.config
+
                 # LINK: initialize reference mapper
                 ReferenceMapper_ = ReferenceMapper()
 
                 # NOTE:  build reference_thermodb
                 reference_thermodb = \
                     ReferenceMapper_.generate_reference_thermodb(
-                        reference_content=custom_reference.content,
-                        reference_config=custom_reference.config
+                        reference_content=reference_content,
+                        reference_config=reference_config
                     )
 
                 # NOTE: reinitialize hub with the new reference thermodb

@@ -9,6 +9,7 @@ MCP_MODULES = [
         'description': 'The module for calculating thermodynamic properties using different EOS models.',
         'instructions': 'This module provides tools for calculating the fugacity of components in gas and liquid phases using various EOS models.',
         'package': 'PyThermoModels',
+        'id': 'PTMCore',
         'class': 'MCP_PTMCore',
         'descriptor': 'ptmcore.yml',
         'resources': [],
