@@ -162,14 +162,14 @@ vapor-pressure:
 - table: vapor-pressure
 - label: VaPr
 
-general:
+general-data:
 
 - databook: CUSTOM-REF-2
 - table: general-data
 - labels:
-  - Pc: Pc
-  - Tc: Tc
-  - AcFa: AcFa
+  - critical-pressure: Pc
+  - critical-temperature: Tc
+  - acentric-factor: AcFa
 """
 
 custom_reference = Reference(
@@ -178,7 +178,8 @@ custom_reference = Reference(
 )
 
 # NOTE: prompt for the tool
-prompt = f"Calculate the fugacity of {component.name} at {temperature.value} {temperature.unit} and {pressure.value} {pressure.unit} using the {eos_model} EOS model."
+prompt = f"""Calculate the fugacity of {component.name} at {temperature.value} {temperature.unit}
+and {pressure.value} {pressure.unit} using the {eos_model} EOS model."""
 print(f"Prompt for '{tool_name}': {prompt}")
 
 # SECTION: Execute the tool
@@ -188,6 +189,6 @@ result = tool_executer.execute_tool(
     temperature=temperature,
     pressure=pressure,
     eos_model=eos_model,
-    custom_reference=custom_reference,
+    custom_reference=custom_reference
 )
 print(f"Result of '{tool_name}': {result}")

@@ -51,6 +51,11 @@ class ReferenceMapper(ReferenceServices):
             Reference content for the MCP.
         reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
             Reference configuration for the MCP.
+
+        Returns
+        -------
+        References
+            The references object containing the content, config, and link.
         """
         try:
             # SECTION: standardize the reference content and config
@@ -130,13 +135,17 @@ class ReferenceMapper(ReferenceServices):
         reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
             Reference configuration for the MCP.
         """
-        # SECTION: standardize the reference content and config
-        _references: References = self._reference_input_settings(
-            reference_content=reference_content,
-            reference_config=reference_config
-        )
+        try:
+            # SECTION: standardize the reference content and config
+            _references: References = self._reference_input_settings(
+                reference_content=reference_content,
+                reference_config=reference_config
+            )
 
-        # NOTE: set the reference thermodb
-        return self._reference_thermodb_settings(
-            references=_references
-        )
+            # NOTE: set the reference thermodb
+            return self._reference_thermodb_settings(
+                references=_references
+            )
+        except Exception as e:
+            logging.error(f"Failed to generate reference thermodb: {e}")
+            raise RuntimeError("Failed to generate reference thermodb.") from e

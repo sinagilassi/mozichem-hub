@@ -189,12 +189,16 @@ class ReferencesInitializer:
 
                 # SECTION: merge local and external references
                 # Combine local reference content with external references
+                # ! reference contents
                 reference_contents = \
                     local_reference_content + external_reference_content
+
+                # ! reference config
                 reference_config = {
                     **local_reference_config,
                     **external_reference_config
                 }
+                # ! reference link
                 reference_link = (
                     local_reference_link or
                     external_reference_link

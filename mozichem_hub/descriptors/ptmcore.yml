@@ -61,7 +61,7 @@ REFERENCES:
     CONFIG:
       vapor-pressure:
         label: VaPr
-      general:
+      general-data:
         labels:
           critical-temperature: Tc
           critical-pressure: Pc

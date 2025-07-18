@@ -22,9 +22,9 @@ REFERENCE_CONFIG: Dict[str, ComponentPropertySource] = {
         table='general-data',
         mode='DATA',
         labels={
-            'Pc': 'Pc',
-            'Tc': 'Tc',
-            'AcFa': 'AcFa',
+            'critical-pressure': 'Pc',
+            'critical-temperature': 'Tc',
+            'acentric-factor': 'AcFa',
         }
     )
 }

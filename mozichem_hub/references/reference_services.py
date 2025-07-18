@@ -31,6 +31,11 @@ class ReferenceServices:
     ) -> ReferenceThermoDB:
         """
         Initialize the references.
+
+        Notes
+        -----
+        - If the user provides a custom reference, it will be used.
+        - If the user does not provide a custom reference, the default references will be used.
         """
         try:
             # SECTION: configure the reference
@@ -39,7 +44,7 @@ class ReferenceServices:
             )
 
             # NOTE: reference thermodb
-            _reference_thermodb = \
+            _reference_thermodb: ReferenceThermoDB = \
                 self.ReferencesInitializer_._get_reference_thermodb()
 
             # return

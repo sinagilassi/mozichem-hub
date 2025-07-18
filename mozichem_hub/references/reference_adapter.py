@@ -47,7 +47,8 @@ class ReferencesAdapter:
         if reference_config_type == "str":
             # ! convert string to dictionary
             res_dict = self.ReferenceConfig_.set_reference_config(
-                reference_config)
+                reference_config
+            )
         elif reference_config_type == "dict":
             # ! convert string-dictionary to dictionary
             reference_config = json.loads(reference_config)
@@ -73,17 +74,42 @@ class ReferencesAdapter:
             # init the result dictionary
             res: Dict[str, Any] = {}
 
-            # iterate over the dictionary and convert ComponentPropertySource to dict
+            # NOTE: iterate over the dictionary and convert ComponentPropertySource to dict
             for key, value in res_dict.items():
-                if isinstance(value, ComponentPropertySource):
-                    res[key] = value.model_dump()
-                elif isinstance(value, dict):
-                    # If it's already a dict, just use it
-                    res[key] = value
-                else:
+                # NOTE: iterate over value
+                if not isinstance(value, dict):
                     raise ValueError(
-                        f"Unexpected type for key '{key}': {type(value)}")
+                        f"Expected a dictionary for key '{key}', "
+                        f"but got {type(value)}."
+                    )
 
+                # ! init the inner dictionary
+                inner_res: Dict[str, ComponentPropertySource] = {}
+
+                # NOTE: iterate over the inner dictionary
+                for inner_key, inner_value in value.items():
+                    # inner res
+                    if not inner_key:
+                        break  # skip empty keys:
+
+                    # check if the inner value is a ComponentPropertySource
+                    if isinstance(inner_value, ComponentPropertySource):
+                        # Convert ComponentPropertySource to dict
+                        inner_res[inner_key] = inner_value
+                    elif isinstance(inner_value, dict):
+                        # If it's already a dict, just use it
+                        inner_res[inner_key] = ComponentPropertySource(
+                            **inner_value
+                        )
+                    else:
+                        raise ValueError(
+                            f"Unexpected type for key '{inner_key}': {type(inner_value)}"
+                        )
+
+                    # add to the result dictionary
+                    res[key] = inner_res
+
+            # NOTE: return the result
             return res
         except Exception as e:
             logging.error(f"Failed to adapt reference config: {e}")
@@ -138,6 +164,39 @@ class ReferencesAdapter:
         -------
         str
             The generated reference link.
+
+        Notes
+        -----
+        The reference link is created based on the provided configuration which contains:
+        - label shows the universal symbol of the property (used in other apps)
+        - labels show the universal symbols of the properties (used in other apps)
+
+        ```python
+        REFERENCE_CONFIG: Dict[str, ComponentPropertySource] = {
+            'heat-capacity': ComponentPropertySource(
+                databook='CUSTOM-REF-1',
+                table='ideal-gas-molar-heat-capacity',
+                mode='EQUATIONS',
+                label='Cp_IG'
+            ),
+            'vapor-pressure': ComponentPropertySource(
+                databook='CUSTOM-REF-1',
+                table='vapor-pressure',
+                mode='EQUATIONS',
+                label='VaPr'
+            ),
+            'general': ComponentPropertySource(
+                databook='CUSTOM-REF-1',
+                table='general-data',
+                mode='DATA',
+                labels={
+                    'critical-pressure': 'Pc',
+                    'critical-temperature': 'Tc',
+                    'acentric-factor': 'AcFa',
+                }
+            )
+        }
+        ```
         """
         # NOTE: check if the reference config is empty
         if not reference_config:

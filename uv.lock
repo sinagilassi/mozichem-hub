@@ -464,9 +464,9 @@ requires-dist = [
     { name = "fastmcp", specifier = ">=2.10.2" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pydantic-settings", specifier = ">=2.10.1" },
-    { name = "pythermodb", specifier = ">=1.11.6" },
+    { name = "pythermodb", specifier = ">=1.11.7" },
     { name = "pythermoflash", specifier = ">=0.1.5" },
-    { name = "pythermolinkdb", specifier = ">=1.3.6" },
+    { name = "pythermolinkdb", specifier = ">=1.3.7" },
     { name = "pythermomodels", specifier = ">=1.4.8" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "rich", specifier = ">=14.0.0" },
@@ -818,7 +818,7 @@ wheels = [
 
 [[package]]
 name = "pythermodb"
-version = "1.11.6"
+version = "1.11.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
@@ -827,9 +827,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4f/a8/eb5eb10a388f2eddbaec82c81a80656f36a07aec7227d7156e30d8971393/pythermodb-1.11.6.tar.gz", hash = "sha256:28fd1b2e8c7b2eaf41fae3197b266bcf72630c559e263070a7c5c32bae53cdda", size = 319196, upload-time = "2025-07-11T06:39:50.179Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/35/75/a365a73910fd2fcebd922926bced3cf8506f243738890f26dd5e3b2bd912/pythermodb-1.11.7.tar.gz", hash = "sha256:1c785dc56de1f259d6d16200e313dc561eba4f41b6439b7903be468b780f1a67", size = 325456, upload-time = "2025-07-18T18:27:54.961Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fe/76/35a49df101963c84b87e409ebb66ec109d596eafc8f12dbd806420827c70/pythermodb-1.11.6-py3-none-any.whl", hash = "sha256:35ccfe793effc88f854694e7004f58b0720d05c21d1a721255ccc024b056701c", size = 354344, upload-time = "2025-07-11T06:39:48.752Z" },
+    { url = "https://files.pythonhosted.org/packages/d1/1b/11ea2b294b3ea7180a9829c8a2104a40f6c88c478f494581bd58cd1c6f09/pythermodb-1.11.7-py3-none-any.whl", hash = "sha256:76f36fc840720a5223a9b16177465369ce9ee3f4a0518eb58059de731099e031", size = 360774, upload-time = "2025-07-18T18:27:53.78Z" },
 ]
 
 [[package]]
@@ -856,15 +856,15 @@ wheels = [
 
 [[package]]
 name = "pythermolinkdb"
-version = "1.3.6"
+version = "1.3.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pythermodb" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/09/36/23d2d1d6c40e74825a84c653535c0f89fb16e43ff883bd1533e14c70eec8/pythermolinkdb-1.3.6.tar.gz", hash = "sha256:ec47a634e10966381bfd0b23c155450a1b3d4b9062567648fa0fe6ebec3697d3", size = 14660, upload-time = "2025-06-30T22:23:27.842Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a7/b2/8a704d5c4924af0040932ce13d23f8d4d0473c6e1810730cf19180f793bf/pythermolinkdb-1.3.7.tar.gz", hash = "sha256:aa7284ce2de53676108046225958fa8cb80de7fa9fd6214f91f807d20a3f9a49", size = 15109, upload-time = "2025-07-13T02:16:29.533Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9c/db/fdd4318dd590d83a91856876111a6fa4b76ad37c5a61b9c5caeba38f70fc/pythermolinkdb-1.3.6-py3-none-any.whl", hash = "sha256:3a985542a196249be99d46fb474de4b4ed9010a5c267fd5e63dab0cbc506cbcf", size = 13841, upload-time = "2025-06-30T22:23:26.264Z" },
+    { url = "https://files.pythonhosted.org/packages/ed/d9/87bebdd1a98813c67547226811815f261ec84eaa5dcbf09b870cbf1d15da/pythermolinkdb-1.3.7-py3-none-any.whl", hash = "sha256:bfa772612bc7a7aa3910adde5153f12f245df0cde4adfd9dc3e11263a76ca50f", size = 14153, upload-time = "2025-07-13T02:16:28.378Z" },
 ]
 
 [[package]]

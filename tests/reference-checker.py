@@ -110,16 +110,18 @@ vapor-pressure:
 
 - databook: CUSTOM-REF-2
 - table: vapor-pressure
+- mode: EQUATIONS
 - label: VaPr
 
 general:
 
 - databook: CUSTOM-REF-2
 - table: general-data
+- mode: DATA
 - labels:
-  - Pc: Pc
-  - Tc: Tc
-  - AcFa: AcFa
+  - critical-pressure: Pc
+  - critical-temperature: Tc
+  - acentric-factor: AcFa
 """
 
 # SECTION: custom reference
@@ -130,4 +132,10 @@ references: References = result._reference_input_settings(
     reference_content=REFERENCE_CONTENT,
     reference_config=REFERENCE_CONFIG
 )
-print(references)
+print(f"References: {references}")
+
+# NOTE: convert to reference thermodb
+reference_thermodb = result._reference_thermodb_settings(
+    references=references,
+)
+print(f"Reference ThermoDB: {reference_thermodb}")

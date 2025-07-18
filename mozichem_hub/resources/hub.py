@@ -36,13 +36,17 @@ class Hub:
         # NOTE: set
         self.reference_thermodb = reference_thermodb
         # LINK: set the references
-        self.reference = reference_thermodb.reference
-        # LINK: content of the reference thermodynamic database
-        self.reference_contents = reference_thermodb.contents
+        self.reference: Dict[str, Any] = reference_thermodb.reference
+        # LINK: content of the reference thermodynamic database (not used)
+        self.reference_contents: List[str] = reference_thermodb.contents
         # LINK: configuration for the thermodynamic database
-        self.reference_config = reference_thermodb.config
+        self.reference_config: Dict[
+            str, Dict[str, Dict[str, str]]
+        ] = reference_thermodb.config
         # LINK: rule for the thermodynamic database
-        self.thermodb_rule = reference_thermodb.link
+        self.thermodb_rule: Dict[
+            str, Dict[str, Dict[str, str]]
+        ] = reference_thermodb.link
 
         # SECTION: Initialize the ThermoHub
         self.thermo_hub = self.build_thermo_hub()
@@ -262,6 +266,12 @@ class Hub:
             # SECTION: build process
             # initialize the component thermodynamic database
             components_thermodb: List[ComponentThermoDB] = []
+
+            # check reference
+            if self.reference is None:
+                raise ValueError(
+                    "Reference is not set. Please provide a valid reference."
+                )
 
             # NOTE: loop through each component
             for component in component_:

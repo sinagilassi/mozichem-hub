@@ -167,9 +167,9 @@ class PTMCore:
             # SECTION: reinitialize hub if needed
             if custom_reference is not None:
                 # NOTE: get mcp reference config
-                mcp_reference_config = self.get_method_reference_config(
-                    method_name="calc_gas_component_fugacity"
-                )
+                # mcp_reference_config = self.get_method_reference_config(
+                #     method_name="calc_gas_component_fugacity"
+                # )
 
                 # ! reference content
                 reference_content = custom_reference.content
