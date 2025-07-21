@@ -193,3 +193,10 @@ reference_config_ = ReferenceChecker_.generate_reference_link(
     databook_name='CUSTOM-REF-1',
 )
 print(f"Reference Link: {reference_config_}")
+
+# SECTION: generate reference link (specific table)
+reference_link_specific = ReferenceChecker_.generate_reference_link(
+    databook_name='CUSTOM-REF-1',
+    table_names='NRTL Non-randomness parameters-1'
+)
+print(f"Reference Link (Specific Table): {reference_link_specific}")

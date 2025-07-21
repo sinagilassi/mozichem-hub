@@ -160,12 +160,14 @@ vapor-pressure:
 
 - databook: CUSTOM-REF-2
 - table: vapor-pressure
+- mode: EQUATIONS
 - label: VaPr
 
 general-data:
 
 - databook: CUSTOM-REF-2
 - table: general-data
+- mode: DATA
 - labels:
   - critical-pressure: Pc
   - critical-temperature: Tc
@@ -189,6 +191,7 @@ result = tool_executer.execute_tool(
     temperature=temperature,
     pressure=pressure,
     eos_model=eos_model,
-    custom_reference=custom_reference
+    custom_reference_content=REFERENCE_CONTENT,
+    custom_reference_config=REFERENCE_CONFIG
 )
 print(f"Result of '{tool_name}': {result}")

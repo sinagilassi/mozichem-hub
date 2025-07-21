@@ -44,6 +44,12 @@ REFERENCES:
       - name: solver_method
         type: str
         description: "Solver method for fugacity calculation. Options are 'ls' for least-square method, 'fsolve' for fsolve, and 'root' for root."
+      - name: custom_reference_content
+        type: Optional[str]
+        description: "Custom reference content provided by PyThermoDB, this consists of data and equations for all components."
+      - name: custom_reference_config
+        type: Optional[str]
+        description: "Custom reference configuration provided by PyThermoDB, this consists of the reference for data and equations for each component."
     DATA:
       - name: critical-temperature
         symbol: Tc

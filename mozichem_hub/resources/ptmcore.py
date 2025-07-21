@@ -18,7 +18,7 @@ from .models import (
 )
 from .utils import set_feed_specification
 from .hub import Hub
-from ..references import Reference, ReferenceMapper
+from ..references import ReferenceMapper
 from ..descriptors import MCPDescriptor
 from ..config import MCP_MODULES
 
@@ -144,15 +144,22 @@ class PTMCore:
                 default="fsolve"
             )
         ] = "ls",
-        custom_reference: Annotated[
-            Optional[Reference],
+        custom_reference_content: Annotated[
+            Optional[str],
             Field(
-                default=None,
                 description=(
-                    "Custom reference for the thermodynamic database provided by PyThermoDB, it is string (yml format) consisting of the reference for data and equations for the component."
+                    "Custom reference content provided by PyThermoDB, this consists of data and equations for all components."
                 )
             )
-        ] = None
+        ] = '',
+        custom_reference_config: Annotated[
+            Optional[str],
+            Field(
+                description=(
+                    "Custom reference configuration provided by PyThermoDB, this consists of the reference for data and equations for each component."
+                )
+            )
+        ] = ''
     ) -> dict:
         """Calculates the fugacity of a gas-phase component at given temperature and pressure"""
         try:
@@ -165,31 +172,37 @@ class PTMCore:
             component_ = f"{component_name}-{component.state}"
 
             # SECTION: reinitialize hub if needed
-            if custom_reference is not None:
-                # NOTE: get mcp reference config
-                # mcp_reference_config = self.get_method_reference_config(
-                #     method_name="calc_gas_component_fugacity"
-                # )
-
-                # ! reference content
-                reference_content = custom_reference.content
-                # ! reference config
-                reference_config = custom_reference.config
-
+            # NOTE: select the reference mapper
+            if (
+                custom_reference_content is not None and
+                custom_reference_content != '' and
+                custom_reference_config is not None and
+                custom_reference_config != ''
+            ):
                 # LINK: initialize reference mapper
                 ReferenceMapper_ = ReferenceMapper()
 
-                # NOTE:  build reference_thermodb
+                # NOTE: build reference_thermodb
                 reference_thermodb = \
                     ReferenceMapper_.generate_reference_thermodb(
-                        reference_content=reference_content,
-                        reference_config=reference_config
+                        reference_content=custom_reference_content,
+                        reference_config=custom_reference_config
                     )
 
-                # NOTE: reinitialize hub with the new reference thermodb
+                # ! reinitialize hub with the new reference thermodb
                 self.hub = Hub(reference_thermodb)
+            elif (
+                custom_reference_content is not None and
+                custom_reference_content != '' and
+                custom_reference_config is None or
+                custom_reference_config == ''
+            ):
+                # NOTE: build reference_thermodb with content only
+                pass
+                # ! reinitialize hub with the new reference thermodb
+                # self.hub = Hub(reference_thermodb)
 
-                # SECTION: build model source
+            # SECTION: build model source
             model_source = self.hub.build_component_model_source(
                 component=component
             )
