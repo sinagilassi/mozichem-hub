@@ -149,3 +149,8 @@ class ReferenceMapper(ReferenceServices):
         except Exception as e:
             logging.error(f"Failed to generate reference thermodb: {e}")
             raise RuntimeError("Failed to generate reference thermodb.") from e
+
+    def _reference_thermodb_from_reference_content(
+        self
+    ):
+        pass

@@ -403,3 +403,54 @@ class ReferencesAdapter:
                 "Please check the provided configuration. Error: %s", e
             )
             raise
+
+    def extract_component_reference_config_from_reference_content(
+        self,
+        reference_content: str,
+        component_name: str,
+        component_formula: str,
+        component_state: str
+    ):
+        '''
+        Extract the component reference configuration from the reference content.
+
+        Parameters
+        ----------
+        reference_content : str
+            The reference content from which to extract the configuration.
+        component_name : str
+            The name of the component for which to extract the configuration.
+        component_formula : str
+            The formula of the component for which to extract the configuration.
+        component_state : str
+            The state of the component for which to extract the configuration.
+        '''
+        try:
+            # NOTE: initialize the ReferenceChecker
+            ReferenceChecker_ = ReferenceChecker(reference_content)
+
+            # NOTE: get component reference config
+            component_reference_config = \
+                ReferenceChecker_.get_component_reference_config(
+                    component_name=component_name,
+                    component_formula=component_formula,
+                    component_state=component_state,
+                    databook_name='CUSTOM-REF-1',
+                )
+
+            # NOTE: check if the component reference config is empty
+            if not component_reference_config:
+                logging.warning(
+                    f"No reference configuration found for component: {component_name}."
+                )
+                return None
+
+            # NOTE: res
+            return component_reference_config
+        except Exception as e:
+            logging.error(
+                "Failed to extract reference configuration from content. "
+                "Please check the provided content. Error: %s", e
+            )
+            raise ValueError(
+                f"Failed to extract reference configuration from content: {e}") from e
