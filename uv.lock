@@ -464,7 +464,7 @@ requires-dist = [
     { name = "fastmcp", specifier = ">=2.10.2" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pydantic-settings", specifier = ">=2.10.1" },
-    { name = "pythermodb", specifier = ">=1.11.8" },
+    { name = "pythermodb", specifier = ">=1.11.9" },
     { name = "pythermoflash", specifier = ">=0.1.5" },
     { name = "pythermolinkdb", specifier = ">=1.3.7" },
     { name = "pythermomodels", specifier = ">=1.4.8" },
@@ -818,7 +818,7 @@ wheels = [
 
 [[package]]
 name = "pythermodb"
-version = "1.11.8"
+version = "1.11.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
@@ -827,9 +827,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0c/c0/0c0e51c861e86215980e883df8681124c425c23e8d94f8384fb78dc530da/pythermodb-1.11.8.tar.gz", hash = "sha256:0eb0337310b118a3f1b33b4b6b7e98cf9c63722b559e13a2529170c0551b2abb", size = 325889, upload-time = "2025-07-20T21:11:10.854Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a1/d1/a07a564219e96f40012e3b978d53c00fb5272fda573e10a84e62c89f4dc2/pythermodb-1.11.9.tar.gz", hash = "sha256:c5b3410ff185c95298567416b336d64e9b780e2294dda5d17e4a00cf0e6530ae", size = 326005, upload-time = "2025-07-21T18:33:59.803Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e4/2f/d51d945ea85c73904a30c89cce7f5fe41cb51280ffe1ea36c84612f448be/pythermodb-1.11.8-py3-none-any.whl", hash = "sha256:b804659f1c3e274e353cf10a208a27e2847586b15f9830289b6c26d7ea49dae5", size = 361128, upload-time = "2025-07-20T21:11:09.247Z" },
+    { url = "https://files.pythonhosted.org/packages/36/0e/a6ee7427c51c7c8737b0cb206c4c2ca3fdba75f16720534d5e7b8e34eb1c/pythermodb-1.11.9-py3-none-any.whl", hash = "sha256:e02d3491b738fb77421c5ca5e24d2edef36092bf85ecde27ce70cf78c1270da5", size = 361266, upload-time = "2025-07-21T18:33:58.58Z" },
 ]
 
 [[package]]
