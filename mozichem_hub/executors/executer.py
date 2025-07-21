@@ -2,7 +2,7 @@
 from typing import Dict, Callable, Any
 # locals
 from ..docs import MoziChemMCP
-from ..resources import MoziTool
+from ..models import MoziTool
 
 
 class ToolExecuter:

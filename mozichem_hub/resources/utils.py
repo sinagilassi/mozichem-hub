@@ -5,7 +5,7 @@ from typing import (
     Literal,
     Dict)
 # locals
-from .models import (
+from ..models import (
     Component,
 )
 

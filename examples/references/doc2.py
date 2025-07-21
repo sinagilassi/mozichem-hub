@@ -1,6 +1,5 @@
 # import libs
 from rich import print
-from pyThermoDB.references import ReferenceChecker
 from mozichem_hub.references import ReferenceMapper
 from mozichem_hub.resources import Component
 
@@ -162,10 +161,6 @@ REFERENCES:
             - [2,methane|ethanol,ethanol,C2H5OH,0.380229054,0,-20.63243601,0,0.059982839,0,4.481683583,0]
 """
 
-
-# SECTION: create ReferenceChecker instance
-ReferenceChecker_ = ReferenceChecker(REFERENCE_CONTENT)
-
 # SECTION: check component availability
 component_name = 'carbon dioxide'
 component_formula = 'CO2'
@@ -176,37 +171,6 @@ CO2 = Component(
     formula=component_formula,
     state=component_state
 )
-
-# check component availability
-check_result = ReferenceChecker_.check_component_availability(
-    component_name=component_name,
-    component_formula=component_formula,
-    component_state=component_state,
-    databook_name='CUSTOM-REF-1',
-)
-print(f"Check Result: {check_result}")
-
-# get component reference config
-component_reference_config = ReferenceChecker_.get_component_reference_config(
-    component_name=component_name,
-    component_formula=component_formula,
-    component_state=component_state,
-    databook_name='CUSTOM-REF-1',
-)
-print(f"Component Reference Config: {component_reference_config}")
-
-# SECTION: generate reference link (ALL)
-reference_config_ = ReferenceChecker_.generate_reference_link(
-    databook_name='CUSTOM-REF-1',
-)
-print(f"Reference Link: {reference_config_}")
-
-# SECTION: generate reference link (specific table)
-reference_link_specific = ReferenceChecker_.generate_reference_link(
-    databook_name='CUSTOM-REF-1',
-    table_names='NRTL Non-randomness parameters-1'
-)
-print(f"Reference Link (Specific Table): {reference_link_specific}")
 
 # SECTION: generate reference thermodb
 ReferenceMapper_ = ReferenceMapper()

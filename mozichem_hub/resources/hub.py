@@ -2,8 +2,6 @@
 from typing import (
     Literal,
     List,
-    Optional,
-    Tuple,
     Dict,
     Union,
     Any
@@ -11,7 +9,7 @@ from typing import (
 import pyThermoDB as ptdb
 import pyThermoLinkDB as ptldb
 # locals
-from .models import (
+from ..models import (
     Component,
     ComponentThermoDB,
 )
@@ -37,13 +35,16 @@ class Hub:
         self.reference_thermodb = reference_thermodb
         # LINK: set the references
         self.reference: Dict[str, Any] = reference_thermodb.reference
-        # LINK: content of the reference thermodynamic database (not used)
+        # LINK: content of the reference thermodynamic database
+        # ! [not used]
         self.reference_contents: List[str] = reference_thermodb.contents
         # LINK: configuration for the thermodynamic database
+        # ! [consists ALL and component-specific configurations]
         self.reference_config: Dict[
             str, Dict[str, Dict[str, str]]
         ] = reference_thermodb.config
         # LINK: rule for the thermodynamic database
+        # ! [consists ALL and component-specific configurations]
         self.thermodb_rule: Dict[
             str, Dict[str, Dict[str, str]]
         ] = reference_thermodb.link
@@ -188,11 +189,12 @@ class Hub:
             formula_ = f"{component_formula}-{component_state}"
 
             # SECTION: create component reference rule
+            # ! by name
             component_reference_rule_by_name = \
                 self._set_component_reference_rule(
                     component_id=name_
                 )
-
+            # ! by formula
             component_reference_rule_by_formula = \
                 self._set_component_reference_rule(
                     component_id=formula_

@@ -18,6 +18,11 @@ from pydantic import (
 )
 # local
 
+# NOTE: component reference config
+ComponentReferenceConfig = Dict[str, Dict[str, str]]
+# NOTE: component reference link
+ComponentReferenceLink = Dict[str, Dict[str, str]]
+
 
 class ComponentPropertySource(BaseModel):
     """

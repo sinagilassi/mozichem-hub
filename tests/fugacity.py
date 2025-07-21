@@ -3,7 +3,7 @@ from mozichem_hub import (
     __version__,
 )
 from mozichem_hub.executors import ToolExecuter
-from mozichem_hub.resources import Temperature, Pressure, Component
+from mozichem_hub.models import Temperature, Pressure, Component
 from mozichem_hub.prebuilt import (
     create_mozichem_mcp,
     get_mozichem_mcp
@@ -192,6 +192,7 @@ result = tool_executer.execute_tool(
     pressure=pressure,
     eos_model=eos_model,
     custom_reference_content=REFERENCE_CONTENT,
-    custom_reference_config=REFERENCE_CONFIG
+    custom_reference_config=None
+    # custom_reference_config=REFERENCE_CONFIG,
 )
 print(f"Result of '{tool_name}': {result}")

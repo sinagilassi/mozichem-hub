@@ -1,9 +1,6 @@
 # import libs
 from typing import (
     Optional,
-    Dict,
-    List,
-    Union
 )
 # local
 from .models import (

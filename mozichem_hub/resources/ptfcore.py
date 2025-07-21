@@ -5,7 +5,7 @@ from typing import Annotated, Literal
 from pydantic import Field
 import pyThermoFlash as ptf
 # local
-from .models import (
+from ..models import (
     Temperature,
     Pressure,
     Component,

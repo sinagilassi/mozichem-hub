@@ -13,6 +13,8 @@ from .models import (
     References,
     ReferenceThermoDB
 )
+from .referencethermodb_controller import ReferenceThermoDBController
+from ..models.resources_models import Component
 
 
 class ReferenceMapper(ReferenceServices):
@@ -92,17 +94,23 @@ class ReferenceMapper(ReferenceServices):
                 "Failed to transform reference content and config."
             ) from e
 
-    def _reference_thermodb_settings(
+    def _reference_thermodb_generator(
         self,
         references: References
     ) -> ReferenceThermoDB:
         """
-        Get the reference thermodb settings for the MCP.
+        Generate the reference thermodb for the MCP methods.
+
+        Parameters
+        ----------
+        references : References
+            The references object containing the content, config, and link.
 
         Returns
         -------
         ReferenceThermoDB
-            The reference thermodb settings for the MCP.
+            The reference thermodb for the MCP.
+
         """
         try:
             # NOTE: get the reference thermodb
@@ -112,6 +120,41 @@ class ReferenceMapper(ReferenceServices):
         except Exception as e:
             logging.error(f"Failed to get reference thermodb: {e}")
             raise RuntimeError("Failed to get reference thermodb.") from e
+
+    def _reference_thermodb_generator_from_reference_content(
+        self,
+        reference_content: str,
+        components: List[Component]
+    ) -> ReferenceThermoDB:
+        """
+        Generate the reference thermodb from the reference content.
+
+        Parameters
+        ----------
+        reference_content : str
+            The reference content to be used for generating the reference thermodb.
+        """
+        try:
+            # NOTE: check if reference content is provided
+            if not reference_content:
+                raise ValueError(
+                    "Reference content is required to generate reference thermodb.")
+
+            # SECTION: init reference thermodb controller
+            ReferenceThermoDBController_ = ReferenceThermoDBController(
+                reference_content=reference_content
+            )
+
+            # NOTE: generate the reference thermodb
+            return ReferenceThermoDBController_.\
+                generate_components_reference_thermodb(
+                    components=components
+                )
+        except Exception as e:
+            logging.error(
+                f"Failed to generate reference thermodb from content: {e}")
+            raise RuntimeError(
+                "Failed to generate reference thermodb from content.") from e
 
     def generate_reference_thermodb(
         self,
@@ -134,23 +177,30 @@ class ReferenceMapper(ReferenceServices):
             Reference content for the MCP.
         reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
             Reference configuration for the MCP.
+
+        Returns
+        -------
+        ReferenceThermoDB
+            The reference thermodb for the MCP.
+
+        Notes
+        -----
+        - This method combines the reference content and configuration to generate
+        the reference thermodynamic database (thermodb) for the MCP methods.
+        - This method is only used before the MCP server starts.
         """
         try:
-            # SECTION: standardize the reference content and config
+            # SECTION: check the reference content and config
+            # NOTE: standardize the reference content and config
             _references: References = self._reference_input_settings(
                 reference_content=reference_content,
                 reference_config=reference_config
             )
 
             # NOTE: set the reference thermodb
-            return self._reference_thermodb_settings(
+            return self._reference_thermodb_generator(
                 references=_references
             )
         except Exception as e:
             logging.error(f"Failed to generate reference thermodb: {e}")
             raise RuntimeError("Failed to generate reference thermodb.") from e
-
-    def _reference_thermodb_from_reference_content(
-        self
-    ):
-        pass

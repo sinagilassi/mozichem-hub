@@ -11,7 +11,7 @@ import inspect
 from pydantic import Field
 import pyThermoDB as ptdb
 # local
-from .models import (
+from ..models import (
     Component,
 )
 from .utils import (

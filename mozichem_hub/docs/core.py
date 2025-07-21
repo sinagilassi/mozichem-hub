@@ -289,16 +289,13 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
             The configuration of the reference, can be a string or a dictionary.
         """
         try:
-            # NOTE: set the references
-            _references = self._reference_input_settings(
-                reference_content=reference_content,
-                reference_config=reference_config
-            )
-
-            # NOTE: set the reference thermodb
-            _reference_thermodb = self._reference_thermodb_settings(
-                references=_references
-            )
+            # SECTION: standardize the reference content and config
+            # NOTE: generate the reference thermodb
+            _reference_thermodb: ReferenceThermoDB = \
+                self.generate_reference_thermodb(
+                    reference_content=reference_content,
+                    reference_config=reference_config
+                )
 
             # SECTION: reinitialize the ToolManager with new references
             self.ToolManager_ = ToolManager(

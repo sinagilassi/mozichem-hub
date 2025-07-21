@@ -5,7 +5,7 @@ from mozichem_hub import (
     get_mozichem_mcp,
 )
 from mozichem_hub.executors import ToolExecuter
-from mozichem_hub.resources import Temperature, Pressure, Component
+from mozichem_hub.models import Temperature, Pressure, Component
 # log
 from rich import print
 

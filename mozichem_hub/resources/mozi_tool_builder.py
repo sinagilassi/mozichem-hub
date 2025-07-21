@@ -2,7 +2,7 @@
 from typing import List, Dict, Callable, Any
 # local
 from ..descriptors import MCPDescriptor
-from .models import MoziTool, MoziToolArg
+from ..models import MoziTool, MoziToolArg
 
 
 class MoziToolBuilder:

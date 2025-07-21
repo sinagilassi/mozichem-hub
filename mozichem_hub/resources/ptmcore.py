@@ -11,7 +11,7 @@ from typing import Annotated, Literal
 from pydantic import Field
 import pyThermoModels as ptm
 # local
-from .models import (
+from ..models import (
     Temperature,
     Pressure,
     Component,
@@ -20,7 +20,7 @@ from .utils import set_feed_specification
 from .hub import Hub
 from ..references import ReferenceMapper
 from ..descriptors import MCPDescriptor
-from ..config import MCP_MODULES
+# from ..config import MCP_MODULES
 
 
 class PTMCore:
@@ -147,6 +147,7 @@ class PTMCore:
         custom_reference_content: Annotated[
             Optional[str],
             Field(
+                default=None,
                 description=(
                     "Custom reference content provided by PyThermoDB, this consists of data and equations for all components."
                 )
@@ -155,6 +156,7 @@ class PTMCore:
         custom_reference_config: Annotated[
             Optional[str],
             Field(
+                default=None,
                 description=(
                     "Custom reference configuration provided by PyThermoDB, this consists of the reference for data and equations for each component."
                 )
@@ -175,12 +177,27 @@ class PTMCore:
             # NOTE: select the reference mapper
             if (
                 custom_reference_content is not None and
-                custom_reference_content != '' and
-                custom_reference_config is not None and
-                custom_reference_config != ''
+                custom_reference_config is not None
             ):
                 # LINK: initialize reference mapper
                 ReferenceMapper_ = ReferenceMapper()
+
+                # NOTE: check
+                if (
+                    custom_reference_content == '' or
+                    custom_reference_config == 'None'
+                ):
+                    raise ValueError(
+                        "Custom reference content cannot be empty if custom reference config is provided. Thus, set it to None."
+                    )
+
+                if (
+                    custom_reference_config == '' or
+                    custom_reference_config == 'None'
+                ):
+                    raise ValueError(
+                        "Custom reference config cannot be empty if custom reference content is provided. Thus, set it to None."
+                    )
 
                 # NOTE: build reference_thermodb
                 reference_thermodb = \
@@ -193,14 +210,29 @@ class PTMCore:
                 self.hub = Hub(reference_thermodb)
             elif (
                 custom_reference_content is not None and
-                custom_reference_content != '' and
-                custom_reference_config is None or
-                custom_reference_config == ''
+                custom_reference_config is None
             ):
+                # NOTE: check
+                if (
+                    custom_reference_content == '' or
+                    custom_reference_content == 'None'
+                ):
+                    raise ValueError(
+                        "Custom reference content cannot be empty if custom reference config is not provided. Thus, set it to None."
+                    )
+
+                # LINK: initialize reference mapper
+                ReferenceMapper_ = ReferenceMapper()
+
                 # NOTE: build reference_thermodb with content only
-                pass
+                reference_thermodb = \
+                    ReferenceMapper_.\
+                    _reference_thermodb_generator_from_reference_content(
+                        reference_content=custom_reference_content,
+                        components=[component]
+                    )
                 # ! reinitialize hub with the new reference thermodb
-                # self.hub = Hub(reference_thermodb)
+                self.hub = Hub(reference_thermodb)
 
             # SECTION: build model source
             model_source = self.hub.build_component_model_source(
