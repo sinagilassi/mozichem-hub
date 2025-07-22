@@ -145,23 +145,23 @@ class PTMCore:
             )
         ] = "ls",
         custom_reference_content: Annotated[
-            Optional[str],
+            str | None,
             Field(
                 default=None,
                 description=(
                     "Custom reference content provided by PyThermoDB, this consists of data and equations for all components."
                 )
             )
-        ] = '',
+        ] = None,
         custom_reference_config: Annotated[
-            Optional[str],
+            str | None,
             Field(
                 default=None,
                 description=(
                     "Custom reference configuration provided by PyThermoDB, this consists of the reference for data and equations for each component."
                 )
             )
-        ] = ''
+        ] = None
     ) -> dict:
         """Calculates the fugacity of a gas-phase component at given temperature and pressure"""
         try:
@@ -174,71 +174,13 @@ class PTMCore:
             component_ = f"{component_name}-{component.state}"
 
             # SECTION: reinitialize hub if needed
+            # NOTE: this is to ensure that the hub is initialized with custom reference content and config
             self.hub = initialize_custom_reference(
                 hub=self.hub,
-                component=component,
+                components=component,
                 custom_reference_content=custom_reference_content,
                 custom_reference_config=custom_reference_config
             )
-            # # NOTE: select the reference mapper
-            # if (
-            #     custom_reference_content is not None and
-            #     custom_reference_config is not None
-            # ):
-            #     # LINK: initialize reference mapper
-            #     ReferenceMapper_ = ReferenceMapper()
-
-            #     # NOTE: check
-            #     if (
-            #         custom_reference_content == '' or
-            #         custom_reference_config == 'None'
-            #     ):
-            #         raise ValueError(
-            #             "Custom reference content cannot be empty if custom reference config is provided. Thus, set it to None."
-            #         )
-
-            #     if (
-            #         custom_reference_config == '' or
-            #         custom_reference_config == 'None'
-            #     ):
-            #         raise ValueError(
-            #             "Custom reference config cannot be empty if custom reference content is provided. Thus, set it to None."
-            #         )
-
-            #     # NOTE: build reference_thermodb
-            #     reference_thermodb = \
-            #         ReferenceMapper_.generate_reference_thermodb(
-            #             reference_content=custom_reference_content,
-            #             reference_config=custom_reference_config
-            #         )
-
-            #     # ! reinitialize hub with the new reference thermodb
-            #     self.hub = Hub(reference_thermodb)
-            # elif (
-            #     custom_reference_content is not None and
-            #     custom_reference_config is None
-            # ):
-            #     # NOTE: check
-            #     if (
-            #         custom_reference_content == '' or
-            #         custom_reference_content == 'None'
-            #     ):
-            #         raise ValueError(
-            #             "Custom reference content cannot be empty if custom reference config is not provided. Thus, set it to None."
-            #         )
-
-            #     # LINK: initialize reference mapper
-            #     ReferenceMapper_ = ReferenceMapper()
-
-            #     # NOTE: build reference_thermodb with content only
-            #     reference_thermodb = \
-            #         ReferenceMapper_.\
-            #         _reference_thermodb_generator_from_reference_content(
-            #             reference_content=custom_reference_content,
-            #             components=[component]
-            #         )
-            #     # ! reinitialize hub with the new reference thermodb
-            #     self.hub = Hub(reference_thermodb)
 
             # SECTION: build model source
             model_source = self.hub.build_component_model_source(

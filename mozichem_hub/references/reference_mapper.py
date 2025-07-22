@@ -133,6 +133,22 @@ class ReferenceMapper(ReferenceServices):
         ----------
         reference_content : str
             The reference content to be used for generating the reference thermodb.
+        components : List[Component]
+            List of components for which the reference thermodb is generated.
+
+        Returns
+        -------
+        ReferenceThermoDB
+            The reference thermodb generated from the reference content.
+
+        Notes
+        -----
+        This method is used to generate the reference thermodynamic database
+        (thermodb) from the provided reference content and components.
+        It is only used after the MCP server starts and is not used
+        before the server starts.
+        One of the method arguments is custom reference content,
+        which is a string containing the reference data.
         """
         try:
             # NOTE: check if reference content is provided

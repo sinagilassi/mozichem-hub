@@ -26,7 +26,7 @@ thermo_models_mcp = create_mozichem_mcp(name="eos-models-mcp")
 # NOTE: reference content
 REFERENCE_CONTENT = """
 REFERENCES:
-    CUSTOM-REF-1:
+    CUSTOM-REF-2:
       DATABOOK-ID: 1
       TABLES:
         ideal-gas-heat-capacity:
@@ -181,9 +181,51 @@ REFERENCES:
             - [2,methane|ethanol,ethanol,C2H5OH,0.380229054,0,-20.63243601,0,0.059982839,0,4.481683583,0]
 """
 
+# NOTE reference config
+REFERENCE_CONFIG = """
+# Configs
+
+## ALL
+
+vapor-pressure:
+
+- databook: CUSTOM-REF-2
+- table: vapor-pressure
+- mode: EQUATIONS
+- label: VaPr
+
+general:
+
+- databook: CUSTOM-REF-2
+- table: general-data
+- mode: DATA
+- labels:
+  - critical-pressure: Pc
+  - critical-temperature: Tc
+  - acentric-factor: AcFa
+"""
+
+# REFERENCE_CONFIG = """
+# ALL
+#   vapor-pressure:
+#     databook: CUSTOM-REF-2
+#     table: vapor-pressure
+#     mode: EQUATIONS
+#     label: VaPr
+#   general:
+#     databook: CUSTOM-REF-2
+#     table: general-data
+#     mode: DATA
+#     labels:
+#       critical-pressure: Pc
+#       critical-temperature: Tc
+#       acentric-factor: AcFa
+# """
+
 # NOTE: add the reference content to the MCP server
 thermo_models_mcp.update_references(
-    reference_content=REFERENCE_CONTENT
+    reference_content=REFERENCE_CONTENT,
+    reference_config=REFERENCE_CONFIG,
 )
 
 # SECTION: Serve the MCP server

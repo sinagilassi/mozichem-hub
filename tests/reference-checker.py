@@ -125,18 +125,35 @@ general:
   - acentric-factor: AcFa
 """
 
+REFERENCE_CONFIG_YAML = """
+ALL:
+  vapor-pressure:
+    databook: CUSTOM-REF-2
+    table: vapor-pressure
+    mode: EQUATIONS
+    label: VaPr
+  general:
+    databook: CUSTOM-REF-2
+    table: general-data
+    mode: DATA
+    labels:
+      critical-pressure: Pc
+      critical-temperature: Tc
+      acentric-factor: AcFa
+"""
+
 # SECTION: custom reference
 result = ReferenceMapper()
 
 # NOTE: generate reference
 references: References = result._reference_input_settings(
     reference_content=REFERENCE_CONTENT,
-    reference_config=REFERENCE_CONFIG
+    reference_config=REFERENCE_CONFIG_YAML
 )
 print(f"References: {references}")
 
 # NOTE: convert to reference thermodb
-reference_thermodb = result._reference_thermodb_settings(
+reference_thermodb = result._reference_thermodb_generator(
     references=references,
 )
 print(f"Reference ThermoDB: {reference_thermodb}")

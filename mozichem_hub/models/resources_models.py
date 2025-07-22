@@ -51,8 +51,8 @@ class Component(BaseModel):
         ...,
         description="State of the component: 'g' for gas, 'l' for liquid, 's' for solid"
     )
-    mole_fraction: Optional[float] = Field(
-        default=None,
+    mole_fraction: float = Field(
+        default=1.0,
         description="Mole fraction of the component in a mixture, if applicable"
     )
 

@@ -200,7 +200,8 @@ class ReferencesInitializer:
                 }
                 # ! reference link
                 reference_link = (
-                    local_reference_link or
+                    local_reference_link +
+                    '\n' +
                     external_reference_link
                 )
 
