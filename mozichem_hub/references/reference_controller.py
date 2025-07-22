@@ -5,12 +5,11 @@ from typing import (
     List,
     Dict,
     Tuple,
-    Literal
 )
 import logging
 # locals
 from .reference_adapter import ReferencesAdapter
-from .models import ComponentPropertySource
+from ..models import ComponentPropertySource
 
 
 class ReferenceController(ReferencesAdapter):

@@ -7,7 +7,6 @@ import pyThermoFlash as ptf
 # local
 from ..models import (
     Temperature,
-    Pressure,
     Component,
 )
 from .utils import (

@@ -1,5 +1,6 @@
 # import libs
-from mozichem_hub.references import References, ReferenceMapper
+from mozichem_hub.references import ReferenceMapper
+from mozichem_hub.models import References
 # log
 from rich import print
 

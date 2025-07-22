@@ -8,7 +8,7 @@ from mozichem_hub.prebuilt import (
     create_mozichem_mcp,
     get_mozichem_mcp
 )
-from mozichem_hub.references import Reference
+from mozichem_hub.models import Reference
 # log
 from rich import print
 

@@ -13,7 +13,7 @@ from typing import (
 from .tool_builder import ToolBuilder
 from ..resources import FunctionDispatcher
 from ..models import MoziTool
-from ..references import (
+from ..models import (
     ReferenceThermoDB,
 )
 

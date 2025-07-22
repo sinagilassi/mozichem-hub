@@ -6,7 +6,7 @@ from typing import (
     Callable
 )
 # locals
-from ..references import (
+from ..models import (
     ReferenceThermoDB
 )
 from .hub import Hub

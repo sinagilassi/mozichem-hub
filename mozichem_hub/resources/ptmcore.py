@@ -18,7 +18,6 @@ from ..models import (
 )
 from .utils import set_feed_specification
 from .hub import Hub
-from ..references import ReferenceMapper
 from ..descriptors import MCPDescriptor
 # from ..config import MCP_MODULES
 from .reference_utils import initialize_custom_reference

@@ -1,6 +1,6 @@
 # import libs
 from typing import Dict
-from .models import ComponentPropertySource
+from ..models import ComponentPropertySource
 # locals
 
 # SECTION: default reference config

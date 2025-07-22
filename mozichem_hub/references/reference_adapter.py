@@ -5,7 +5,7 @@ import logging
 from typing import Dict, Any, Literal, Union
 from pyThermoDB.references import ReferenceConfig, ReferenceChecker
 # local
-from .models import ComponentPropertySource
+from ..models import ComponentPropertySource
 
 
 class ReferencesAdapter:

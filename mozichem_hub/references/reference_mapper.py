@@ -9,7 +9,7 @@ from typing import (
 # locals
 from .reference_services import ReferenceServices
 from .reference_controller import ReferenceController
-from .models import (
+from ..models import (
     References,
     ReferenceThermoDB
 )

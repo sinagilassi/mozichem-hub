@@ -13,7 +13,7 @@ from ..models import (
     Component,
     ComponentThermoDB,
 )
-from ..references import (
+from ..models import (
     ReferenceThermoDB
 )
 

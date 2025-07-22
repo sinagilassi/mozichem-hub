@@ -3,7 +3,7 @@ from typing import (
     Optional,
 )
 # local
-from .models import (
+from ..models import (
     References,
     ReferenceThermoDB
 )

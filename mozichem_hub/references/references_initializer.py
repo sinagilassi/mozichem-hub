@@ -8,7 +8,7 @@ from typing import (
 # local
 from .contents import REFERENCE_CONTENT
 from .config import REFERENCE_CONFIGS
-from .models import (
+from ..models import (
     References,
     ReferenceThermoDB,
 )

@@ -1,11 +1,7 @@
 # import libs
 import logging
 from typing import (
-    Optional,
-    Union,
-    Dict,
-    List,
-    Any
+    Dict
 )
 from pyThermoDB.references import (
     ReferenceChecker,
@@ -21,12 +17,12 @@ from ..errors import (
     COMPONENT_REFERENCE_CONFIG_ERROR_MSG,
     COMPONENT_REFERENCE_LINK_ERROR_MSG
 )
-from ..models.resources_models import Component
-from .models import (
+from ..models import (
+    Component,
     ComponentReferenceConfig,
-    ComponentReferenceLink
+    ComponentReferenceLink,
+    ReferenceThermoDB
 )
-from .models import ReferenceThermoDB
 
 
 class ReferenceThermoDBController():

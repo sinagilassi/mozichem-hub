@@ -15,12 +15,11 @@ from typing import (
 from .registry import RegistryMixin
 from .server import MoziServer
 from ..tools import ToolManager
-from ..references import (
-    References,
+from ..models import (
     ReferenceThermoDB,
-    ReferenceMapper
 )
 from ..descriptors import MCPDescriptor
+from ..references import ReferenceMapper
 
 
 class MoziChemMCP(RegistryMixin, ReferenceMapper):

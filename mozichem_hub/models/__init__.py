@@ -8,6 +8,15 @@ from .resources_models import (
     Component,
     ComponentThermoDB
 )
+# references
+from .references_models import (
+    References,
+    Reference,
+    ReferenceThermoDB,
+    ComponentPropertySource,
+    ComponentReferenceConfig,
+    ComponentReferenceLink
+)
 
 __all__ = [
     "MCPConfig",
@@ -16,5 +25,11 @@ __all__ = [
     "Temperature",
     "Pressure",
     "Component",
-    "ComponentThermoDB"
+    "ComponentThermoDB",
+    "References",
+    "Reference",
+    "ReferenceThermoDB",
+    "ComponentPropertySource",
+    "ComponentReferenceConfig",
+    "ComponentReferenceLink",
 ]
