@@ -2,7 +2,7 @@
 from rich import print
 from pyThermoDB.references import ReferenceChecker
 from mozichem_hub.references import ReferenceMapper
-from mozichem_hub.resources import Component
+from mozichem_hub.models import Component
 
 # SECTION: reference content
 REFERENCE_CONTENT = """

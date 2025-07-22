@@ -46,7 +46,7 @@ mozichem_api.add_mozichem_mcp(thermo_models_mcp)
 # mozichem_api.add_mozichem_mcp(thermodynamic_properties_mcp)
 
 # NOTE: create the API
-mcp_api = mozichem_api.create_api()
+mcp_api: FastAPI = mozichem_api.create_api()
 
 # NOTE: run the API
 if __name__ == "__main__":
