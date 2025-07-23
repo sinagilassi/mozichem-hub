@@ -16,6 +16,16 @@ from ..models import MoziTool
 from ..models import (
     ReferenceThermoDB,
 )
+from ..errors import (
+    FunctionRetrievalError,
+    FunctionLoadingError,
+    ToolBuildingError,
+    ToolExecutionError,
+    FUNCTION_RETRIEVAL_ERROR_MSG,
+    FUNCTION_LOADING_ERROR_MSG,
+    TOOL_BUILDING_ERROR_MSG,
+    TOOL_EXECUTION_ERROR_MSG
+)
 
 
 class ToolManager(ToolBuilder):
@@ -51,7 +61,8 @@ class ToolManager(ToolBuilder):
             # NOTE: Load function from FunctionDispatcher
             return self.FunctionDispatcher_.retrieve_all_mozi_tools()
         except Exception as e:
-            raise Exception(f"Failed to load MoziChem functions: {e}") from e
+            raise FunctionRetrievalError(
+                f"{FUNCTION_RETRIEVAL_ERROR_MSG} {e}") from e
 
     def _retrieve_local_functions(self, mcp_name: str) -> List[MoziTool]:
         """
@@ -66,7 +77,8 @@ class ToolManager(ToolBuilder):
             # NOTE: Load function from FunctionDispatcher
             return self.FunctionDispatcher_.retrieve_mozi_tools(mcp_name)
         except Exception as e:
-            raise Exception(f"Failed to load MoziChem functions: {e}") from e
+            raise FunctionRetrievalError(
+                f"{FUNCTION_RETRIEVAL_ERROR_MSG} {e}") from e
 
     def _get_info_local_functions(self, mcp_name: str) -> Dict[str, Any]:
         """
@@ -92,7 +104,8 @@ class ToolManager(ToolBuilder):
                 "functions": local_functions
             }
         except Exception as e:
-            raise ValueError(f"Failed to retrieve local functions: {e}") from e
+            raise FunctionLoadingError(
+                f"{FUNCTION_LOADING_ERROR_MSG} {e}") from e
 
     def _build_local_tools(
         self,
@@ -138,7 +151,7 @@ class ToolManager(ToolBuilder):
             # return the tools
             return local_tools
         except Exception as e:
-            raise ValueError(f"Failed to build tools: {e}") from e
+            raise ToolBuildingError(f"{TOOL_BUILDING_ERROR_MSG} {e}") from e
 
     def _build_tools(
         self,
@@ -177,8 +190,8 @@ class ToolManager(ToolBuilder):
                 _function = _functions.get(mcp_name, None)
 
                 if _function is None:
-                    raise ValueError(
-                        f"Function '{mcp_name}' not found in local resources.")
+                    raise FunctionRetrievalError(
+                        f"{FUNCTION_RETRIEVAL_ERROR_MSG} Function '{mcp_name}' not found in local resources.")
 
                 # NOTE: Build local tools
                 local_tools = self.build_tools_from_mozi_tools(_function)
@@ -198,7 +211,7 @@ class ToolManager(ToolBuilder):
             # return the tools
             return self._tools
         except Exception as e:
-            raise ValueError(f"Failed to build tools: {e}") from e
+            raise ToolBuildingError(f"{TOOL_BUILDING_ERROR_MSG} {e}") from e
 
     def launch(self):
         """
@@ -211,4 +224,4 @@ class ToolManager(ToolBuilder):
             self._build_tools()
             return self._tools
         except Exception as e:
-            raise RuntimeError(f"Failed to launch ToolManager: {e}") from e
+            raise ToolExecutionError(f"{TOOL_EXECUTION_ERROR_MSG} {e}") from e

@@ -11,6 +11,12 @@ from typing import (
 from .core import MoziChemMCP
 from ..config import MCP_MODULES
 from ..utils import MCPController
+from ..errors import (
+    MCPInitializationError,
+    MCPNotFoundError,
+    MCP_INITIALIZATION_ERROR_MSG,
+    MCP_NOT_FOUND_ERROR_MSG
+)
 
 
 class MCPHub(MoziChemMCP):
@@ -70,8 +76,8 @@ class MCPHub(MoziChemMCP):
 
         # check if mcp is available
         if mcp not in mcp_names:
-            raise ValueError(
-                f"'{mcp}' is not a valid MCP name. "
+            raise MCPNotFoundError(
+                f"{MCP_NOT_FOUND_ERROR_MSG} '{mcp}' is not a valid MCP name. "
                 f"Available MCPs: {', '.join(mcp_names)}"
             )
 
@@ -109,8 +115,8 @@ class MCPHub(MoziChemMCP):
         """
         source = self.info
         if source is None:
-            raise ValueError(
-                f"'{self._mcp_name}' is not a valid MCP name. "
+            raise MCPNotFoundError(
+                f"{MCP_NOT_FOUND_ERROR_MSG} '{self._mcp_name}' is not a valid MCP name. "
                 f"Available MCPs: {', '.join(MCPController.mcp_names())}"
             )
 
@@ -129,8 +135,8 @@ class MCPHub(MoziChemMCP):
         """
         source = self.info
         if source is None:
-            raise ValueError(
-                f"'{self._mcp_name}' is not a valid MCP name. "
+            raise MCPNotFoundError(
+                f"{MCP_NOT_FOUND_ERROR_MSG} '{self._mcp_name}' is not a valid MCP name. "
                 f"Available MCPs: {', '.join(MCPController.mcp_names())}"
             )
 
@@ -148,8 +154,8 @@ class MCPHub(MoziChemMCP):
         """
         source = self.info
         if source is None:
-            raise ValueError(
-                f"'{self._mcp_name}' is not a valid MCP name. "
+            raise MCPNotFoundError(
+                f"{MCP_NOT_FOUND_ERROR_MSG} '{self._mcp_name}' is not a valid MCP name. "
                 f"Available MCPs: {', '.join(MCPController.mcp_names())}"
             )
 
@@ -167,8 +173,8 @@ class MCPHub(MoziChemMCP):
         """
         source = self.info
         if source is None:
-            raise ValueError(
-                f"'{self._mcp_name}' is not a valid MCP name. "
+            raise MCPNotFoundError(
+                f"{MCP_NOT_FOUND_ERROR_MSG} '{self._mcp_name}' is not a valid MCP name. "
                 f"Available MCPs: {', '.join(MCPController.mcp_names())}"
             )
 
@@ -186,8 +192,8 @@ class MCPHub(MoziChemMCP):
         """
         source = self.info
         if source is None:
-            raise ValueError(
-                f"'{self._mcp_name}' is not a valid MCP name. "
+            raise MCPNotFoundError(
+                f"{MCP_NOT_FOUND_ERROR_MSG} '{self._mcp_name}' is not a valid MCP name. "
                 f"Available MCPs: {', '.join(MCPController.mcp_names())}"
             )
 
@@ -216,6 +222,6 @@ class MCPHub(MoziChemMCP):
             )
         except Exception as e:
             logging.error(f"Failed to build MoziChem MCP: {e}")
-            raise RuntimeError(
-                f"Failed to build MoziChem MCP '{self.name}': {e}"
+            raise MCPInitializationError(
+                f"{MCP_INITIALIZATION_ERROR_MSG} '{self.name}': {e}"
             ) from e

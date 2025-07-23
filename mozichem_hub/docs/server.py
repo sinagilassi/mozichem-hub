@@ -6,6 +6,12 @@ from typing import (
 from fastmcp.tools import Tool
 # local
 from .mcp import MCP
+from ..errors import (
+    ToolRegistrationError,
+    MCPExecutionError,
+    TOOL_REGISTRATION_ERROR_MSG,
+    MCP_EXECUTION_ERROR_MSG
+)
 
 
 class MoziServer(MCP):
@@ -52,14 +58,15 @@ class MoziServer(MCP):
 
         Raises
         ------
-        Exception
+        ToolRegistrationError
             If there is an error while adding tools to the MCP server.
         """
         try:
             # SECTION: add tools to the MCP server
             self._add_tools(tools)
         except Exception as e:
-            raise Exception(f"Failed to build mcp server: {e}") from e
+            raise ToolRegistrationError(
+                f"{TOOL_REGISTRATION_ERROR_MSG} Failed to build mcp server: {e}") from e
 
     def _serve(self):
         """
@@ -76,4 +83,5 @@ class MoziServer(MCP):
             # log
             print(f"{self._name} server is running.")
         except Exception as e:
-            raise Exception(f"Failed to start {self._name} server: {e}") from e
+            raise MCPExecutionError(
+                f"{MCP_EXECUTION_ERROR_MSG} Failed to start {self._name} server: {e}") from e

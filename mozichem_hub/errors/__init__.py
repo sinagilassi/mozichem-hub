@@ -34,13 +34,17 @@ from .tool_exceptions import (
     FunctionLoadingError,
     ToolRegistrationError,
     ToolNotFoundError,
+    MoziToolBuildingError,
+    FunctionToolBuildingError,
+    MOZI_TOOL_BUILDING_ERROR_MSG,
     TOOL_BUILDING_ERROR_MSG,
     TOOL_EXECUTION_ERROR_MSG,
     MCP_TOOL_BUILDING_ERROR_MSG,
     FUNCTION_RETRIEVAL_ERROR_MSG,
     FUNCTION_LOADING_ERROR_MSG,
     TOOL_REGISTRATION_ERROR_MSG,
-    TOOL_NOT_FOUND_ERROR_MSG
+    TOOL_NOT_FOUND_ERROR_MSG,
+    FUNCTION_TOOL_BUILDING_ERROR_MSG,
 )
 
 from .mcp_exceptions import (
@@ -119,6 +123,10 @@ __all__ = [
     "FUNCTION_LOADING_ERROR_MSG",
     "TOOL_REGISTRATION_ERROR_MSG",
     "TOOL_NOT_FOUND_ERROR_MSG",
+    "MoziToolBuildingError",
+    "FunctionToolBuildingError",
+    "MOZI_TOOL_BUILDING_ERROR_MSG",
+    "FUNCTION_TOOL_BUILDING_ERROR_MSG",
 
     # MCP exceptions
     "MCPError",

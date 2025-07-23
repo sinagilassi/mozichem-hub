@@ -8,6 +8,8 @@ FUNCTION_RETRIEVAL_ERROR_MSG = "Error retrieving function."
 FUNCTION_LOADING_ERROR_MSG = "Error loading functions."
 TOOL_REGISTRATION_ERROR_MSG = "Error registering tool."
 TOOL_NOT_FOUND_ERROR_MSG = "Tool not found."
+MOZI_TOOL_BUILDING_ERROR_MSG = "Error building tools from MoziTool instances."
+FUNCTION_TOOL_BUILDING_ERROR_MSG = "Error building tools from function dictionary."
 
 
 class ToolError(Exception):
@@ -27,6 +29,16 @@ class ToolExecutionError(ToolError):
 
 class MCPToolBuildingError(ToolError):
     """Raised when there's an error building MCP tools."""
+    pass
+
+
+class MoziToolBuildingError(ToolError):
+    """Raised when there's an error building tools from MoziTool instances."""
+    pass
+
+
+class FunctionToolBuildingError(ToolError):
+    """Raised when there's an error building tools from function dictionary."""
     pass
 
 

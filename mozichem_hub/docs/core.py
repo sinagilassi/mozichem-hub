@@ -20,6 +20,20 @@ from ..models import (
 )
 from ..descriptors import MCPDescriptor
 from ..references import ReferenceMapper
+from ..errors import (
+    MCPInitializationError,
+    MCPExecutionError,
+    MCPUpdateError,
+    ToolBuildingError,
+    LoadingReferenceError,
+    ReferenceConfigGenerationError,
+    MCP_INITIALIZATION_ERROR_MSG,
+    MCP_EXECUTION_ERROR_MSG,
+    MCP_UPDATE_ERROR_MSG,
+    TOOL_BUILDING_ERROR_MSG,
+    LOADING_REFERENCE_ERROR_MSG,
+    REFERENCE_CONFIG_GEN_ERROR_MSG
+)
 
 
 class MoziChemMCP(RegistryMixin, ReferenceMapper):
@@ -181,7 +195,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
                     mcp_name=self._mcp_name
                 )
         except Exception as e:
-            raise Exception(f"Failed to load tools: {e}") from e
+            raise ToolBuildingError(f"{TOOL_BUILDING_ERROR_MSG} {e}") from e
 
     def _update(self):
         """
@@ -221,7 +235,8 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
             # collect the registered prompts
 
         except Exception as e:
-            raise RuntimeError(f"Failed to launch {self.name}: {e}") from e
+            raise MCPUpdateError(
+                f"{MCP_UPDATE_ERROR_MSG} {self.name}: {e}") from e
 
     def get_mcp(self) -> FastMCP:
         """
@@ -237,7 +252,8 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
             # NOTE: return the MCP server instance
             return self.MoziServer_.get_mcp()
         except Exception as e:
-            raise RuntimeError(f"Failed to run {self.name}: {e}") from e
+            raise MCPInitializationError(
+                f"{MCP_INITIALIZATION_ERROR_MSG} {self.name}: {e}") from e
 
     def run(
         self,
@@ -266,7 +282,8 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
                 **transport_kwargs
             )
         except Exception as e:
-            raise RuntimeError(f"Failed to run {self.name}: {e}") from e
+            raise MCPExecutionError(
+                f"{MCP_EXECUTION_ERROR_MSG} {self.name}: {e}") from e
 
     def update_references(
         self,
@@ -347,7 +364,8 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
             return "Custom references added successfully."
         except Exception as e:
             logging.error(f"Failed to add custom references: {e}")
-            raise RuntimeError("Failed to add custom references.") from e
+            raise LoadingReferenceError(
+                f"{LOADING_REFERENCE_ERROR_MSG} {e}") from e
 
     def update_instructions(
         self,
@@ -375,4 +393,5 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
             return "Instructions updated successfully."
         except Exception as e:
             logging.error(f"Failed to update instructions: {e}")
-            raise RuntimeError("Failed to update instructions.") from e
+            raise MCPUpdateError(
+                f"{MCP_UPDATE_ERROR_MSG} Failed to update instructions: {e}") from e

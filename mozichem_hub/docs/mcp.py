@@ -11,6 +11,16 @@ from fastmcp.tools import Tool
 from fastmcp.exceptions import ToolError
 # local
 from ..config import app_settings
+from ..errors import (
+    MCPInitializationError,
+    MCPExecutionError,
+    ToolBuildingError,
+    ToolRegistrationError,
+    MCP_INITIALIZATION_ERROR_MSG,
+    MCP_EXECUTION_ERROR_MSG,
+    TOOL_BUILDING_ERROR_MSG,
+    TOOL_REGISTRATION_ERROR_MSG
+)
 
 
 class MCP():
@@ -57,8 +67,8 @@ class MCP():
         Set the transport type of the MCP server.
         """
         if value not in ['stdio', 'streamable-http']:
-            raise ValueError(
-                "Transport must be one of: 'stdio', 'streamable-http'")
+            raise MCPInitializationError(
+                f"{MCP_INITIALIZATION_ERROR_MSG} Transport must be one of: 'stdio', 'streamable-http'")
         self.server_parameters["transport"] = value
 
     @property
@@ -74,7 +84,8 @@ class MCP():
         Set the host address of the MCP server.
         """
         if not isinstance(value, str):
-            raise ValueError("Host must be a string.")
+            raise MCPInitializationError(
+                f"{MCP_INITIALIZATION_ERROR_MSG} Host must be a string.")
         self.server_parameters["host"] = value
 
     @property
@@ -90,7 +101,8 @@ class MCP():
         Set the port number of the MCP server.
         """
         if not isinstance(value, int) or value <= 0:
-            raise ValueError("Port must be a positive integer.")
+            raise MCPInitializationError(
+                f"{MCP_INITIALIZATION_ERROR_MSG} Port must be a positive integer.")
         self.server_parameters["port"] = value
 
     @property
@@ -106,7 +118,8 @@ class MCP():
         Set the path for the MCP server.
         """
         if not isinstance(value, str):
-            raise ValueError("Path must be a string.")
+            raise MCPInitializationError(
+                f"{MCP_INITIALIZATION_ERROR_MSG} Path must be a string.")
         self.server_parameters["path"] = value
 
     def create_mcp(self):
@@ -129,7 +142,8 @@ class MCP():
                 dependencies=dependencies
             )
         except ToolError as e:
-            raise RuntimeError(f"Failed to register tools: {e}") from e
+            raise ToolRegistrationError(
+                f"{TOOL_REGISTRATION_ERROR_MSG} {e}") from e
 
     def get_mcp(self) -> FastMCP:
         """
@@ -143,16 +157,19 @@ class MCP():
         try:
             # NOTE: Ensure the MCP instance is initialized
             if not isinstance(self._mcp, FastMCP):
-                raise TypeError("MCP instance is not of type FastMCP.")
+                raise MCPInitializationError(
+                    f"{MCP_INITIALIZATION_ERROR_MSG} MCP instance is not of type FastMCP.")
 
             # NOTE: Check if MCP instance is initialized
             if self._mcp is None:
-                raise ValueError("MCP instance is not initialized.")
+                raise MCPInitializationError(
+                    f"{MCP_INITIALIZATION_ERROR_MSG} MCP instance is not initialized.")
 
             # NOTE: add tools to the MCP server
             return self._mcp
         except Exception as e:
-            raise RuntimeError(f"Failed to get MCP instance: {e}") from e
+            raise MCPInitializationError(
+                f"{MCP_INITIALIZATION_ERROR_MSG} {e}") from e
 
     def run(self):
         """
@@ -169,8 +186,8 @@ class MCP():
             # check if transport is valid
             valid_transports = ['stdio', 'streamable-http']
             if transport_str not in valid_transports:
-                raise ValueError(
-                    f"Invalid transport: {transport_str}. Must be one of: {valid_transports}"
+                raise MCPInitializationError(
+                    f"{MCP_INITIALIZATION_ERROR_MSG} Invalid transport: {transport_str}. Must be one of: {valid_transports}"
                 )
 
             # Cast str to Literal type after validation
@@ -187,7 +204,7 @@ class MCP():
                 log_level=log_level
             )
         except Exception as e:
-            raise RuntimeError(f"Failed to run MCP server: {e}") from e
+            raise MCPExecutionError(f"{MCP_EXECUTION_ERROR_MSG} {e}") from e
 
     def _add_tools(self, tools: List[Tool]):
         """
@@ -211,10 +228,11 @@ class MCP():
             # NOTE: add tools to the MCP server
             for tool in tools:
                 if not isinstance(tool, Tool):
-                    raise TypeError(
-                        f"Expected Tool instance, got {type(tool)}")
+                    raise ToolBuildingError(
+                        f"{TOOL_BUILDING_ERROR_MSG} Expected Tool instance, got {type(tool)}")
 
                 # Register each tool with the MCP server
                 self._mcp.add_tool(tool)
         except Exception as e:
-            raise Exception(f"Failed to build tools: {e}") from e
+            raise ToolRegistrationError(
+                f"{TOOL_REGISTRATION_ERROR_MSG} {e}") from e

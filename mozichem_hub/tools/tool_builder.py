@@ -4,6 +4,14 @@ from fastmcp.tools import Tool
 # local
 from ..config import app_settings
 from ..models import MoziTool
+from ..errors import (
+    MCPToolBuildingError,
+    MoziToolBuildingError,
+    FunctionToolBuildingError,
+    MCP_TOOL_BUILDING_ERROR_MSG,
+    MOZI_TOOL_BUILDING_ERROR_MSG,
+    FUNCTION_TOOL_BUILDING_ERROR_MSG
+)
 
 
 class ToolBuilder():
@@ -57,7 +65,8 @@ class ToolBuilder():
 
             return mcp_tools
         except Exception as e:
-            raise ValueError(f"Failed to build MCP tools: {e}") from e
+            raise MoziToolBuildingError(
+                f"{MOZI_TOOL_BUILDING_ERROR_MSG} {e}") from e
 
     def build_tools_from_function(
         self,
@@ -89,22 +98,24 @@ class ToolBuilder():
 
                 # check if function is provided
                 if not fn:
-                    raise ValueError(f"Function '{fn_name}' is not provided.")
+                    raise MCPToolBuildingError(
+                        f"{MCP_TOOL_BUILDING_ERROR_MSG} Function '{fn_name}' is not provided.")
 
                 if not callable(fn):
-                    raise ValueError(f"Function '{fn_name}' is not callable.")
+                    raise MCPToolBuildingError(
+                        f"{MCP_TOOL_BUILDING_ERROR_MSG} Function '{fn_name}' is not callable.")
 
                 if not isinstance(fn_name, str):
-                    raise ValueError(
-                        f"Function name '{fn_name}' is not a string.")
+                    raise MCPToolBuildingError(
+                        f"{MCP_TOOL_BUILDING_ERROR_MSG} Function name '{fn_name}' is not a string.")
 
                 if not isinstance(description, str):
-                    raise ValueError(
-                        f"Description for function '{fn_name}' is not a string.")
+                    raise MCPToolBuildingError(
+                        f"{MCP_TOOL_BUILDING_ERROR_MSG} Description for function '{fn_name}' is not a string.")
 
                 if not isinstance(tags, set):
-                    raise ValueError(
-                        f"Tags for function '{fn_name}' must be a set or list.")
+                    raise MCPToolBuildingError(
+                        f"{MCP_TOOL_BUILDING_ERROR_MSG} Tags for function '{fn_name}' must be a set or list.")
 
                 tool_ = Tool.from_function(
                     fn=fn,
@@ -118,4 +129,5 @@ class ToolBuilder():
 
             return mcp_tools
         except Exception as e:
-            raise ValueError(f"Failed to build MCP tools: {e}") from e
+            raise FunctionToolBuildingError(
+                f"{FUNCTION_TOOL_BUILDING_ERROR_MSG} {e}") from e
