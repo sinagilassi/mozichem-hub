@@ -37,12 +37,12 @@ tool_name = "calc_gas_component_fugacity"
 
 # arguments for the tool
 temperature = Temperature(
-    value=298.15,
+    value=300.1,
     unit="K"
 )
 
 pressure = Pressure(
-    value=10,
+    value=9.99,
     unit="bar"
 )
 
@@ -191,7 +191,7 @@ result = tool_executer.execute_tool(
     temperature=temperature,
     pressure=pressure,
     eos_model=eos_model,
-    custom_reference_content=REFERENCE_CONTENT,
+    # custom_reference_content=REFERENCE_CONTENT,
     # custom_reference_config=None
     # custom_reference_config=REFERENCE_CONFIG,
 )
