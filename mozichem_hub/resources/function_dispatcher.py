@@ -1,4 +1,5 @@
 # import libs
+import logging
 from typing import (
     List,
     Dict,
@@ -11,15 +12,16 @@ from ..models import (
 )
 from .hub import Hub
 from .mozi_tool_builder import MoziToolBuilder
+from .class_builder import MCPClassBuilder
 from ..config import MCP_MODULES
 from ..models import MoziTool
 # class lists
-from .ptmcore import PTMCore
-from .ptfcore import PTFCore
-from .ptdbcore import PTDBCore
+# from .ptmcore import PTMCore
+# from .ptfcore import PTFCore
+# from .ptdbcore import PTDBCore
 
 
-class FunctionDispatcher(MoziToolBuilder):
+class FunctionDispatcher(MoziToolBuilder, MCPClassBuilder):
     """
     Dispatcher class for defining functions in the MoziChem Hub.
     """
@@ -39,8 +41,10 @@ class FunctionDispatcher(MoziToolBuilder):
         reference : Reference
             Reference instance containing the reference data.
         """
-        # SECTION: Initialize the MoziToolBuilder
+        # LINK: Initialize the MoziToolBuilder
         MoziToolBuilder.__init__(self)
+        # LINK: Initialize the MCPClassBuilder
+        MCPClassBuilder.__init__(self)
 
         # SECTION: Initialize the Hub
         self.Hub_ = Hub(
@@ -48,12 +52,60 @@ class FunctionDispatcher(MoziToolBuilder):
         )
 
         # SECTION: Initialize function source
-        # LINK: pyThermoModels
-        self.MCP_PTMCore = PTMCore(self.Hub_)
-        # LINK: pyThermoFlash
-        self.MCP_PTFCore = PTFCore(self.Hub_)
-        # LINK: pyThermoDB
-        self.MCP_PTDBCore = PTDBCore(self.Hub_)
+        # # LINK: pyThermoModels
+        # self.MCP_PTMCore = PTMCore(self.Hub_)
+        # # LINK: pyThermoFlash
+        # self.MCP_PTFCore = PTFCore(self.Hub_)
+        # # LINK: pyThermoDB
+        # self.MCP_PTDBCore = PTDBCore(self.Hub_)
+
+    def _init_mcp_class(self, mcp_name: str):
+        """
+        Initialize the MCP class based on the provided mcp_name.
+
+        Parameters
+        ----------
+        mcp_name : str
+            The name of the MCP to initialize.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The initialized MCP class.
+        """
+        try:
+            # SECTION: get mcp information
+            mcp_info = self._select_mcp_by_name(mcp_name)
+
+            # NOTE: mcp id
+            mcp_id = mcp_info.get('id', None)
+            # check
+            if not mcp_id:
+                raise ValueError(
+                    f"MCP '{mcp_name}' does not have an ID defined."
+                )
+
+            # SECTION: init the MCP class
+            mcp_class = self.get_mcp_class(mcp_id)
+            # check if the class is found
+            if not mcp_class:
+                raise ValueError(
+                    f"MCP class '{mcp_id}' is not registered in the MoziChem Hub."
+                )
+
+            # return the initialized MCP class
+            if isinstance(mcp_class, type):
+                return {
+                    mcp_name: mcp_class(self.Hub_)
+                }
+            else:
+                return {
+                    mcp_name: mcp_class
+                }
+
+        except Exception as e:
+            raise Exception(
+                f"Failed to initialize MCP class '{mcp_name}': {e}") from e
 
     def _get_mcp_registered(self) -> Dict[str, Any]:
         """
@@ -75,10 +127,17 @@ class FunctionDispatcher(MoziToolBuilder):
             # }
 
             # ! method 2
+            # mcp_registered = {
+            #     mcp['class']: getattr(self, mcp['class'])
+            #     for mcp in MCP_MODULES
+            #     if 'name' in mcp and 'class' in mcp
+            # }
+
+            # ! method 3
             mcp_registered = {
-                mcp['class']: getattr(self, mcp['class'])
+                mcp['class']: self.get_mcp_class(mcp['id'])
                 for mcp in MCP_MODULES
-                if 'name' in mcp and 'class' in mcp
+                if 'id' in mcp and 'class' in mcp
             }
 
             # return
@@ -114,6 +173,16 @@ class FunctionDispatcher(MoziToolBuilder):
     ) -> Dict[str, Any]:
         """
         Select a specific MCP registered by its class name.
+
+        Parameters
+        ----------
+        mcp_class : str
+            The class name of the MCP to select.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The selected MCP information.
         """
         try:
             # SECTION: lookup the class in the registered list
@@ -132,6 +201,41 @@ class FunctionDispatcher(MoziToolBuilder):
         except Exception as e:
             raise Exception(
                 f"Failed to select MCP class '{mcp_class}': {e}") from e
+
+    def _select_mcp_by_name(
+            self,
+            mcp_name: str
+    ) -> Dict[str, Any]:
+        """
+        Select a specific MCP registered by its name.
+
+        Parameters
+        ----------
+        mcp_name : str
+            The name of the MCP to select.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The selected MCP.
+        """
+        try:
+            # SECTION: lookup the name in the registered list
+            mcp_selected = next(
+                (mcp for mcp in MCP_MODULES if mcp['name'] == mcp_name),
+                None
+            )
+
+            # check if the mcp_name is found
+            if not mcp_selected:
+                raise ValueError(
+                    f"MCP '{mcp_name}' is not registered in the MoziChem Hub.")
+
+            # return the selected MCP class
+            return mcp_selected
+        except Exception as e:
+            raise Exception(
+                f"Failed to select MCP '{mcp_name}': {e}") from e
 
     def _check_availability_mcp_by_class(
             self,
@@ -197,7 +301,18 @@ class FunctionDispatcher(MoziToolBuilder):
                     # ! function is registered in the module
                     # ! Dict[str, Callable]
                     # add the class to the functions dict
-                    return mcp_class.list_functions()
+                    # ! check mcp_class is a class
+                    if isinstance(mcp_class, type):
+                        # initialize the class
+                        mcp_instance = mcp_class(self.Hub_)
+                        return mcp_instance.list_functions()
+                    elif hasattr(mcp_class, 'list_functions'):
+                        # if it has a method list_functions, call it
+                        return mcp_class.list_functions()
+                    else:
+                        raise ValueError(
+                            f"MCP class '{mcp_class_name}' does not have a method 'list_functions'."
+                        )
 
             raise ValueError(
                 f"No functions found for MCP module '{mcp_name}'. "
@@ -256,9 +371,14 @@ class FunctionDispatcher(MoziToolBuilder):
         except Exception as e:
             raise Exception(f"Failed to get local function list: {e}") from e
 
-    def retrieve_mozi_tools(self, mcp_name) -> List[MoziTool]:
+    def retrieve_mozi_tools(self, mcp_name: str) -> List[MoziTool]:
         """
         Get all mozi tools available in the MoziChem Hub.
+
+        Parameters
+        ----------
+        mcp_name : str
+            The name of the mcp to retrieve functions for.
 
         Returns
         -------

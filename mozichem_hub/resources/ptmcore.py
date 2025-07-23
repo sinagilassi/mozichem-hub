@@ -4,7 +4,6 @@ from typing import (
     Any,
     Callable,
     List,
-    Optional
 )
 import inspect
 from typing import Annotated, Literal

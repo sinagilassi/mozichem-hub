@@ -53,9 +53,14 @@ class ToolManager(ToolBuilder):
         except Exception as e:
             raise Exception(f"Failed to load MoziChem functions: {e}") from e
 
-    def _retrieve_local_functions(self, mcp_name) -> List[MoziTool]:
+    def _retrieve_local_functions(self, mcp_name: str) -> List[MoziTool]:
         """
         Retrieve local functions for the given mcp.
+
+        Parameters
+        ----------
+        mcp_name : str
+            The name of the mcp to retrieve functions for.
         """
         try:
             # NOTE: Load function from FunctionDispatcher
