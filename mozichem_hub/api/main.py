@@ -182,8 +182,15 @@ class MoziChemHubAPI:
             if welcome_message:
                 # line
                 line_1 = f"Welcome to MoziChemHub API {__version__}."
-                line_2 = f"Available MCPs: {', '.join(self._get_all_mcps())}"
+                # Adjust spacing to align properly with ASCII art border
+                line_2 = "🧪 Available MCPs:"
                 lines = [line_1, line_2]
+
+                # Add each MCP on a separate indented line with emoji
+                for mcp_name in self._get_all_mcps():
+                    # Ensure consistent indentation for proper alignment
+                    lines.append(f"  ⚗️ {mcp_name}")
+
                 print_ascii_art(lines)
 
             return MoziChemAPI_.app

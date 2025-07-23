@@ -11,7 +11,10 @@ from ..config import (
 )
 
 
-def print_ascii_art(info: Optional[List[str]] = None):
+def print_ascii_art(
+    info: Optional[List[str]] = None,
+    use_panel: bool = True
+):
     """
     Print the ASCII art with a cat face.
     """
@@ -28,10 +31,14 @@ def print_ascii_art(info: Optional[List[str]] = None):
         ascii_lines = combine_lines([ascii_art], cat_lines + info)
 
     # Frame it with a Panel
-    panel_ascii = Panel(
-        Text(ascii_lines, style="white"),
-        title="MoziChemHub MCP Server",
-        border_style="blue",
-        expand=False
-    )
-    console.print(panel_ascii)
+    if use_panel:
+        panel_ascii = Panel(
+            Text(ascii_lines, style="white"),
+            title="MoziChemHub MCP Server",
+            border_style="blue",
+            expand=False
+        )
+        console.print(panel_ascii)
+    else:
+        # Print without panel
+        console.print(Text(ascii_lines, style="white"))
