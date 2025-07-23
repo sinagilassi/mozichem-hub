@@ -3,6 +3,15 @@ from typing import Dict, Callable, Any
 # locals
 from ..docs import MoziChemMCP
 from ..models import MoziTool
+from ..errors import (
+    ToolError,
+    ToolNotFoundError,
+    ToolExecutionError,
+    FunctionRetrievalError,
+    TOOL_NOT_FOUND_ERROR_MSG,
+    TOOL_EXECUTION_ERROR_MSG,
+    FUNCTION_RETRIEVAL_ERROR_MSG
+)
 
 
 class ToolExecuter:
@@ -32,13 +41,14 @@ class ToolExecuter:
 
             # check if tools_info is not None
             if tools_info is None:
-                raise Exception("No tools available in the MoziChem MCP.")
+                raise FunctionRetrievalError(
+                    "No tools available in the MoziChem MCP.")
 
             # Extract the functions from the tools information
             mozi_tools = tools_info.get("functions", {})
 
             if not mozi_tools:
-                raise Exception(
+                raise FunctionRetrievalError(
                     "No functions found in the MoziChem MCP tools.")
 
             # SECTION: init tools dictionary
@@ -54,8 +64,11 @@ class ToolExecuter:
                         f"Expected MoziTool instance, got {type(mozi_tool)}")
 
             return tools
+        except ToolError:
+            raise
         except Exception as e:
-            raise Exception(f"Error retrieving tools: {e}")
+            raise FunctionRetrievalError(
+                f"{FUNCTION_RETRIEVAL_ERROR_MSG} {str(e)}")
 
     def _get_tool(self, tool_name: str):
         """
@@ -77,15 +90,17 @@ class ToolExecuter:
 
             # check if the tool exists
             if tool_name not in tools.keys():
-                raise ValueError(
-                    f"Tool '{tool_name}' not found in the MoziChem MCP.")
+                raise ToolNotFoundError(
+                    f"{TOOL_NOT_FOUND_ERROR_MSG} Tool '{tool_name}' not found in the MoziChem MCP.")
 
             # Return the tool function
             return tools[tool_name]
 
+        except ToolError:
+            raise
         except Exception as e:
-            raise Exception(
-                f"Error retrieving tool info for '{tool_name}': {e}")
+            raise FunctionRetrievalError(
+                f"{FUNCTION_RETRIEVAL_ERROR_MSG} Failed to retrieve tool '{tool_name}': {str(e)}")
 
     def execute_tool(self, tool_name: str, *args, **kwargs):
         """
@@ -113,5 +128,8 @@ class ToolExecuter:
             result = tool_function(*args, **kwargs)
 
             return result
+        except ToolError:
+            raise
         except Exception as e:
-            raise Exception(f"Error executing tool '{tool_name}': {e}")
+            raise ToolExecutionError(
+                f"{TOOL_EXECUTION_ERROR_MSG} Failed to execute tool '{tool_name}': {str(e)}")

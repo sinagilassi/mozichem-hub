@@ -144,23 +144,23 @@ class PTMCore:
             )
         ] = "ls",
         custom_reference_content: Annotated[
-            str | None,
+            str,
             Field(
-                default=None,
+                default='None',
                 description=(
                     "Custom reference content provided by PyThermoDB, this consists of data and equations for all components."
                 )
             )
-        ] = None,
+        ] = 'None',
         custom_reference_config: Annotated[
-            str | None,
+            str,
             Field(
-                default=None,
+                default='None',
                 description=(
                     "Custom reference configuration provided by PyThermoDB, this consists of the reference for data and equations for each component."
                 )
             )
-        ] = None
+        ] = 'None'
     ) -> dict:
         """Calculates the fugacity of a gas-phase component at given temperature and pressure"""
         try:

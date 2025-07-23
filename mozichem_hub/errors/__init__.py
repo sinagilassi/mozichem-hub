@@ -2,10 +2,20 @@ from .reference_exceptions import (
     NoDatabookFoundError,
     ReferenceConfigGenerationError,
     ReferenceLinkGenerationError,
+    CustomReferenceInitializationError,
+    EmptyReferenceContentError,
+    EmptyReferenceConfigError,
+    InvalidReferenceContentTypeError,
+    InvalidReferenceConfigTypeError,
     NO_DATABOOK_FOUND_MSG,
     REFERENCE_CONFIG_GEN_ERROR_MSG,
     COMPONENT_REFERENCE_CONFIG_ERROR_MSG,
-    COMPONENT_REFERENCE_LINK_ERROR_MSG
+    COMPONENT_REFERENCE_LINK_ERROR_MSG,
+    CUSTOM_REFERENCE_INIT_ERROR_MSG,
+    EMPTY_REFERENCE_CONTENT_ERROR_MSG,
+    EMPTY_REFERENCE_CONFIG_ERROR_MSG,
+    INVALID_REFERENCE_CONTENT_TYPE_MSG,
+    INVALID_REFERENCE_CONFIG_TYPE_MSG
 )
 
 from .utils_exceptions import (
@@ -81,15 +91,37 @@ from .resource_exceptions import (
     TOOL_BUILDER_ERROR_MSG
 )
 
+from .api_exceptions import (
+    APIError,
+    APICreationError,
+    InvalidMCPTypeError,
+    InvalidMCPListItemError,
+    MCPAdditionError,
+    API_CREATION_ERROR_MSG,
+    INVALID_MCP_TYPE_ERROR_MSG,
+    INVALID_MCP_LIST_ITEM_ERROR_MSG,
+    MCP_ADDITION_ERROR_MSG
+)
+
 __all__ = [
     # Reference exceptions
     "NoDatabookFoundError",
     "ReferenceConfigGenerationError",
     "ReferenceLinkGenerationError",
+    "CustomReferenceInitializationError",
+    "EmptyReferenceContentError",
+    "EmptyReferenceConfigError",
+    "InvalidReferenceContentTypeError",
+    "InvalidReferenceConfigTypeError",
     "NO_DATABOOK_FOUND_MSG",
     "REFERENCE_CONFIG_GEN_ERROR_MSG",
     "COMPONENT_REFERENCE_CONFIG_ERROR_MSG",
     "COMPONENT_REFERENCE_LINK_ERROR_MSG",
+    "CUSTOM_REFERENCE_INIT_ERROR_MSG",
+    "EMPTY_REFERENCE_CONTENT_ERROR_MSG",
+    "EMPTY_REFERENCE_CONFIG_ERROR_MSG",
+    "INVALID_REFERENCE_CONTENT_TYPE_MSG",
+    "INVALID_REFERENCE_CONFIG_TYPE_MSG",
 
     # Utils exceptions
     "LoaderError",
@@ -158,5 +190,16 @@ __all__ = [
     "THERMODB_REGISTRATION_ERROR_MSG",
     "COMPONENT_THERMODB_BUILD_ERROR_MSG",
     "FUNCTION_DISPATCHER_ERROR_MSG",
-    "TOOL_BUILDER_ERROR_MSG"
+    "TOOL_BUILDER_ERROR_MSG",
+
+    # API exceptions
+    "APIError",
+    "APICreationError",
+    "InvalidMCPTypeError",
+    "InvalidMCPListItemError",
+    "MCPAdditionError",
+    "API_CREATION_ERROR_MSG",
+    "INVALID_MCP_TYPE_ERROR_MSG",
+    "INVALID_MCP_LIST_ITEM_ERROR_MSG",
+    "MCP_ADDITION_ERROR_MSG",
 ]
