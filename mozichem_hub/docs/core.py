@@ -77,16 +77,19 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
                 "heat-capacity": {
                     "databook": "databook 1",
                     "table": "table 1",
+                    "mode": 'EQUATIONS',
                     "label": "Cp_IG"
                 },
                 "vapor-pressure": {
                     "databook": "databook 2",
                     "table": "table 2",
+                    "mode": 'EQUATIONS',
                     "label": "VaPr"
                 },
                 "general":{
                     "databook": "databook 2",
                     "table": "table 2",
+                    "mode": 'DATA',
                     "labels": {
                         "Pc": "Pc",
                         "Tc": "Tc",
@@ -286,6 +289,40 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
             The content of the reference, can be a string or a list of strings.
         reference_config : Optional[Union[str, Dict[str, Dict[str, str | Dict[str, str]]]]]
             The configuration of the reference, can be a string or a dictionary.
+
+        Notes
+        -----
+        Reference config accepts a dictionary or yaml, markdown string as:
+
+        ```python
+        # dictionary format
+        my_config = {
+            "CO2" : {
+                "heat-capacity": {
+                    "databook": "databook 1",
+                    "table": "table 1",
+                    "mode": 'EQUATIONS',
+                    "label": "Cp_IG"
+                },
+                "vapor-pressure": {
+                    "databook": "databook 2",
+                    "table": "table 2",
+                    "mode": 'EQUATIONS',
+                    "label": "VaPr"
+                },
+                "general":{
+                    "databook": "databook 2",
+                    "table": "table 2",
+                    "mode": 'DATA',
+                    "labels": {
+                        "Pc": "Pc",
+                        "Tc": "Tc",
+                        "AcFa": "AcFa"
+                    }
+                }
+            }
+        }
+        ```
         """
         try:
             # SECTION: standardize the reference content and config

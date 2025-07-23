@@ -4,6 +4,19 @@ import yaml
 from typing import Dict, List
 # local
 from ..config import app_settings
+from ..errors import (
+    FileNotFoundError,
+    InvalidFileFormatError,
+    LoadingYmlError,
+    LoadingReferenceError,
+    ListingReferenceError,
+    LOADER_ERROR_MSG,
+    FILE_NOT_FOUND_ERROR_MSG,
+    INVALID_FILE_FORMAT_ERROR_MSG,
+    LOADING_YML_ERROR_MSG,
+    LOADING_REFERENCE_ERROR_MSG,
+    LISTING_REFERENCE_ERROR_MSG
+)
 
 
 class Loader:
@@ -43,7 +56,8 @@ class Loader:
 
             # target file format
             if not target_file.endswith('.yml'):
-                raise ValueError("The target_file must be a .yml file.")
+                raise InvalidFileFormatError(
+                    "The target_file must be a .yml file.")
 
             # NOTE: get the current folder and parent folder
             # current folder relative
@@ -61,9 +75,14 @@ class Loader:
                 with open(yml_file, 'r') as f:
                     return yaml.load(f, Loader=yaml.FullLoader)
             else:
-                raise Exception('Reference file not found!')
+                raise FileNotFoundError(FILE_NOT_FOUND_ERROR_MSG)
+        except FileNotFoundError as e:
+            raise FileNotFoundError(f"{FILE_NOT_FOUND_ERROR_MSG} {e}")
+        except InvalidFileFormatError as e:
+            raise InvalidFileFormatError(
+                f"{INVALID_FILE_FORMAT_ERROR_MSG} {e}")
         except Exception as e:
-            raise Exception('Loading yml failed! ', e)
+            raise LoadingYmlError(f"{LOADING_YML_ERROR_MSG} {e}")
 
     def load_yml_references(
         self,
@@ -90,8 +109,10 @@ class Loader:
 
             # NOTE: get the references
             return ref['REFERENCES']
+        except LoadingYmlError as e:
+            raise LoadingYmlError(f"{LOADING_YML_ERROR_MSG} {e}")
         except Exception as e:
-            raise Exception('Loading reference failed! ', e)
+            raise LoadingReferenceError(f"{LOADING_REFERENCE_ERROR_MSG} {e}")
 
     def list_yml_references(
         self,
@@ -127,7 +148,7 @@ class Loader:
 
             return yml_files
         except Exception as e:
-            raise Exception('Listing yml references failed! ', e) from e
+            raise ListingReferenceError(f"{LISTING_REFERENCE_ERROR_MSG} {e}")
 
     def load_all_yml_references(
         self,
@@ -158,5 +179,7 @@ class Loader:
                         f, Loader=yaml.FullLoader)
 
             return references
+        except ListingReferenceError as e:
+            raise ListingReferenceError(f"{LISTING_REFERENCE_ERROR_MSG} {e}")
         except Exception as e:
-            raise Exception('Loading all yml references failed! ', e) from e
+            raise LoadingReferenceError(f"{LOADING_REFERENCE_ERROR_MSG} {e}")
