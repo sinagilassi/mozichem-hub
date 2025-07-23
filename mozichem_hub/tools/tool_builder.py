@@ -19,17 +19,17 @@ class ToolBuilder():
         # set
         self._settings = app_settings
 
-    def build_mozi_tools(
+    def build_tools_from_mozi_tools(
         self,
         mozi_tools: List[MoziTool]
     ) -> List[Tool]:
         """
-        Build the MCP tools from local resources.
+        Build the MCP tools from local resources (MoziTool).
 
         Parameters
         ----------
-        functions : Dict[str, Callable]
-            Dictionary of functions to be included in the tools.
+        mozi_tools : List[MoziTool]
+            List of MoziTool instances to be converted to Tool instances.
 
         Returns
         -------

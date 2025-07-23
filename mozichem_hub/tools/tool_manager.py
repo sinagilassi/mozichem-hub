@@ -133,7 +133,7 @@ class ToolManager(ToolBuilder):
 
             # NOTE: Build local tools
             # ! convert MoziTool to FastMCP Tool
-            local_tools = self.build_mozi_tools(_functions)
+            local_tools = self.build_tools_from_mozi_tools(_functions)
 
             # return the tools
             return local_tools
@@ -181,7 +181,7 @@ class ToolManager(ToolBuilder):
                         f"Function '{mcp_name}' not found in local resources.")
 
                 # NOTE: Build local tools
-                local_tools = self.build_mozi_tools(_function)
+                local_tools = self.build_tools_from_mozi_tools(_function)
 
             # SECTION: Build external tools
             external_tools = []  # Ensure external_tools is always initialized
