@@ -1,7 +1,9 @@
 pydantic
 pydantic-settings
+fastapi
 fastmcp
 PyYAML
 PyThermoDB
 PyThermoLinkDB
 PyThermoModels
+PyThermoFlash
