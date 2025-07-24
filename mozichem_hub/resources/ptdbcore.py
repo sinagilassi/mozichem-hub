@@ -12,12 +12,8 @@ import pyThermoDB as ptdb
 from ..models import (
     Component,
 )
-from .utils import (
-    set_feed_specification,
-    get_components_formulas,
-    get_components_names,
-)
 from .hub import Hub
+from .utils import convert_str_numeric_to_int
 
 
 class PTDBCore:
@@ -67,6 +63,10 @@ class PTDBCore:
     ):
         """Get information about a specific databook."""
         try:
+            # NOTE: input conversion
+            # ! check if databook is a string or integer
+            databook = convert_str_numeric_to_int(databook)
+
             # SECTION: get databook information
             return str(self.tdb.databook_info(databook, res_format='json'))
         except Exception as e:
@@ -90,6 +90,11 @@ class PTDBCore:
     ) -> str:
         """Verify if a component is available in the PTDB database for a specific databook and table."""
         try:
+            # NOTE: input conversion
+            # ! check if databook is a string or integer
+            databook = convert_str_numeric_to_int(databook)
+            table = convert_str_numeric_to_int(table)
+
             # NOTE: extract component name
             component_name, _, _ = (
                 component.name, component.formula, component.state)
@@ -154,6 +159,10 @@ class PTDBCore:
     ):
         """Get the list of all tables in a specific databook."""
         try:
+            # NOTE: input conversion
+            # ! check if databook is a string or integer
+            databook = convert_str_numeric_to_int(databook)
+
             # SECTION: get tables
             return str(self.tdb.list_tables(databook, res_format='json'))
         except Exception as e:
@@ -176,6 +185,11 @@ class PTDBCore:
         Moreover, it returns the number of each type of data in the table.
         """
         try:
+            # NOTE: input conversion
+            # ! check if databook is a string or integer
+            databook = convert_str_numeric_to_int(databook)
+            table = convert_str_numeric_to_int(table)
+
             # SECTION: get table information
             return str(self.tdb.table_info(databook, table, res_format='json'))
         except Exception as e:
@@ -195,6 +209,11 @@ class PTDBCore:
     ):
         """Get the structure of a specific table in a databook."""
         try:
+            # NOTE: input conversion
+            # ! check if databook is a string or integer
+            databook = convert_str_numeric_to_int(databook)
+            table = convert_str_numeric_to_int(table)
+
             # SECTION: get table structure
             return str(self.tdb.select_table(databook, table))
         except Exception as e:
@@ -214,6 +233,11 @@ class PTDBCore:
     ):
         """Get the data of a specific table in a databook."""
         try:
+            # NOTE: input conversion
+            # ! check if databook is a string or integer
+            databook = convert_str_numeric_to_int(databook)
+            table = convert_str_numeric_to_int(table)
+
             # SECTION: get table data
             return str(self.tdb.table_data(databook, table, res_format='json'))
         except Exception as e:
@@ -248,6 +272,10 @@ class PTDBCore:
     ) -> str:
         """Get the ID of a specific table in a databook."""
         try:
+            # NOTE: input conversion
+            # ! check if databook is a string or integer
+            databook = convert_str_numeric_to_int(databook)
+
             # SECTION: get table ID
             return str(self.tdb.get_table_id(
                 databook,
@@ -272,6 +300,10 @@ class PTDBCore:
     ) -> str:
         """Get the description of a specific table in a databook."""
         try:
+            # NOTE: input conversion
+            # ! check if databook is a string or integer
+            databook = convert_str_numeric_to_int(databook)
+
             # SECTION: get table description
             return str(self.tdb.table_description(
                 databook,
@@ -296,6 +328,10 @@ class PTDBCore:
     ) -> str:
         """Get the equation structure of a specific table in a databook."""
         try:
+            # NOTE: input conversion
+            # ! check if databook is a string or integer
+            databook = convert_str_numeric_to_int(databook)
+
             # SECTION: get equation structure
             eq_ = self.tdb.equation_load(
                 databook,

@@ -29,6 +29,6 @@ my_mcp = create_mozichem_mcp(name="thermodynamic-properties-mcp")
 
 if __name__ == "__main__":
     # run the MCP server
-    my_mcp.run(transport='stdio')
+    # my_mcp.run(transport='stdio')
     # http transport
-    # my_mcp.run(transport='streamable-http')
+    my_mcp.run(transport='streamable-http')

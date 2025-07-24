@@ -13,7 +13,7 @@ from ..config import (
 
 def print_ascii_art(
     info: Optional[List[str]] = None,
-    use_panel: bool = True
+    use_panel: bool = False
 ):
     """
     Print the ASCII art with a cat face.
@@ -33,12 +33,12 @@ def print_ascii_art(
     # Frame it with a Panel
     if use_panel:
         panel_ascii = Panel(
-            Text(ascii_lines, style="white"),
+            Text(ascii_lines, style="blue"),
             title="MoziChemHub MCP Server",
-            border_style="blue",
+            border_style="white",
             expand=False
         )
         console.print(panel_ascii)
     else:
         # Print without panel
-        console.print(Text(ascii_lines, style="white"))
+        console.print(Text(ascii_lines, style="blue"))
