@@ -54,25 +54,21 @@ MCP_MODULES = [
         'prompts': [],
         'tools': [
             {
-                'name': 'calc_bubble_pressure',
-                'description': 'Calculates the bubble pressure of a mixture at a given temperature using specified equilibrium model.'
+                'name': 'calc_bubble_pressure_ideal_vapor_ideal_liquid',
+                'description': 'Calculates the bubble pressure of a mixture at a given temperature using raoult`s law (ideal vapor and ideal liquid).'
             },
-            # {
-            #     'name': 'calc_dew_pressure',
-            #     'description': 'Calculates the dew pressure of a mixture at a given temperature using specified equilibrium model.'
-            # },
-            # {
-            #     'name': 'calc_bubble_temperature',
-            #     'description': 'Calculates the bubble temperature of a mixture at a given pressure using specified equilibrium model.'
-            # },
-            # {
-            #     'name': 'calc_dew_temperature',
-            #     'description': 'Calculates the dew temperature of a mixture at a given pressure using specified equilibrium model.'
-            # },
-            # {
-            #     'name': 'flash_calculation',
-            #     'description': 'Performs flash calculations for a mixture at given temperature and pressure.'
-            # }
+            {
+                'name': 'calc_dew_pressure_ideal_vapor_ideal_liquid',
+                'description': 'Calculates the dew pressure of a mixture at a given temperature using raoult`s law (ideal vapor and ideal liquid).'
+            },
+            {
+                'name': 'calc_bubble_temperature_ideal_vapor_ideal_liquid',
+                'description': 'Calculates the bubble temperature of a mixture at a given pressure using raoult`s law (ideal vapor and ideal liquid).'
+            },
+            {
+                'name': 'calc_dew_temperature_ideal_vapor_ideal_liquid',
+                'description': 'Calculates the dew temperature of a mixture at a given pressure using raoult`s law (ideal vapor and ideal liquid).'
+            },
         ],
     },
     {

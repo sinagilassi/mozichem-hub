@@ -103,6 +103,44 @@ from .api_exceptions import (
     MCP_ADDITION_ERROR_MSG
 )
 
+from .ptf_exceptions import (
+    PTFError,
+    PTFCalculationError,
+    PTFInitializationError,
+    PTFModelSourceError,
+    PTFComponentError,
+    PTFFeedSpecificationError,
+    PTFSolverError,
+    PTF_CALCULATION_ERROR_MSG,
+    PTF_INITIALIZATION_ERROR_MSG,
+    PTF_MODEL_SOURCE_ERROR_MSG,
+    PTF_COMPONENT_ERROR_MSG,
+    PTF_FEED_SPECIFICATION_ERROR_MSG,
+    PTF_SOLVER_ERROR_MSG
+)
+
+from .ptm_exceptions import (
+    PTMError,
+    PTMCalculationError,
+    PTMInitializationError,
+    PTMModelSourceError,
+    PTMComponentError,
+    PTMFeedSpecificationError,
+    PTMSolverError,
+    PTMReferenceError,
+    PTMFugacityError,
+    PTMRootsAnalysisError,
+    PTM_CALCULATION_ERROR_MSG,
+    PTM_INITIALIZATION_ERROR_MSG,
+    PTM_MODEL_SOURCE_ERROR_MSG,
+    PTM_COMPONENT_ERROR_MSG,
+    PTM_FEED_SPECIFICATION_ERROR_MSG,
+    PTM_SOLVER_ERROR_MSG,
+    PTM_REFERENCE_ERROR_MSG,
+    PTM_FUGACITY_ERROR_MSG,
+    PTM_ROOTS_ANALYSIS_ERROR_MSG
+)
+
 __all__ = [
     # Reference exceptions
     "NoDatabookFoundError",
@@ -202,4 +240,40 @@ __all__ = [
     "INVALID_MCP_TYPE_ERROR_MSG",
     "INVALID_MCP_LIST_ITEM_ERROR_MSG",
     "MCP_ADDITION_ERROR_MSG",
+
+    # PTF exceptions
+    "PTFError",
+    "PTFCalculationError",
+    "PTFInitializationError",
+    "PTFModelSourceError",
+    "PTFComponentError",
+    "PTFFeedSpecificationError",
+    "PTFSolverError",
+    "PTF_CALCULATION_ERROR_MSG",
+    "PTF_INITIALIZATION_ERROR_MSG",
+    "PTF_MODEL_SOURCE_ERROR_MSG",
+    "PTF_COMPONENT_ERROR_MSG",
+    "PTF_FEED_SPECIFICATION_ERROR_MSG",
+    "PTF_SOLVER_ERROR_MSG",
+
+    # PTM exceptions
+    "PTMError",
+    "PTMCalculationError",
+    "PTMInitializationError",
+    "PTMModelSourceError",
+    "PTMComponentError",
+    "PTMFeedSpecificationError",
+    "PTMSolverError",
+    "PTMReferenceError",
+    "PTMFugacityError",
+    "PTMRootsAnalysisError",
+    "PTM_CALCULATION_ERROR_MSG",
+    "PTM_INITIALIZATION_ERROR_MSG",
+    "PTM_MODEL_SOURCE_ERROR_MSG",
+    "PTM_COMPONENT_ERROR_MSG",
+    "PTM_FEED_SPECIFICATION_ERROR_MSG",
+    "PTM_SOLVER_ERROR_MSG",
+    "PTM_REFERENCE_ERROR_MSG",
+    "PTM_FUGACITY_ERROR_MSG",
+    "PTM_ROOTS_ANALYSIS_ERROR_MSG",
 ]

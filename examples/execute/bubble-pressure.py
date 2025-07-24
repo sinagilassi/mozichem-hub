@@ -32,7 +32,7 @@ tools_ = tool_executer.get_tools()
 print(f"All tools: {tools_}")
 
 # select a tool to execute
-tool_name = "calc_bubble_pressure"
+tool_name = "calc_bubble_pressure_ideal_vapor_ideal_liquid"
 
 # NOTE: arguments for the tool
 # temperature

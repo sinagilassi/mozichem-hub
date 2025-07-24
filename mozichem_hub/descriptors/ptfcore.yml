@@ -3,22 +3,69 @@ REFERENCES:
     This MCP server provides tools for computing vapor-liquid equilibrium (VLE) calculations using the Raoult's law and modified Raoult's law models.
 
     🔧 Available Tools:
-    • `calc_bubble_pressure`
-      → Calculates the bubble pressure of a liquid mixture at a specified temperature using Raoult's law or modified Raoult's law.
-  TOOL1:
-    NAME: calc_bubble_pressure
+    • `calc_bubble_pressure_ideal_vapor_ideal_liquid`
+      → Calculates the bubble pressure of a liquid mixture at a specified temperature using Raoult's law for ideal vapor and ideal liquid.
+  calc_bubble_pressure_ideal_vapor_ideal_liquid:
+    NAME: calc_bubble_pressure_ideal_vapor_ideal_liquid
     DESCRIPTION: The Bubble-Pressure (BP) calculation determines the pressure at which the first bubble of vapor forms when a liquid mixture is heated at a constant temperature. It is used to find the pressure for a given temperature at which the liquid will begin to vaporize.
     ARGS:
-      - name: temperature
-        type: Temperature
-        description: "Temperature at which the bubble pressure is calculated."
       - name: components
         type: Components
         description: "Chemical components for which the fugacity is calculated."
-      - name: equilibrium_model
-        type: str
-        description: "Equilibrium model to use for the calculation. Options are 'raoult' for Raoult's law and 'modified_raoult' for modified Raoult's law."
+      - name: temperature
+        type: Temperature
+        description: "Temperature at which the bubble pressure is calculated."
     TAGS:
       - thermodynamics
       - vapor-liquid equilibrium
       - bubble pressure
+      - ideal vapor and ideal liquid
+      - raoult's law
+  calc_dew_pressure_ideal_vapor_ideal_liquid:
+    NAME: calc_dew_pressure_ideal_vapor_ideal_liquid
+    DESCRIPTION: The Dew-Pressure (DP) calculation determines the pressure at which the first drop of liquid condenses from a vapor mixture when cooled at a constant temperature. It is used to find the pressure for a given temperature at which the vapor will begin to condense.
+    ARGS:
+      - name: components
+        type: Components
+        description: "Chemical components for which the fugacity is calculated."
+      - name: temperature
+        type: Temperature
+        description: "Temperature at which the dew pressure is calculated."
+    TAGS:
+      - thermodynamics
+      - vapor-liquid equilibrium
+      - dew pressure
+      - ideal vapor and ideal liquid
+      - raoult's law
+  calc_bubble_temperature_ideal_vapor_ideal_liquid:
+    NAME: calc_bubble_temperature_ideal_vapor_ideal_liquid
+    DESCRIPTION: The Bubble-Temperature (BT) calculation determines the temperature at which the first bubble of vapor forms when a liquid mixture is heated at a constant pressure. It is used to find the temperature for a given pressure at which the liquid will begin to vaporize.
+    ARGS:
+      - name: components
+        type: Components
+        description: "Chemical components for which the fugacity is calculated."
+      - name: pressure
+        type: Pressure
+        description: "Pressure at which the bubble temperature is calculated."
+    TAGS:
+      - thermodynamics
+      - vapor-liquid equilibrium
+      - bubble temperature
+      - ideal vapor and ideal liquid
+      - raoult's law
+  calc_dew_temperature_ideal_vapor_ideal_liquid:
+    NAME: calc_dew_temperature_ideal_vapor_ideal_liquid
+    DESCRIPTION: The Dew-Temperature (DT) calculation determines the temperature at which the first drop of liquid condenses from a vapor mixture when cooled at a constant pressure. It is used to find the temperature for a given pressure at which the vapor will begin to condense.
+    ARGS:
+      - name: components
+        type: Components
+        description: "Chemical components for which the fugacity is calculated."
+      - name: pressure
+        type: Pressure
+        description: "Pressure at which the dew temperature is calculated."
+    TAGS:
+      - thermodynamics
+      - vapor-liquid equilibrium
+      - dew temperature
+      - raoult's law
+
