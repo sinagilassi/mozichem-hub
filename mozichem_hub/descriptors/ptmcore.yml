@@ -3,6 +3,9 @@ REFERENCES:
     This MCP server provides tools for computing thermodynamic fugacity using a variety of equations of state (EOS). It supports both component-level and mixture-level calculations in gas and liquid phases.
 
     🔧 Available Tools:
+    • `get_method_reference_inputs`
+      → Retrieves the reference inputs required for a specific method, including data and equations.
+
     • `calc_gas_component_fugacity`
       → Calculates the fugacity of a gas-phase component at a given temperature and pressure.
 
@@ -12,6 +15,12 @@ REFERENCES:
     • `calc_fugacity_gas_mixture`
       → Computes the fugacity of a gas-phase mixture of components under specified conditions.
 
+    • `component_eos_roots_analysis`
+      → Analyzes the roots of the EOS for a single component at specified temperature and pressure
+
+    • `multi_component_eos_roots_analysis`
+      → Analyzes the roots of the EOS for a mixture of components at specified temperature and pressure.
+
     📦 Backend:
     • Powered by the `PyThermoModels` package.
     • Implements the `MCP_PTMCore` class described in `ptmcore.yml`.
@@ -20,6 +29,15 @@ REFERENCES:
     • Inputs must include valid temperature, pressure, and composition data.
     • Each tool is independent—call the one appropriate to your task.
     • Results are optimized for process modeling and engineering applications.
+  get_method_reference_inputs:
+    NAME: get_method_reference_inputs
+    DESCRIPTION: "This function retrieves the reference inputs required for a specific method, including data and equations."
+    TAGS:
+      - reference inputs
+    ARGS:
+      - name: method_name
+        type: str
+        description: "Name of the method for which reference inputs are retrieved."
   calc_gas_component_fugacity:
     NAME: calc_gas_component_fugacity
     DESCRIPTION: "This function calculates the fugacity of single-gas component using different equation of states (EOS) including Peng-Robinson (PR), Soave-Redlich-Kwong (SRK), Redlich-Kwong (RK), and van der Waals (vdW)."
@@ -45,25 +63,26 @@ REFERENCES:
         type: str
         description: "Solver method for fugacity calculation. Options are 'ls' for least-square method, 'fsolve' for fsolve, and 'root' for root."
       - name: custom_reference_content
-        type: Optional[str]
+        type: str
         description: "Custom reference content provided by PyThermoDB, this consists of data and equations for all components."
       - name: custom_reference_config
-        type: Optional[str]
+        type: str
         description: "Custom reference configuration provided by PyThermoDB, this consists of the reference for data and equations for each component."
-    DATA:
-      - name: critical-temperature
-        symbol: Tc
-        description: "Critical temperature of the component."
-      - name: critical-pressure
-        symbol: Pc
-        description: "Critical pressure of the component."
-      - name: acentric-factor
-        symbol: AcFa
-        description: "Acentric factor of the component."
-    EQUATIONS:
-      - name: vapor-pressure
-        symbol: VaPr
-        description: "Vapor pressure equation for the component."
+    REFERENCE_INPUTS:
+      DATA:
+        - name: critical-temperature
+          symbol: Tc
+          description: "Critical temperature of the component."
+        - name: critical-pressure
+          symbol: Pc
+          description: "Critical pressure of the component."
+        - name: acentric-factor
+          symbol: AcFa
+          description: "Acentric factor of the component."
+      EQUATIONS:
+        - name: vapor-pressure
+          symbol: VaPr
+          description: "Vapor pressure equation for the component."
     CONFIG:
       vapor-pressure:
         label: VaPr

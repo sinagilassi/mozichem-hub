@@ -16,6 +16,10 @@ MCP_MODULES = [
         'prompts': [],
         'tools': [
             {
+                'name': 'get_method_reference_inputs',
+                'description': 'Retrieves the reference inputs required for a specific method, including data and equations.'
+            },
+            {
                 'name': 'calc_gas_component_fugacity',
                 'description': 'Calculates the fugacity of a gas-phase component at given temperature and pressure.',
             },

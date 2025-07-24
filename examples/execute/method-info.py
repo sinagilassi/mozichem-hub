@@ -1,13 +1,14 @@
 # import libs
 from mozichem_hub import (
-    __version__
+    __version__,
 )
+from mozichem_hub.executors import ToolExecuter
+from mozichem_hub.models import Temperature, Pressure, Component
 from mozichem_hub.prebuilt import (
     create_mozichem_mcp,
     get_mozichem_mcp
 )
-from mozichem_hub.executors import ToolExecuter
-from mozichem_hub.models import Temperature, Pressure, Component
+from mozichem_hub.models import Reference
 # log
 from rich import print
 
@@ -32,44 +33,21 @@ tools_ = tool_executer.get_tools()
 print(f"All tools in 'eos-models-mcp': {tools_}")
 
 # select a tool to execute
-tool_name = "calc_fugacity_gas_mixture"
+tool_name = "get_method_reference_inputs"
 
 # arguments for the tool
-temperature = Temperature(
-    value=298.15,
-    unit="K"
-)
+# method name
+method_name = "calc_gas_component_fugacity"
 
-pressure = Pressure(
-    value=10,
-    unit="bar"
-)
 
-# methane
-component_1 = Component(
-    name="methane",
-    formula="CH4",
-    state="g",
-    mole_fraction=0.35
-)
-# ethane
-component_2 = Component(
-    name="ethane",
-    formula="C2H6",
-    state="g",
-    mole_fraction=0.65
-)
+# NOTE: prompt for the tool
+prompt = f"""Execute the tool '{tool_name}' with method '{method_name}'.
+This tool retrieves the reference configuration for the specified method."""
 
-components = [component_1, component_2]
-
-eos_model = "SRK"
 
 # SECTION: Execute the tool
 result = tool_executer.execute_tool(
     tool_name=tool_name,
-    components=components,
-    temperature=temperature,
-    pressure=pressure,
-    eos_model=eos_model
+    method_name=method_name
 )
 print(f"Result of '{tool_name}': {result}")

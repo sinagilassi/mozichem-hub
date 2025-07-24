@@ -246,3 +246,55 @@ class MCPDescriptor:
             return reference_config
         except Exception as e:
             raise ValueError(f"Failed to load MCP method config: {e}") from e
+
+    @staticmethod
+    def mcp_method_reference_inputs(
+        mcp_id: str,
+        method_name: str
+    ):
+        """
+        Get all reference inputs for a specific mcp method.
+
+        Parameters
+        ----------
+        mcp_id : str
+            The id of the mcp to get the method for.
+        method_name : str
+            The name of the method to get the reference link for.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the method data and equations.
+        """
+        try:
+            # NOTE: find mcp name
+            mcp_name = next(
+                (
+                    module['name'] for module in MCP_MODULES
+                    if module['id'] == mcp_id
+                ),
+                None
+            )
+
+            # check if mcp name exists
+            if not mcp_name:
+                raise ValueError(f"MCP with id '{mcp_id}' not found.")
+
+            # NOTE: load the mcp descriptor
+            mcp_descriptor = MCPDescriptor().mcp_descriptor(mcp_name)
+
+            # NOTE: check if method exists
+            if method_name not in mcp_descriptor:
+                raise ValueError(
+                    f"Method '{method_name}' not found in MCP '{mcp_name}'."
+                )
+
+            # NOTE:reference inputs
+            reference_inputs = mcp_descriptor[method_name].get(
+                'REFERENCE_INPUTS', {})
+
+            return reference_inputs
+        except Exception as e:
+            raise ValueError(
+                f"Failed to load MCP method reference link: {e}") from e

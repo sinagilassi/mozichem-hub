@@ -119,6 +119,35 @@ class PTMCore:
         # return config
         return config
 
+    def get_method_reference_inputs(self, method_name: str) -> Dict[str, Any]:
+        """
+        Get the method summary for a specific PTMCore method. It provides which inputs are required for the method. These inputs should be defined in the reference content.
+
+        Parameters
+        ----------
+        method_name : str
+            Name of the method to get summary for.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A dictionary containing the method summary.
+        """
+        # SECTION: get summary
+        reference_inputs = MCPDescriptor.mcp_method_reference_inputs(
+            mcp_id=self.id,
+            method_name=method_name
+        )
+
+        # NOTE: check if summary is empty
+        if not reference_inputs:
+            raise ValueError(
+                f"No summary found for method '{method_name}' in PTMCore."
+            )
+
+        # return summary
+        return reference_inputs
+
     def calc_gas_component_fugacity(
         self,
         component: Annotated[
