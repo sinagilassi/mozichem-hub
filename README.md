@@ -1,5 +1,10 @@
 # 🧪 MoziChem-Hub
 
+![Downloads](https://img.shields.io/pypi/dm/mozichem-hub)
+![PyPI Version](https://img.shields.io/pypi/v/mozichem-hub)
+![Supported Python Versions](https://img.shields.io/pypi/pyversions/mozichem-hub.svg)
+![License](https://img.shields.io/pypi/l/mozichem-hub)
+
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Framework-green?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![MCP](https://img.shields.io/badge/Model_Context_Protocol-Compatible-orange)](https://modelcontextprotocol.io)
