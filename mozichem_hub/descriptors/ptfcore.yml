@@ -14,6 +14,9 @@ REFERENCES:
 
     • `calc_dew_temperature_ideal_vapor_ideal_liquid`
       → Calculates the dew temperature of a vapor mixture at a specified pressure using Raoult's law for ideal vapor and ideal liquid.
+
+    • `calc_flash_isothermal_ideal_vapor_ideal_liquid`
+      → Calculates the flash calculation for a liquid mixture at a specified temperature, determining the vapor and liquid phase compositions using Raoult's law for ideal vapor and ideal liquid.
   calc_bubble_pressure_ideal_vapor_ideal_liquid:
     NAME: calc_bubble_pressure_ideal_vapor_ideal_liquid
     DESCRIPTION: The Bubble-Pressure (BP) calculation determines the pressure at which the first bubble of vapor forms when a liquid mixture is heated at a constant temperature. It is used to find the pressure for a given temperature at which the liquid will begin to vaporize.
@@ -78,3 +81,22 @@ REFERENCES:
       - dew temperature
       - ideal vapor and ideal liquid
       - raoult's law
+  calc_flash_isothermal_ideal_vapor_ideal_liquid:
+    NAME: calc_flash_isothermal_ideal_vapor_ideal_liquid
+    DESCRIPTION: The Flash Isothermal (FI) calculation determines the phase equilibrium of a liquid mixture at a constant temperature, calculating the vapor and liquid phase compositions. It is used to find the equilibrium state of a mixture at a specified temperature.
+    ARGS:
+      - name: components
+        type: Components
+        description: "Chemical components for which the fugacity is calculated."
+      - name: temperature
+        type: Temperature
+        description: "Temperature at which the flash calculation is performed."
+      - name: pressure
+        type: Pressure
+        description: "Pressure at which the flash calculation is performed."
+    TAGS:
+      - thermodynamics
+      - vapor-liquid equilibrium
+      - flash calculation
+      - isothermal
+      - ideal vapor and ideal liquid

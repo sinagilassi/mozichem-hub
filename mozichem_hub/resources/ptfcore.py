@@ -492,3 +492,107 @@ class PTFCore:
             raise PTFCalculationError(
                 f"Unexpected error in dew temperature calculation: {e}"
             ) from e
+
+    def calc_flash_isothermal_ideal_vapor_ideal_liquid(
+        self,
+        components: Annotated[
+            List[Component],
+            Field(..., description="List of components with their properties")
+        ],
+        temperature: Annotated[
+            Temperature,
+            Field(..., description="Temperature of the system")
+        ],
+        pressure: Annotated[
+            Pressure,
+            Field(..., description="Pressure of the system")
+        ]
+    ) -> str:
+        """Calculates the flash calculation for a liquid mixture at a specified temperature, determining the vapor and liquid phase compositions using Raoult's law for ideal vapor and ideal liquid."""
+        logger.info(
+            f"Starting flash calculation for {len(components)} components at {temperature.value} {temperature.unit} and {pressure.value} {pressure.unit}"
+        )
+
+        try:
+            # SECTION: components id
+            # NOTE: formulas
+            component_formulas = get_components_formulas(components)
+            logger.debug(f"Component formulas: {component_formulas}")
+
+            # SECTION: build model source
+            try:
+                model_source = self.hub.build_components_model_source(
+                    components=components
+                )
+                logger.debug("Model source built successfully")
+            except Exception as e:
+                logger.error(f"Failed to build model source: {e}")
+                raise PTFModelSourceError(
+                    f"Failed to build model source: {e}") from e
+
+            # SECTION: constants
+            # NOTE: equilibrium model
+            equilibrium_model = 'raoult'
+
+            # SECTION: initialize ptf
+            # NOTE: set components mode: 'formula' or 'name'
+            # ! formula
+            try:
+                vle = ptf.vle(
+                    components=component_formulas,
+                    model_source=model_source
+                )
+                logger.debug("PTF VLE initialized successfully")
+            except Exception as e:
+                logger.error(f"Failed to initialize PTF VLE: {e}")
+                raise PTFInitializationError(
+                    f"Failed to initialize PTF VLE: {e}") from e
+
+            # SECTION: set feed specification
+            # NOTE: set feed mode: 'formula' or 'name'
+            # ! formula
+            try:
+                N0s = set_feed_specification(
+                    components=components,
+                    feed_mode="formula"  # or 'name'
+                )
+                logger.debug(f"Feed specification set: {N0s}")
+            except Exception as e:
+                logger.error(f"Failed to set feed specification: {e}")
+                raise PTFFeedSpecificationError(
+                    f"Failed to set feed specification: {e}") from e
+            # SECTION: model input
+            model_inputs = {
+                "mole_fraction": N0s,
+                "temperature": [temperature.value, temperature.unit],
+                "pressure": [pressure.value, pressure.unit]
+            }
+
+            logger.debug(f"Model inputs: {model_inputs}")
+            # SECTION: calc
+            try:
+                res = vle.flash_isothermal(
+                    inputs=model_inputs,
+                    equilibrium_model=equilibrium_model
+                )
+                logger.info("Flash calculation completed successfully")
+                logger.debug(f"Result: {res}")
+            except Exception as e:
+                logger.error(f"PTF flash calculation failed: {e}")
+                raise PTFCalculationError(
+                    f"PTF flash calculation failed: {e}") from e
+            # return
+            return str(res)
+        except (
+            PTFModelSourceError,
+            PTFInitializationError,
+            PTFFeedSpecificationError,
+            PTFCalculationError
+        ):
+            # Re-raise custom exceptions
+            raise
+        except Exception as e:
+            logger.error(f"Unexpected error in flash calculation: {e}")
+            raise PTFCalculationError(
+                f"Unexpected error in flash calculation: {e}"
+            ) from e

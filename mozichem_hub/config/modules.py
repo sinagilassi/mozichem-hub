@@ -69,6 +69,10 @@ MCP_MODULES = [
                 'name': 'calc_dew_temperature_ideal_vapor_ideal_liquid',
                 'description': 'Calculates the dew temperature of a mixture at a given pressure using raoult`s law (ideal vapor and ideal liquid).'
             },
+            {
+                'name': 'calc_flash_isothermal_ideal_vapor_ideal_liquid',
+                'description': 'Calculates the flash calculation for a liquid mixture at a specified temperature, determining the vapor and liquid phase compositions using Raoult\'s law for ideal vapor and ideal liquid.'
+            }
         ],
     },
     {
