@@ -1,4 +1,4 @@
-# 🧪 MoziChem-Hub
+# 🐱 MoziChem-Hub
 
 ![Downloads](https://img.shields.io/pypi/dm/mozichem-hub)
 ![PyPI Version](https://img.shields.io/pypi/v/mozichem-hub)
@@ -12,6 +12,8 @@
 
 MoziChem-Hub empowers researchers, engineers, and developers to seamlessly expose core computational chemistry and process modeling tools as MCP servers, making them accessible through standardized APIs and enabling integration with modern AI workflows.
 
+**Important:** MoziChem-Hub is built on top of **[FastMCP](https://github.com/jlowin/fastmcp)**, a powerful Python package that provides the core MCP (Model Context Protocol) functionality. FastMCP enables the seamless creation and deployment of MCP servers, making it the foundation that powers all MoziChem-Hub modules.
+
 *Please note: This is the initial version of the application, and we're continuously working to add new MCP modules in future releases.*
 
 ## ✨ What You Can Do
@@ -22,28 +24,28 @@ MoziChem-Hub empowers researchers, engineers, and developers to seamlessly expos
 
 🌐 **Integrate universally** with any client ecosystem—cloud platforms, VS Code, custom GUIs, and more
 
-## 🎯 Key Features
+## 🎯 Available MCP Modules
 
-### 🧮 **EOS Models MCP**
+### 🧮 **eos-models-mcp**
 
 Advanced thermodynamic property calculations using state-of-the-art equations of state (EOS) models:
 
-- 💨 **Gas & liquid phase fugacity** calculations
+- 💨 **Gas & liquid phase fugacity** calculations (gas, liquid, mixture)
 - 🔄 **Mixture fugacity** analysis
 - 📊 **EOS roots analysis** for components and mixtures
 
 *Backed by: **PyThermoModels***
 
-### ⚗️ **Flash Calculations MCP**
+### ⚗️ **flash-calculations-mcp**
 
 Comprehensive flash calculation suite supporting both ideal and non-ideal thermodynamic models:
 
 - 🌡️ **Bubble & dew point** calculations
-- ⚖️ **Flash equilibrium** computations
+- ⚖️ **Flash equilibrium** computations and advanced flash calculations
 
 *Backed by: **PyThermoFlash***
 
-### 📚 **Thermodynamic Properties MCP**
+### 📚 **thermodynamic-properties-mcp**
 
 Robust database integration for reliable thermodynamic data management:
 
@@ -51,23 +53,6 @@ Robust database integration for reliable thermodynamic data management:
 - ✅ **Data availability verification** and validation
 
 *Backed by: **PyThermoDB***
-
-## 📦 Available MCP Modules
-
-### 🧮 **eos-models-mcp**
-
-- ⚡ Fugacity calculations (gas, liquid, mixture)
-- 🔍 EOS roots analysis (component and mixture)
-
-### ⚗️ **flash-calculations-mcp**
-
-- 🌡️ Bubble and dew point calculations
-- ⚖️ Advanced flash calculations
-
-### 📚 **thermodynamic-properties-mcp**
-
-- 🔍 Database property lookups
-- ✅ Availability verification
 
 *Each module provides well-defined APIs optimized for LLMs, AI agents, and modern user interfaces.*
 
@@ -180,6 +165,72 @@ if __name__ == "__main__":
 ```
 
 *📁 See: [`examples/api/create-api.py`](examples/api/create-api.py)*
+
+#### 4. **Creating Custom MCP Tools**
+
+Build your own MCP server with custom functions using the `@app.tool` decorator:
+
+```python
+from mozichem_hub import __version__
+from mozichem_hub.docs import MoziChemMCP
+from rich import print
+
+# Create a custom MCP server
+app = MoziChemMCP(name="custom-tools-mcp")
+
+# Define custom functions with @tool decorator
+@app.tool(name="multiply")
+def multiply(a: int, b: int) -> int:
+    """
+    Multiply two numbers.
+
+    Parameters
+    ----------
+    a : int
+        The first number.
+    b : int
+        The second number.
+
+    Returns
+    -------
+    int
+        The product of the two numbers.
+    """
+    return a * b
+
+@app.tool(name="add")
+def add(a: int, b: int) -> int:
+    """
+    Add two numbers.
+
+    Parameters
+    ----------
+    a : int
+        The first number.
+    b : int
+        The second number.
+
+    Returns
+    -------
+    int
+        The sum of the two numbers.
+    """
+    return a + b
+
+# Run the custom MCP server
+if __name__ == "__main__":
+    app.run(transport="stdio")
+    # Or use HTTP transport: app.run(transport="streamable-http", port=8000)
+```
+
+*📁 See: [`tests/custom_tools.py`](tests/custom_tools.py)*
+
+This approach allows you to:
+
+- 🛠️ **Define any Python function** as an MCP tool using the `@app.tool()` decorator
+- 📝 **Provide detailed documentation** through docstrings that become part of the MCP tool description
+- 🔧 **Use standard Python types** for parameters and return values with automatic validation
+- 🚀 **Deploy instantly** via multiple transport options (stdio, HTTP, etc.)
 
 ### � **Custom References & External Data Integration**
 
