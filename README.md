@@ -1,5 +1,7 @@
 # 🐱 MoziChem-Hub
 
+![MoziChem Logo](static/mozichem-sm.jpg)
+
 ![Downloads](https://img.shields.io/pypi/dm/mozichem-hub)
 ![PyPI Version](https://img.shields.io/pypi/v/mozichem-hub)
 ![Supported Python Versions](https://img.shields.io/pypi/pyversions/mozichem-hub.svg)
@@ -166,8 +168,8 @@ For systems without UV, use direct Python execution:
 {
   "mcpServers": {
     "mozichem-hub": {
-      "command": "/absolute/path/to/mozichem-hub/examples/mcp/eos-models-mcp.py",
-      "args": [],
+      "command": "python",
+      "args": ["/absolute/path/to/mozichem-hub/examples/mcp/eos-models-mcp.py"],
       "env": {
         "PYTHONPATH": "/absolute/path/to/mozichem-hub"
       }
