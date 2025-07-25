@@ -4,7 +4,7 @@
 ![PyPI Version](https://img.shields.io/pypi/v/mozichem-hub)
 ![Supported Python Versions](https://img.shields.io/pypi/pyversions/mozichem-hub.svg)
 ![License](https://img.shields.io/pypi/l/mozichem-hub)
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://python.org)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Framework-green?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![MCP](https://img.shields.io/badge/Model_Context_Protocol-Compatible-orange)](https://modelcontextprotocol.io)
 
@@ -83,7 +83,141 @@ Traditional LLMs and AI agents struggle to deliver **reliable, validated results
 
 *Transform your chemical engineering workflows with the power of modern AI and reliable computational chemistry.*
 
-## 📋 Examples
+## � MCP Client Integration
+
+MoziChem-Hub modules can be seamlessly integrated with MCP-compatible clients like **Claude Desktop**, **VS Code**, and other AI applications that support the Model Context Protocol.
+
+### 🖥️ **Claude Desktop Integration**
+
+To use MoziChem-Hub modules with Claude Desktop, add the server configuration to your Claude configuration file:
+
+**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "mozichem-eos-models": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "C:\\ABSOLUTE\\PATH\\TO\\MOZICHEM-HUB",
+        "run",
+        "python",
+        "-m",
+        "examples.mcp.eos-models-mcp"
+      ]
+    },
+    "mozichem-flash-calc": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "C:\\ABSOLUTE\\PATH\\TO\\MOZICHEM-HUB",
+        "run",
+        "python",
+        "-m",
+        "examples.mcp.flash-calculations-mcp"
+      ]
+    },
+    "mozichem-thermo-db": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "C:\\ABSOLUTE\\PATH\\TO\\MOZICHEM-HUB",
+        "run",
+        "python",
+        "-m",
+        "examples.mcp.thermodynamic-properties-mcp"
+      ]
+    }
+  }
+}
+```
+
+### 🔧 **VS Code MCP Server Settings**
+
+For VS Code integration, configure your MCP servers in the VS Code settings or workspace configuration:
+
+```json
+{
+  "mcpServers": {
+    "mozichem-hub": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/absolute/path/to/mozichem-hub",
+        "run",
+        "python",
+        "examples/mcp/eos-models-mcp.py"
+      ]
+    }
+  }
+}
+```
+
+### ⚙️ **Configuration Options**
+
+#### **Using UV (Recommended)**
+
+The `uv` command provides fast, reliable Python environment management:
+
+- **`--directory`**: Specifies the project directory containing `pyproject.toml`
+- **`run`**: Executes the command in the project's virtual environment
+- **Benefits**: Automatic dependency resolution, faster execution, isolated environment
+
+#### **Alternative: Direct Python**
+
+For systems without UV, use direct Python execution:
+
+```json
+{
+  "mcpServers": {
+    "mozichem-hub": {
+      "command": "python",
+      "args": [
+        "/absolute/path/to/mozichem-hub/examples/mcp/eos-models-mcp.py"
+      ],
+      "env": {
+        "PYTHONPATH": "/absolute/path/to/mozichem-hub"
+      }
+    }
+  }
+}
+```
+
+### 📂 **Path Configuration**
+
+**Important:** Always use **absolute paths** in MCP server configurations:
+
+- ✅ **Windows**: `C:\\Users\\YourName\\Projects\\mozichem-hub`
+- ✅ **macOS/Linux**: `/home/username/projects/mozichem-hub`
+- ❌ **Relative paths**: `./mozichem-hub` or `~/mozichem-hub`
+
+### 🚀 **Available MCP Modules for Client Integration**
+
+### 🚀 Available MCP Modules for Client Integration
+
+- **`eos-models-mcp`**: Thermodynamic property calculations
+  *Script Path*: `examples/mcp/eos-models-mcp.py`
+
+- **`flash-calculations-mcp`**: Flash equilibrium computations
+  *Script Path*: `examples/mcp/flash-calculations-mcp.py`
+
+- **`thermodynamic-properties-mcp`**: Component property database
+  *Script Path*: `examples/mcp/thermodynamic-properties-mcp.py`
+
+### 🔍 **Verification**
+
+After configuration, restart your MCP client. You should see the MoziChem-Hub tools available for:
+
+- 🧮 **Thermodynamic calculations** (fugacity, phase equilibrium)
+- ⚗️ **Flash calculations** (bubble/dew points, flash equilibrium)
+- 📊 **Property lookups** (critical properties, molecular data)
+- 🔬 **EOS model analysis** (equation of state computations)
+
+*💡 **Tip**: Start with a single module first, then add additional modules as needed for your specific workflow.*
+
+## �📋 Examples
 
 MoziChem-Hub provides extensive examples to help you get started quickly. All examples are located in the `examples/` directory and demonstrate different usage patterns:
 
