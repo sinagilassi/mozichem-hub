@@ -103,9 +103,7 @@ To use MoziChem-Hub modules with Claude Desktop, add the server configuration to
         "--directory",
         "C:\\ABSOLUTE\\PATH\\TO\\MOZICHEM-HUB",
         "run",
-        "python",
-        "-m",
-        "examples.mcp.eos-models-mcp"
+        "examples/mcp/eos-models-mcp.py"
       ]
     },
     "mozichem-flash-calc": {
@@ -114,9 +112,7 @@ To use MoziChem-Hub modules with Claude Desktop, add the server configuration to
         "--directory",
         "C:\\ABSOLUTE\\PATH\\TO\\MOZICHEM-HUB",
         "run",
-        "python",
-        "-m",
-        "examples.mcp.flash-calculations-mcp"
+        "examples/mcp/flash-calculations-mcp.py"
       ]
     },
     "mozichem-thermo-db": {
@@ -125,9 +121,7 @@ To use MoziChem-Hub modules with Claude Desktop, add the server configuration to
         "--directory",
         "C:\\ABSOLUTE\\PATH\\TO\\MOZICHEM-HUB",
         "run",
-        "python",
-        "-m",
-        "examples.mcp.thermodynamic-properties-mcp"
+        "examples/mcp/thermodynamic-properties-mcp.py"
       ]
     }
   }
@@ -147,7 +141,6 @@ For VS Code integration, configure your MCP servers in the VS Code settings or w
         "--directory",
         "/absolute/path/to/mozichem-hub",
         "run",
-        "python",
         "examples/mcp/eos-models-mcp.py"
       ]
     }
@@ -173,10 +166,8 @@ For systems without UV, use direct Python execution:
 {
   "mcpServers": {
     "mozichem-hub": {
-      "command": "python",
-      "args": [
-        "/absolute/path/to/mozichem-hub/examples/mcp/eos-models-mcp.py"
-      ],
+      "command": "/absolute/path/to/mozichem-hub/examples/mcp/eos-models-mcp.py",
+      "args": [],
       "env": {
         "PYTHONPATH": "/absolute/path/to/mozichem-hub"
       }
@@ -194,8 +185,6 @@ For systems without UV, use direct Python execution:
 - ❌ **Relative paths**: `./mozichem-hub` or `~/mozichem-hub`
 
 ### 🚀 **Available MCP Modules for Client Integration**
-
-### 🚀 Available MCP Modules for Client Integration
 
 - **`eos-models-mcp`**: Thermodynamic property calculations
   *Script Path*: `examples/mcp/eos-models-mcp.py`
