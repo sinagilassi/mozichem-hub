@@ -81,9 +81,25 @@ Traditional LLMs and AI agents struggle to deliver **reliable, validated results
 
 ✅ **Supporting the next generation** of intelligent, trustworthy engineering applications
 
----
 
 *Transform your chemical engineering workflows with the power of modern AI and reliable computational chemistry.*
+
+## 🗺️ MoziChem-Hub System Architecture
+
+The following diagram illustrates the high-level architecture of MoziChem-Hub and how its components interact:
+
+![MoziChem-Hub Architecture](static/mozichem-plan.jpeg)
+
+**Explanation:**
+
+- **MoziChem-Hub** acts as the central hub, connecting various MCP modules (e.g., EOS models, flash calculations, property databases) and exposing them as standardized APIs.
+- **MCP Modules** (top row) are individual computational tools or servers that implement the Model Context Protocol for specific domains (e.g., thermodynamics, property lookup).
+- **PyThermoDB** provides a robust backend for thermodynamic data, which is accessed by MoziChem-Hub and MCP modules.
+- **Reference** modules manage and validate data from multiple sources, ensuring reliable property lookups and calculations.
+- **Client** applications (bottom right) such as Claude, VS Code, and Claude interact with MoziChem-Hub via MCP APIs, enabling seamless integration into AI workflows, IDEs, and automation tools.
+- **External Data** (bottom left) can be incorporated through the Reference system, allowing for custom datasets and advanced data integration.
+
+This architecture enables flexible, modular, and scalable deployment of chemical engineering tools, making them accessible to both humans and AI agents through modern interfaces.
 
 ## � MCP Client Integration
 
@@ -208,7 +224,7 @@ After configuration, restart your MCP client. You should see the MoziChem-Hub to
 
 *💡 **Tip**: Start with a single module first, then add additional modules as needed for your specific workflow.*
 
-## �📋 Examples
+## 📋 Examples
 
 MoziChem-Hub provides extensive examples to help you get started quickly. All examples are located in the `examples/` directory and demonstrate different usage patterns:
 
