@@ -101,27 +101,27 @@ To use MoziChem-Hub modules with Claude Desktop, add the server configuration to
       "command": "uv",
       "args": [
         "--directory",
-        "C:\\ABSOLUTE\\PATH\\TO\\MOZICHEM-HUB",
+        "C:\\ABSOLUTE\\PATH",
         "run",
-        "examples/mcp/eos-models-mcp.py"
+        "eos-models-mcp.py"
       ]
     },
     "mozichem-flash-calc": {
       "command": "uv",
       "args": [
         "--directory",
-        "C:\\ABSOLUTE\\PATH\\TO\\MOZICHEM-HUB",
+        "C:\\ABSOLUTE\\PATH",
         "run",
-        "examples/mcp/flash-calculations-mcp.py"
+        "flash-calculations-mcp.py"
       ]
     },
     "mozichem-thermo-db": {
       "command": "uv",
       "args": [
         "--directory",
-        "C:\\ABSOLUTE\\PATH\\TO\\MOZICHEM-HUB",
+        "C:\\ABSOLUTE\\PATH",
         "run",
-        "examples/mcp/thermodynamic-properties-mcp.py"
+        "thermodynamic-properties-mcp.py"
       ]
     }
   }
@@ -139,9 +139,9 @@ For VS Code integration, configure your MCP servers in the VS Code settings or w
       "command": "uv",
       "args": [
         "--directory",
-        "/absolute/path/to/mozichem-hub",
+        "/absolute/path/",
         "run",
-        "examples/mcp/eos-models-mcp.py"
+        "eos-models-mcp.py"
       ]
     }
   }
