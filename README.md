@@ -385,6 +385,26 @@ The reference format is fully compatible with **[PyThermoDB](https://github.com/
 
 #### 🛠️ **Adding Custom References**
 
+You can convert your own CSV thermodynamic data (such as vapor pressure, critical constants, etc.) into a custom reference and use it in MoziChem-Hub. The process is as follows:
+
+1. **Prepare your CSV files** with the required columns for each property (e.g., Name, Formula, State, C1, C2, Tmin, Tmax, etc.).
+
+2. **Build a custom databook from CSV:**
+   Use the script [`references/create-reference.py`](references/create-reference.py) to read your CSV files and create a PyThermoDB-compatible databook. This script demonstrates how to:
+   - Add data tables and equation tables from CSV files using `ThermoDatabook`.
+   - Build and save the databook as a YAML file (e.g., `custom-databook.yml`).
+
+3. **Generate and load a custom reference:**
+   Use [`references/load-custom-reference.py`](references/load-custom-reference.py) to:
+   - Load the databook and build a `ThermoReference`.
+   - Save the reference as `custom-references.yml`.
+   - Initialize a thermodynamic database with your custom reference and access properties/equations for components.
+
+4. **Integrate with MoziChem-Hub:**
+   You can now use your custom reference YAML in MoziChem-Hub for calculations and lookups, either by direct use in your scripts or by updating MCP modules as shown in the examples above.
+
+*See the scripts in [`references/`](references/) for a complete, working example of this workflow.*
+
 You can extend any MCP module with custom thermodynamic data using string-based reference definitions:
 
 ```python
