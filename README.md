@@ -16,17 +16,7 @@ MoziChem-Hub empowers researchers, engineers, and developers to seamlessly expos
 
 ## 🆕 New Application Under Active Development
 
-**MoziChem-Hub is a newly launched application** currently in active development with continuous improvements and enhancements being made regularly. As an emerging tool in the computational chemistry ecosystem, we are committed to:
-
-🔧 **Ongoing Improvements**: Regular updates with enhanced functionality, performance optimizations, and expanded capabilities based on user feedback and emerging needs in the field.
-
-🐛 **Bug Fixes & Stability**: Continuous monitoring and rapid resolution of issues to ensure reliable performance across all supported platforms and use cases.
-
-🚀 **Future Roadmap**: Planned integration of additional thermodynamic models, advanced flash calculation methods, expanded database support, and enhanced AI workflow compatibility.
-
-🔄 **Community-Driven Development**: Active incorporation of user suggestions, feature requests, and contributions to build a comprehensive solution that serves the broader chemical engineering community.
-
-**We encourage early adopters** to explore the current capabilities while we continue expanding and refining the platform. Your feedback and contributions help shape the future of MoziChem-Hub!
+**MoziChem-Hub is a newly launched application** currently in active development with continuous improvements and enhancements being made regularly. As an emerging tool in chemical engineering ecosystem.
 
 **Important:** MoziChem-Hub is built on top of **[FastMCP](https://github.com/jlowin/fastmcp)**, a powerful Python package that provides the core MCP (Model Context Protocol) functionality. FastMCP enables the seamless creation and deployment of MCP servers, making it the foundation that powers all MoziChem-Hub modules.
 
