@@ -1,4 +1,4 @@
-# 🐱 MoziChem-Hub
+# MoziChem-Hub
 
 ![MoziChem Logo](static/mozichem-2.png)
 
