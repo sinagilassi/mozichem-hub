@@ -1,5 +1,5 @@
 # SECTION: default reference for the ThermoDB
-REFERENCE_CONTENT_0 = """
+REFERENCE_CONTENT = """
 # REFERENCES
 
 ## CUSTOM-REF-1
@@ -148,45 +148,8 @@ EXTERNAL-REFERENCES:
 - url2
 """
 
-
-# ideal-gas-molar-heat-capacity:
-#                 TABLE-ID: 0
-#                 DESCRIPTION:
-#                     This table provides the heat capacity at constant pressure of ideal gas (Cp_IG) in J/mol.K as a function of temperature (T) in K.
-#                 EQUATIONS:
-#                     - EQ-1:
-#                         BODY:
-#                             - res['heat capacity of ideal gas | Cp_IG | J/mol.K'] = (parms['a0 | a0 | 1'] + parms['a1 | a1 | 1E3']*args['temperature | T | K'] + parms['a2 | a2 | 1E5']*(args['temperature | T | K']**2) + parms['a3 | a3 | 1E8']*(args['temperature | T | K']**3) + parms['a4 | a4 | 1E11']*(args['temperature | T | K']**4))*parms['Universal-Gas-Constant | R | J/mol.K']
-#                         BODY-INTEGRAL:
-#                             None
-#                         BODY-FIRST-DERIVATIVE:
-#                             None
-#                         BODY-SECOND-DERIVATIVE:
-#                             None
-#                 STRUCTURE:
-#                     COLUMNS: [No.,Name,Formula,State,a0,a1,a2,a3,a4,R,Eq]
-#                     SYMBOL: [None,None,None,None,a0,a1,a2,a3,a4,R,Cp_IG]
-#                     UNIT: [None,None,None,None,1,1E3,1E5,1E8,1E11,1,J/mol.K]
-#                 VALUES:
-#                     - [1,'carbon dioxide','CO2','g',3.259,1.356,1.502,-2.374,1.056,8.314,1]
-#                     - [2,'carbon monoxide','CO','g',3.912,-3.913,1.182,-1.302,0.515,8.314,1]
-#                     - [3,'hydrogen','H2','g',2.883,3.681,-0.772,0.692,-0.213,8.314,1]
-#                     - [4,'methanol','CH3OH','g',4.714,-6.986,4.211,-4.443,1.535,8.314,1]
-#                     - [5,'water','H2O','g',4.395,-4.186,1.405,-1.564,0.632,8.314,1]
-#                     - [6,'acetylene','C2H2','g',2.410,10.926,-0.255,-0.790,0.524,8.314,1]
-#                     - [7,'ethanol','C2H6O','l',4.178,4.427,5.660,6.651,2.487,8.314,1]
-#                     - [8,'n-butane','C4H10','g',5.547,5.536,8.057,-10.571,4.134,8.314,1]
-#                     - [9,'methane','CH4','g',4.568,-8.975,3.631,-3.407,1.091,8.314,1]
-#                     - [10,'propane','C3H8','g',3.847,5.131,6.011,-7.893,3.079,8.314,1]
-#                     - [11,'1-butene','C4H8','g',4.389,7.984,6.143,-8.197,3.165,8.314,1]
-#                     - [12,'1,3-Butadiene','C4H6','g',3.607,5.085,8.253,-12.371,5.321,8.314,1]
-#                     - [13,'ethylene','C2H4','g',4.221,-8.782,5.795,-6.729,2.511,8.314,1]
-#                     - [14,'benzene','C6H6','l',3.551,-6.184,14.365,-19.807,8.234,8.314,1]
-#                     - [15,'nitrogen','N2','g',3.539,-0.261,0.007,0.157,-0.099,8.314,1]
-#                     - [16,'ethane','C2H6','g',4.178,-4.427,5.660,-6.651,2.487,8.314,1]
-
 # SECTION: custom reference content
-REFERENCE_CONTENT = """
+REFERENCE_CONTENT_0 = """
 REFERENCES:
     CUSTOM-REF-1:
         DATABOOK-ID: 1

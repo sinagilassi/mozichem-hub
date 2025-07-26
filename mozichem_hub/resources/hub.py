@@ -111,7 +111,9 @@ class Hub:
         try:
             # SECTION: get the reference configuration for the component
             component_reference_config = self.reference_config.get(
-                component_id, None)
+                component_id,
+                None
+            )
 
             # NOTE: if not found, get ALL
             if component_reference_config is None:
@@ -120,7 +122,9 @@ class Hub:
                     "using ALL config"
                 )
                 component_reference_config = self.reference_config.get(
-                    'ALL', None)
+                    'ALL',
+                    None
+                )
 
                 # check if ALL is also not found
                 if component_reference_config is None:
