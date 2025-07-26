@@ -11,3 +11,5 @@ include requirements.txt
 
 # Include YAML descriptor files for the package
 recursive-include mozichem_hub/descriptors *.yml
+recursive-include mozichem_hub/references *.yml
+recursive-include mozichem_hub/references *.md

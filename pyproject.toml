@@ -39,7 +39,7 @@ dependencies = [
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["mozichem_hub*"]
-exclude = ["tests*","examples*", "references*"]
+exclude = ["tests*", "examples*", "references*"]
 
 [tool.setuptools.package-data]
-"mozichem_hub" = ["descriptors/*.yml"]
+"mozichem_hub" = ["descriptors/*.yml", "references/*.yml", "references/*.md"]
