@@ -1,6 +1,6 @@
 # 🐱 MoziChem-Hub
 
-![MoziChem Logo](static/mozichem-sm.jpg)
+![MoziChem Logo](static/mozichem-1.png)
 
 ![Downloads](https://img.shields.io/pypi/dm/mozichem-hub)
 ![PyPI Version](https://img.shields.io/pypi/v/mozichem-hub)
