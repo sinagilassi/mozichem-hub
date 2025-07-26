@@ -51,14 +51,6 @@ class FunctionDispatcher(MoziToolBuilder, MCPClassBuilder):
             reference_thermodb=reference_thermodb
         )
 
-        # SECTION: Initialize function source
-        # # LINK: pyThermoModels
-        # self.MCP_PTMCore = PTMCore(self.Hub_)
-        # # LINK: pyThermoFlash
-        # self.MCP_PTFCore = PTFCore(self.Hub_)
-        # # LINK: pyThermoDB
-        # self.MCP_PTDBCore = PTDBCore(self.Hub_)
-
     def _init_mcp_class(self, mcp_name: str):
         """
         Initialize the MCP class based on the provided mcp_name.

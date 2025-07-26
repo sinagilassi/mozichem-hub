@@ -273,7 +273,11 @@ class PTMCore:
 
             # return
             return res
-        except (PTMReferenceError, PTMModelSourceError, PTMFugacityError):
+        except (
+            PTMReferenceError,
+            PTMModelSourceError,
+            PTMFugacityError
+        ):
             # Re-raise custom exceptions
             raise
         except Exception as e:
