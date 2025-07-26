@@ -9,12 +9,11 @@ description = "MoziChem-Hub"
 authors = [
     { name = "Sina Gilassi", email = "sina.gilassi@gmail.com" }
 ]
-license = { file = "LICENSE" }
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 
@@ -41,4 +40,4 @@ where = ["."]
 exclude = ["tests*"]
 
 [tool.setuptools.package-data]
-"mozichem_hub" = ["config/*.yml", "data/*.csv"]
+"mozichem_hub" = ["descriptors/*.yml"]
