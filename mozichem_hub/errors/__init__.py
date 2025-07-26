@@ -82,13 +82,29 @@ from .resource_exceptions import (
     ComponentThermoDBBuildError,
     FunctionDispatcherError,
     ToolBuilderError,
+    HubThermoHubBuildError,
+    HubThermoHubCleanError,
+    HubComponentReferenceConfigError,
+    HubComponentReferenceRuleError,
+    HubComponentThermoDBRegistrationError,
+    HubComponentsThermoDBRegistrationError,
+    HubComponentModelSourceBuildError,
+    HubComponentsModelSourceBuildError,
     MODEL_SOURCE_BUILD_ERROR_MSG,
     COMPONENT_MODEL_SOURCE_BUILD_ERROR_MSG,
     HUB_INITIALIZATION_ERROR_MSG,
     THERMODB_REGISTRATION_ERROR_MSG,
     COMPONENT_THERMODB_BUILD_ERROR_MSG,
     FUNCTION_DISPATCHER_ERROR_MSG,
-    TOOL_BUILDER_ERROR_MSG
+    TOOL_BUILDER_ERROR_MSG,
+    HUB_THERMO_HUB_BUILD_ERROR_MSG,
+    HUB_THERMO_HUB_CLEAN_ERROR_MSG,
+    HUB_COMPONENT_REFERENCE_CONFIG_ERROR_MSG,
+    HUB_COMPONENT_REFERENCE_RULE_ERROR_MSG,
+    HUB_COMPONENT_THERMODB_REGISTRATION_ERROR_MSG,
+    HUB_COMPONENTS_THERMODB_REGISTRATION_ERROR_MSG,
+    HUB_COMPONENT_MODEL_SOURCE_BUILD_ERROR_MSG,
+    HUB_COMPONENTS_MODEL_SOURCE_BUILD_ERROR_MSG
 )
 
 from .api_exceptions import (
@@ -229,6 +245,24 @@ __all__ = [
     "COMPONENT_THERMODB_BUILD_ERROR_MSG",
     "FUNCTION_DISPATCHER_ERROR_MSG",
     "TOOL_BUILDER_ERROR_MSG",
+
+    # Hub-specific error messages
+    "HUB_THERMO_HUB_BUILD_ERROR_MSG",
+    "HUB_THERMO_HUB_CLEAN_ERROR_MSG",
+    "HUB_COMPONENT_REFERENCE_CONFIG_ERROR_MSG",
+    "HUB_COMPONENT_REFERENCE_RULE_ERROR_MSG",
+    "HUB_COMPONENT_THERMODB_REGISTRATION_ERROR_MSG",
+    "HUB_COMPONENTS_THERMODB_REGISTRATION_ERROR_MSG",
+    "HUB_COMPONENT_MODEL_SOURCE_BUILD_ERROR_MSG",
+    "HUB_COMPONENTS_MODEL_SOURCE_BUILD_ERROR_MSG",
+    "HubThermoHubBuildError",
+    "HubThermoHubCleanError",
+    "HubComponentReferenceConfigError",
+    "HubComponentReferenceRuleError",
+    "HubComponentThermoDBRegistrationError",
+    "HubComponentsThermoDBRegistrationError",
+    "HubComponentModelSourceBuildError",
+    "HubComponentsModelSourceBuildError",
 
     # API exceptions
     "APIError",
