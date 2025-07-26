@@ -14,9 +14,21 @@
 
 MoziChem-Hub empowers researchers, engineers, and developers to seamlessly expose core computational chemistry and process modeling tools as MCP servers, making them accessible through standardized APIs and enabling integration with modern AI workflows.
 
-**Important:** MoziChem-Hub is built on top of **[FastMCP](https://github.com/jlowin/fastmcp)**, a powerful Python package that provides the core MCP (Model Context Protocol) functionality. FastMCP enables the seamless creation and deployment of MCP servers, making it the foundation that powers all MoziChem-Hub modules.
+## 🆕 New Application Under Active Development
 
-*Please note: This is the initial version of the application, and we're continuously working to add new MCP modules in future releases.*
+**MoziChem-Hub is a newly launched application** currently in active development with continuous improvements and enhancements being made regularly. As an emerging tool in the computational chemistry ecosystem, we are committed to:
+
+🔧 **Ongoing Improvements**: Regular updates with enhanced functionality, performance optimizations, and expanded capabilities based on user feedback and emerging needs in the field.
+
+🐛 **Bug Fixes & Stability**: Continuous monitoring and rapid resolution of issues to ensure reliable performance across all supported platforms and use cases.
+
+🚀 **Future Roadmap**: Planned integration of additional thermodynamic models, advanced flash calculation methods, expanded database support, and enhanced AI workflow compatibility.
+
+🔄 **Community-Driven Development**: Active incorporation of user suggestions, feature requests, and contributions to build a comprehensive solution that serves the broader chemical engineering community.
+
+**We encourage early adopters** to explore the current capabilities while we continue expanding and refining the platform. Your feedback and contributions help shape the future of MoziChem-Hub!
+
+**Important:** MoziChem-Hub is built on top of **[FastMCP](https://github.com/jlowin/fastmcp)**, a powerful Python package that provides the core MCP (Model Context Protocol) functionality. FastMCP enables the seamless creation and deployment of MCP servers, making it the foundation that powers all MoziChem-Hub modules.
 
 ## ✨ What You Can Do
 
