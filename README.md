@@ -1,6 +1,6 @@
 # MoziChem-Hub
 
-![MoziChem Logo](static/mozichem-2.png)
+![MoziChem Logo](https://drive.google.com/uc?export=view&id=1G-lxZzOBxX8UtKCvIqSoHfugIOxJw6ft)
 
 ![Downloads](https://img.shields.io/pypi/dm/mozichem-hub)
 ![PyPI Version](https://img.shields.io/pypi/v/mozichem-hub)
@@ -90,7 +90,7 @@ Traditional LLMs and AI agents struggle to deliver **reliable, validated results
 
 The following diagram illustrates the high-level architecture of MoziChem-Hub and how its components interact:
 
-![MoziChem-Hub Architecture](static/mozichem-plan.jpeg)
+![MoziChem-Hub Architecture](https://drive.google.com/uc?export=view&id=1BPpVS59ay5jgmZchWa95VCTK1YI8CdUy)
 
 **Explanation:**
 
@@ -408,7 +408,7 @@ You can convert your own CSV thermodynamic data (such as vapor pressure, critica
 
 This module ensures that all thermochemical properties (e.g., critical temperature, vapor pressure, heat capacity) used in calculations are traceable to their original reference sources. Data from `ThermoDB` is processed by `CompBuilder`, mapped to constant symbols (e.g., Tc, Cp_IG, VaPr), and made accessible in the application. These symbols are used consistently in sub-calculations, enabling transparency, validation, and scientific reliability.
 
-![Reference Mapping](static/reference-mapping.jpeg)
+![Reference Mapping](https://drive.google.com/uc?export=view&id=1A9qLjWWAYytLXeHeE3kZ3OpP7f7zqo1M)
 
 *See the scripts in [`references/`](references/) for a complete, working example of this workflow.*
 
