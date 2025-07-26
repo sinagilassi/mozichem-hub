@@ -30,7 +30,7 @@ dependencies = [
     "pythermodb>=1.11.11",
     "pythermolinkdb>=1.3.7",
     "pythermomodels>=1.4.8",
-    "pythermoflash>=0.1.5",
+    "pythermoflash>=0.1.5"
 ]
 
 [project.urls]
