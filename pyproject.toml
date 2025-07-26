@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mozichem-hub"
-version = "0.1.0"
+version = "0.1.1"
 description = "MoziChem-Hub"
 authors = [
     { name = "Sina Gilassi", email = "sina.gilassi@gmail.com" }
