@@ -191,7 +191,7 @@ result = tool_executer.execute_tool(
     temperature=temperature,
     pressure=pressure,
     eos_model=eos_model,
-    # custom_reference_content=REFERENCE_CONTENT,
+    custom_reference_content=REFERENCE_CONTENT,
     # custom_reference_config=None
     # custom_reference_config=REFERENCE_CONFIG,
 )
