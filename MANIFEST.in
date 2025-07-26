@@ -1,0 +1,13 @@
+# Exclude non-package folders from source distribution
+exclude examples/*
+exclude references/*
+exclude tests/*
+
+# Include license and documentation
+include LICENSE
+include README.md
+include pyproject.toml
+include requirements.txt
+
+# Include YAML descriptor files for the package
+recursive-include mozichem_hub/descriptors *.yml
