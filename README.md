@@ -403,6 +403,13 @@ You can convert your own CSV thermodynamic data (such as vapor pressure, critica
 4. **Integrate with MoziChem-Hub:**
    You can now use your custom reference YAML in MoziChem-Hub for calculations and lookups, either by direct use in your scripts or by updating MCP modules as shown in the examples above.
 
+
+🔗 Reference Mapping Overview
+
+This module ensures that all thermochemical properties (e.g., critical temperature, vapor pressure, heat capacity) used in calculations are traceable to their original reference sources. Data from `ThermoDB` is processed by `CompBuilder`, mapped to constant symbols (e.g., Tc, Cp_IG, VaPr), and made accessible in the application. These symbols are used consistently in sub-calculations, enabling transparency, validation, and scientific reliability.
+
+![Reference Mapping](static/reference-mapping.jpeg)
+
 *See the scripts in [`references/`](references/) for a complete, working example of this workflow.*
 
 You can extend any MCP module with custom thermodynamic data using string-based reference definitions:
