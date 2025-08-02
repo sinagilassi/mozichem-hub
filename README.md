@@ -2,7 +2,7 @@
 
 ![MoziChem Logo](https://drive.google.com/uc?export=view&id=1G-lxZzOBxX8UtKCvIqSoHfugIOxJw6ft)
 
-![Downloads](https://img.shields.io/pypi/dm/mozichem-hub)
+[![PyPI Downloads](https://static.pepy.tech/badge/mozichem-hub/month)](https://pepy.tech/projects/mozichem-hub)
 ![PyPI Version](https://img.shields.io/pypi/v/mozichem-hub)
 ![Supported Python Versions](https://img.shields.io/pypi/pyversions/mozichem-hub.svg)
 ![License](https://img.shields.io/pypi/l/mozichem-hub)
