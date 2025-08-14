@@ -29,7 +29,7 @@ REFERENCES:
       → Get the description of a specific table in a databook.
     • `get_equation_structure`
       → Get the equation structure of a specific table in a databook.
-  TOOL1:
+  search_component_for_thermodynamic_properties:
     NAME: search_component_for_thermodynamic_properties
     DESCRIPTION: This tool checks if the thermodynamic properties of a specified chemical component are available in the database. It returns a string indicating the availability status of the component's properties. Normally, it returns a list of available properties with its name, symbol, databook, and table name.
     ARGS:
@@ -38,13 +38,16 @@ REFERENCES:
         description: "Chemical component for which the thermodynamic properties are verified."
     TAGS:
       - thermodynamic properties
-  TOOL2:
+      - components
+  get_databooks_descriptions:
     NAME: get_databooks_descriptions
     DESCRIPTION: Get the descriptions of all available databooks in the PTDB database.
     ARGS: []
     TAGS:
       - databooks
-  TOOL3:
+      - information
+      - thermodynamic_properties
+  get_databook_information:
     NAME: get_databook_information
     DESCRIPTION: Get information about a specific databook.
     ARGS:
@@ -53,7 +56,9 @@ REFERENCES:
         description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
     TAGS:
       - databooks
-  TOOL4:
+      - information
+      - thermodynamic_properties
+  verify_component_availability:
     NAME: verify_component_availability
     DESCRIPTION: Verify if a component is available in the PTDB database for a specific databook and table.
     ARGS:
@@ -69,13 +74,17 @@ REFERENCES:
     TAGS:
       - databooks
       - components
-  TOOL5:
+      - tables
+      - thermodynamic_properties
+  get_list_databooks:
     NAME: get_list_databooks
     DESCRIPTION: Get the list of all available databooks in the PTDB database.
     ARGS: []
     TAGS:
       - databooks
-  TOOL6:
+      - list
+      - thermodynamic_properties
+  get_list_tables:
     NAME: get_list_tables
     DESCRIPTION: Get the list of all tables in a specific databook.
     ARGS:
@@ -85,7 +94,9 @@ REFERENCES:
     TAGS:
       - databooks
       - tables
-  TOOL7:
+      - list
+      - thermodynamic_properties
+  get_table_information:
     NAME: get_table_information
     DESCRIPTION: Get information about a specific table in a databook. It returns the table type including Equations, Data, Matrix-Equations, and Matrix-Data. Moreover, it returns the number of each type of data in the table.
     ARGS:
@@ -97,7 +108,9 @@ REFERENCES:
         description: "Table name or id such as 'Vapor Pressure' or 1"
     TAGS:
       - tables
-  TOOL8:
+      - information
+      - thermodynamic_properties
+  get_table_structure:
     NAME: get_table_structure
     DESCRIPTION: Get the structure of a specific table in a databook.
     ARGS:
@@ -109,7 +122,9 @@ REFERENCES:
         description: "Table name or id such as 'Vapor Pressure' or 1"
     TAGS:
       - tables
-  TOOL9:
+      - structure
+      - thermodynamic_properties
+  get_table_data:
     NAME: get_table_data
     DESCRIPTION: Get the data of a specific table in a databook.
     ARGS:
@@ -121,7 +136,9 @@ REFERENCES:
         description: "Table name or id such as 'Vapor Pressure' or 1"
     TAGS:
       - tables
-  TOOL10:
+      - data
+      - thermodynamic_properties
+  get_databook_id:
     NAME: get_databook_id
     DESCRIPTION: Get the ID of a specific databook.
     ARGS:
@@ -130,7 +147,9 @@ REFERENCES:
         description: "Databook name such as 'Perry's Chemical Engineers' Handbook'"
     TAGS:
       - databooks
-  TOOL11:
+      - id
+      - thermodynamic_properties
+  get_table_id:
     NAME: get_table_id
     DESCRIPTION: Get the ID of a specific table in a databook.
     ARGS:
@@ -142,7 +161,9 @@ REFERENCES:
         description: "Table name such as 'Vapor Pressure'"
     TAGS:
       - tables
-  TOOL12:
+      - id
+      - thermodynamic_properties
+  get_table_description:
     NAME: get_table_description
     DESCRIPTION: Get the description of a specific table in a databook.
     ARGS:
@@ -154,7 +175,9 @@ REFERENCES:
         description: "Table name such as 'Vapor Pressure'"
     TAGS:
       - tables
-  TOOL13:
+      - description
+      - thermodynamic_properties
+  get_equation_structure:
     NAME: get_equation_structure
     DESCRIPTION: Get the equation structure of a specific table in a databook.
     ARGS:
@@ -166,3 +189,5 @@ REFERENCES:
         description: "Table name such as 'Vapor Pressure'"
     TAGS:
       - tables
+      - structure
+      - thermodynamic_properties

@@ -88,8 +88,56 @@ MCP_MODULES = [
         'prompts': [],
         'tools': [
             {
-                'name': 'verify_component_thermodynamic_properties_availability',
-                'description': 'Verify the availability of thermodynamic properties for a given component in the database. It returns a list of available properties and their sources.'
+                'name': 'search_component_for_thermodynamic_properties',
+                'description': 'This tool checks if the thermodynamic properties of a specified chemical component are available in the database. It returns a string indicating the availability status of the component\'s properties. Normally, it returns a list of available properties with its name, symbol, databook, and table name.'
+            },
+            {
+                'name': 'get_databook_descriptions',
+                'description': 'Get the descriptions of all available databooks in the PTDB database.'
+            },
+            {
+                'name': 'get_databooks_descriptions',
+                'description': 'Get information about a specific databook.'
+            },
+            {
+                'name': 'verify_component_availability',
+                'description': 'Verify if a component is available in the PTDB database for a specific databook and table.'
+            },
+            {
+                'name': 'get_list_databooks',
+                'description': 'Get the list of all available databooks in the PTDB database.'
+            },
+            {
+                'name': 'get_list_tables',
+                'description': 'Get the list of all tables in a specific databook.'
+            },
+            {
+                'name': 'get_table_information',
+                'description': 'Get information about a specific table in a databook. It returns the table type including Equations, Data, Matrix-Equations, and Matrix-Data. Moreover, it returns the number of each type of data in the table.'
+            },
+            {
+                'name': 'get_table_structure',
+                'description': 'Get the structure of a specific table in a databook.'
+            },
+            {
+                'name': 'get_table_data',
+                'description': 'Get the data of a specific table in a databook.'
+            },
+            {
+                'name': 'get_databook_id',
+                'description': 'Get the ID of a specific databook.'
+            },
+            {
+                'name': 'get_table_id',
+                'description': 'Get the ID of a specific table in a databook.'
+            },
+            {
+                'name': 'get_table_description',
+                'description': 'Get the description of a specific table in a databook.'
+            },
+            {
+                'name': 'get_equation_structure',
+                'description': 'Get the equation structure of a specific table in a databook.'
             }
         ]
     }
