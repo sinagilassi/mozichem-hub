@@ -1,0 +1,139 @@
+REFERENCES:
+  INSTRUCTIONS: |
+    This MCP server provides tools to analyze different chemical reactions and to thermodynamically check their feasibility and behavior under various conditions. PyReactLab is aimed at supporting theoretical studies, reaction pathway assessments, and reaction property evaluations without involving reactor design. It is especially useful in early-stage research and educational applications where understanding reaction viability is essential.
+
+    🔧 Available Tools:
+    • `calc_enthalpy_of_reaction`
+      → Calculates the enthalpy of a chemical reaction using the enthalpies of formation of the reactants and products at different temperatures.
+    • `calc_component_enthalpy_of_formation`
+      → Calculates the enthalpy of formation of a chemical component at a specified temperature.
+    • `calc_equilibrium_constant`
+      → Calculates the equilibrium constant of a chemical reaction at a specified temperature.
+    • `analyze_reaction_pathway`
+      → Analyzes the reaction pathway of a chemical reaction, providing insights into the reaction mechanism and intermediates. This tool is useful to understand equilibrium of a reaction and its feasibility at different operating conditions.
+  calc_enthalpy_of_reaction:
+    NAME: calc_enthalpy_of_reaction
+    DESCRIPTION: Calculates the enthalpy of a chemical reaction using the enthalpies of formation of the reactants and products at different temperatures.
+    ARGS:
+      - name: reactions
+        type: Reactions
+        description: Chemical reactions for which the enthalpy of reaction is calculated.
+      - name: components
+        type: Components
+        description: Chemical components involved in the reactions.
+      - name: temperature
+        type: Temperature
+        description: Temperature at which the bubble pressure is calculated.
+      - name: pressure
+        type: Pressure
+        description: Pressure at which the bubble pressure is calculated.
+    TAGS:
+      - thermodynamics
+      - enthalpy of reaction
+      - chemical reactions
+    CONFIG:
+      vapor-pressure:
+        label: VaPr
+      heat-capacity:
+        label: Cp
+      general-data:
+        labels:
+          critical-temperature: Tc
+          critical-pressure: Pc
+          acentric-factor: AcFa
+          enthalpy-of-formation: EnFo_IG
+          gibbs-free-energy-of-formation: GiFo_IG
+  calc_component_enthalpy_of_formation:
+    NAME: calc_component_enthalpy_of_formation
+    DESCRIPTION: Calculates the enthalpy of formation of a chemical component at a specified temperature.
+    ARGS:
+      - name: reactions
+        type: Reactions
+        description: Chemical reactions for which the enthalpy of reaction is calculated.
+      - name: components
+        type: Components
+        description: Chemical components involved in the reactions.
+      - name: temperature
+        type: Temperature
+        description: Temperature at which the bubble pressure is calculated.
+      - name: pressure
+        type: Pressure
+        description: Pressure at which the bubble pressure is calculated.
+    TAGS:
+      - thermodynamics
+      - enthalpy of formation
+    CONFIG:
+      vapor-pressure:
+        label: VaPr
+      heat-capacity:
+        label: Cp
+      general-data:
+        labels:
+          critical-temperature: Tc
+          critical-pressure: Pc
+          acentric-factor: AcFa
+          enthalpy-of-formation: EnFo_IG
+          gibbs-free-energy-of-formation: GiFo_IG
+  calc_equilibrium_constant:
+    NAME: calc_equilibrium_constant
+    DESCRIPTION: Calculates the equilibrium constant of a chemical reaction at a specified temperature.
+    ARGS:
+      - name: reactions
+        type: Reactions
+        description: Chemical reactions for which the equilibrium constant is calculated.
+      - name: components
+        type: Components
+        description: Chemical components involved in the reactions.
+      - name: temperature
+        type: Temperature
+        description: Temperature at which the equilibrium constant is calculated.
+      - name: pressure
+        type: Pressure
+        description: Pressure at which the equilibrium constant is calculated.
+    TAGS:
+      - thermodynamics
+      - equilibrium constant
+    CONFIG:
+      vapor-pressure:
+        label: VaPr
+      heat-capacity:
+        label: Cp
+      general-data:
+        labels:
+          critical-temperature: Tc
+          critical-pressure: Pc
+          acentric-factor: AcFa
+          enthalpy-of-formation: EnFo_IG
+          gibbs-free-energy-of-formation: GiFo_IG
+  analyze_reaction_pathway:
+    NAME: analyze_reaction_pathway
+    DESCRIPTION: Analyzes the reaction pathway of a chemical reaction, providing insights into the reaction mechanism and intermediates. This tool is useful to understand equilibrium of a reaction and its feasibility at different operating conditions.
+    ARGS:
+      - name: reactions
+        type: Reactions
+        description: Chemical reactions for which the reaction pathway is analyzed.
+      - name: components
+        type: Components
+        description: Chemical components involved in the reactions.
+      - name: temperature
+        type: Temperature
+        description: Temperature at which the reaction pathway is analyzed.
+      - name: pressure
+        type: Pressure
+        description: Pressure at which the reaction pathway is analyzed.
+    TAGS:
+      - thermodynamics
+      - reaction pathway
+      - chemical reactions
+    CONFIG:
+      vapor-pressure:
+        label: VaPr
+      heat-capacity:
+        label: Cp
+      general-data:
+        labels:
+          critical-temperature: Tc
+          critical-pressure: Pc
+          acentric-factor: AcFa
+          enthalpy-of-formation: EnFo_IG
+          gibbs-free-energy-of-formation: GiFo_IG
