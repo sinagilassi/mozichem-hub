@@ -2,7 +2,7 @@
 from rich import print
 from pyThermoDB.references import ReferenceChecker
 from mozichem_hub.references import ReferenceMapper
-from mozichem_hub.models import Component
+from mozichem_hub.models import Component, ReferenceThermoDB
 
 # SECTION: reference content
 REFERENCE_CONTENT = """
@@ -162,7 +162,6 @@ REFERENCES:
             - [2,methane|ethanol,ethanol,C2H5OH,0.380229054,0,-20.63243601,0,0.059982839,0,4.481683583,0]
 """
 
-
 # SECTION: create ReferenceChecker instance
 ReferenceChecker_ = ReferenceChecker(REFERENCE_CONTENT)
 
@@ -211,7 +210,7 @@ print(f"Reference Link (Specific Table): {reference_link_specific}")
 # SECTION: generate reference thermodb
 ReferenceMapper_ = ReferenceMapper()
 
-reference_thermodb = ReferenceMapper_.\
+reference_thermodb: ReferenceThermoDB = ReferenceMapper_.\
     _reference_thermodb_generator_from_reference_content(
         reference_content=REFERENCE_CONTENT,
         components=[CO2]
