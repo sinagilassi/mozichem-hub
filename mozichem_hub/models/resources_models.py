@@ -47,7 +47,7 @@ class Component(BaseModel):
     """Component model for input validation"""
     name: str = Field(..., description="Name of the component")
     formula: str = Field(..., description="Chemical formula of the component")
-    state: Literal['g', 'l', 's'] = Field(
+    state: Literal['g', 'l', 's', 'aq'] = Field(
         ...,
         description="State of the component: 'g' for gas, 'l' for liquid, 's' for solid"
     )
