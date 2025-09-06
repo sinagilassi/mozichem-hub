@@ -225,7 +225,7 @@ version = "3.23.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
-    { name = "docstring-parser", marker = "python_full_version < '4.0'" },
+    { name = "docstring-parser", marker = "python_full_version < '4'" },
     { name = "rich" },
     { name = "rich-rst" },
 ]
@@ -1029,7 +1029,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/30/23/2f0a3efc4d6a32f3b
 
 [[package]]
 name = "pythermodb"
-version = "1.11.23"
+version = "1.11.24"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy" },
@@ -1039,9 +1039,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1e/29/1a19ed5bad6144cacadac64adde726cdd56ab1f283ce759378a1b1924c59/pythermodb-1.11.23.tar.gz", hash = "sha256:133a56e450c6c630afb9fd3f0452e732757a11b13d6247103d556746927a2264", size = 347341, upload-time = "2025-09-06T02:04:59.214Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/83/df/a12e2e724862a94f45b8d189ad97389c07e9811c09569828ebac5dd91eaa/pythermodb-1.11.24.tar.gz", hash = "sha256:c1720049cd9afcf7d548df491fa6303e490923ebc5de503316b6607c2623ec4d", size = 346974, upload-time = "2025-09-06T04:06:43.438Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d7/58/5b8923444201d70693b8597cb195fc7fc0bbcfb78138601fb1ea0742c7b6/pythermodb-1.11.23-py3-none-any.whl", hash = "sha256:05727dfeef04f35382af336b3089dcb6015aa57bdf65f29d7c89f82d88f5f5d2", size = 384733, upload-time = "2025-09-06T02:04:57.456Z" },
+    { url = "https://files.pythonhosted.org/packages/ac/c7/c417308b0391d80b2f40be7a51b5b976099d58d2f41f695b716efedd862f/pythermodb-1.11.24-py3-none-any.whl", hash = "sha256:bd22a280f16d01471361c812fe848285124c846cdc1705053874c28b5c88254b", size = 384692, upload-time = "2025-09-06T04:06:42.033Z" },
 ]
 
 [[package]]
