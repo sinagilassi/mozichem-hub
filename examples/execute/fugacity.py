@@ -14,9 +14,12 @@ from mozichem_hub.prebuilt import (
 )
 # log
 from rich import print
+import pyThermoDB as ptdb
 
 # NOTE: version
 print(f"[bold green]Mozichem Hub Version: {__version__}[/bold green]")
+# SECTION: pyThermoDB version
+print(f"[bold blue]pyThermoDB Version: {ptdb.__version__}[/bold blue]")
 
 # SECTION: mcp names
 mcp_names = get_mozichem_mcp()
