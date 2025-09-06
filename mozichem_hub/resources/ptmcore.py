@@ -239,7 +239,8 @@ class PTMCore:
             # SECTION: build model source
             try:
                 model_source = self.hub.build_component_model_source(
-                    component=component
+                    component=component,
+                    build_mode='name'  # REVIEW
                 )
                 logger.debug("Model source built successfully")
             except Exception as e:

@@ -8,6 +8,7 @@ from typing import (
     Any
 )
 import pyThermoDB as ptdb
+from pyThermoDB.models import Component as ptdbComponent
 import pyThermoLinkDB as ptldb
 # locals
 from ..models import (
@@ -174,7 +175,9 @@ class Hub:
         try:
             # SECTION: get the reference rule for the component
             component_reference_rule = self.thermodb_rule.get(
-                component_id, None)
+                component_id,
+                None
+            )
 
             # NOTE: if not found, get ALL
             if component_reference_rule is None:
@@ -183,7 +186,9 @@ class Hub:
                     "using ALL rule"
                 )
                 component_reference_rule = self.thermodb_rule.get(
-                    'ALL', None)
+                    'ALL',
+                    None
+                )
 
                 # check if ALL is also not found
                 if component_reference_rule is None:
@@ -284,12 +289,12 @@ class Hub:
             logger.debug(f"Registering component: {name_} / {formula_}")
 
             # SECTION: create component reference rule
-            # ! by name
+            # ! by name-state
             component_reference_rule_by_name = \
                 self._set_component_reference_rule(
                     component_id=name_
                 )
-            # ! by formula
+            # ! by formula-state
             component_reference_rule_by_formula = \
                 self._set_component_reference_rule(
                     component_id=formula_
@@ -391,9 +396,14 @@ class Hub:
                 component_formula = component.formula.strip()
                 component_state = component.state.strip().lower()
 
+                # REVIEW: adapt
+                component_ptdb = ptdbComponent.model_validate(
+                    component.model_dump()
+                )
+
                 # SECTION: build the component thermodynamic database
                 # NOTE: check build mode
-                if build_mode == 'name':
+                if build_mode == 'name':  # ! >> name-state
                     # NOTE: component reference config
                     component_id = f"{component_name}-{component_state}"
 
@@ -403,14 +413,22 @@ class Hub:
                             component_id=component_id
                         )
 
-                    # ! by name
-                    component_thermodb = ptdb.build_component_thermodb(
-                        component_name=component_name,
-                        reference_config=component_reference_config,
-                        custom_reference=self.reference
+                    # ! by name (older version)
+                    # component_thermodb = ptdb.build_component_thermodb(
+                    #     component_name=component_name,
+                    #     reference_config=component_reference_config,
+                    #     custom_reference=self.reference
 
+                    # )
+
+                    # ! by name (newer version)
+                    component_thermodb = ptdb.check_and_build_component_thermodb(
+                        component=component_ptdb,
+                        reference_config=component_reference_config,
+                        custom_reference=self.reference,
+                        component_key='Name-State'
                     )
-                elif build_mode == 'formula':
+                elif build_mode == 'formula':  # ! >> formula-state
                     # NOTE: component reference config
                     component_id = f"{component_formula}-{component_state}"
 
@@ -420,11 +438,20 @@ class Hub:
                             component_id=component_id
                         )
 
-                    # ! by formula
-                    component_thermodb = ptdb.build_component_thermodb(
-                        component_name=component_formula,
+                    # ! by formula (older version)
+                    # component_thermodb = ptdb.build_component_thermodb(
+                    #     component_name=component_formula,
+                    #     reference_config=component_reference_config,
+                    #     custom_reference=self.reference,
+                    #     component_key='Formula'
+                    # )
+
+                    # ! by formula (newer version)
+                    component_thermodb = ptdb.check_and_build_component_thermodb(
+                        component=component_ptdb,
                         reference_config=component_reference_config,
-                        custom_reference=self.reference
+                        custom_reference=self.reference,
+                        component_key='Formula-State'
                     )
                 else:
                     raise ValueError(
@@ -442,7 +469,7 @@ class Hub:
             # SECTION: check thermodb items
             if len(components_thermodb) == 1:
                 # NOTE: if only one component, return the thermodb directly
-                components_thermodb_ = components_thermodb[0]
+                components_thermodb_: ComponentThermoDB = components_thermodb[0]
                 return components_thermodb_
 
             # NOTE: return
