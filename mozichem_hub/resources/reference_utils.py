@@ -90,6 +90,7 @@ def initialize_custom_reference(
     components: Component | List[Component],
     custom_reference_content: Optional[str],
     custom_reference_config: Optional[str],
+    ignore_state_props: Optional[List[str]] = None
 ) -> Hub:
     """
     Universal helper to initialize the hub with a custom reference if provided.
@@ -105,6 +106,8 @@ def initialize_custom_reference(
         Custom reference content provided by the user.
     custom_reference_config : Optional[str]
         Custom reference configuration provided by the user.
+    ignore_state_props : Optional[List[str]], optional
+        List of properties to ignore state for, by default None.
 
     Returns
     -------
