@@ -18,7 +18,7 @@ from ..models import (
 )
 from .utils import set_feed_specification
 from .hub import Hub
-from ..descriptors import MCPDescriptor
+from ..descriptors import MCPDescriptor, get_mcp_ignore_state_props
 # from ..config import MCP_MODULES
 from .reference_utils import initialize_custom_reference
 from ..errors import (
@@ -213,13 +213,26 @@ class PTMCore:
         try:
             # NOTE: extract component name
             (
-                component_name, _, _
+                component_name, component_formula, component_state
             ) = component.name, component.formula, component.state
             logger.debug(
-                f"Component details: {component_name}, {component.formula}, {component.state}")
+                f"Component details: {component_name}, {component_formula}, {component_state}")
 
-            # component name - state
-            component_ = f"{component_name}-{component.state}"
+            # component ky (name-state)
+            component_ = f"{component_name}-{component_state}"
+
+            # SECTION: ignore state props
+            try:
+                ignore_state_props = get_mcp_ignore_state_props(
+                    mcp_name=self.id,
+                    method_name='calc_gas_component_fugacity'
+                )
+                logger.debug(
+                    f"Ignore state properties for component '{component_name}': {ignore_state_props}")
+            except Exception as e:
+                logger.error(f"Failed to get ignore state props: {e}")
+                raise PTMComponentError(
+                    f"Failed to get ignore state props: {e}") from e
 
             # SECTION: reinitialize hub if needed
             # NOTE: this is to ensure that the hub is initialized with custom reference content and config
