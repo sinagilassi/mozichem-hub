@@ -89,6 +89,7 @@ class ReferenceThermoDBController():
         component_name: str,
         component_formula: str,
         component_state: str,
+        component_key: str = 'name'
     ) -> ComponentReferenceConfig:
         """
         Generate the reference configuration for a component.

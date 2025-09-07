@@ -9,6 +9,7 @@ from typing import (
 )
 import pyThermoDB as ptdb
 from pyThermoDB.models import Component as ptdbComponent
+from pyThermoDB import CompBuilder
 import pyThermoLinkDB as ptldb
 # locals
 from ..models import (
@@ -407,14 +408,14 @@ class Hub:
                     # NOTE: component reference config
                     component_id = f"{component_name}-{component_state}"
 
-                    # !get the component reference config
+                    # ! get the component reference config
                     component_reference_config = \
                         self._set_component_reference_config(
                             component_id=component_id
                         )
 
                     # ! by name (older version)
-                    # component_thermodb = ptdb.build_component_thermodb(
+                    # component_thermodb: CompBuilder = ptdb.build_component_thermodb(
                     #     component_name=component_name,
                     #     reference_config=component_reference_config,
                     #     custom_reference=self.reference
@@ -422,7 +423,7 @@ class Hub:
                     # )
 
                     # ! by name (newer version)
-                    component_thermodb = ptdb.check_and_build_component_thermodb(
+                    component_thermodb: CompBuilder = ptdb.check_and_build_component_thermodb(
                         component=component_ptdb,
                         reference_config=component_reference_config,
                         custom_reference=self.reference,
