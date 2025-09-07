@@ -1,8 +1,12 @@
 # import libs
 import logging
+from typing import List, Dict, Optional
 # locals
 from ..utils import Loader
 from ..config import MCP_MODULES
+
+# NOTE: get logger
+logger = logging.getLogger(__name__)
 
 
 class MCPDescriptor:
@@ -298,3 +302,57 @@ class MCPDescriptor:
         except Exception as e:
             raise ValueError(
                 f"Failed to load MCP method reference link: {e}") from e
+
+    @staticmethod
+    def mcp_method_ignore_state_props(
+        mcp_id: str,
+        method_name: str
+    ) -> List[str]:
+        """
+        Get all properties for which state is ignored in a specific mcp method.
+
+        Parameters
+        ----------
+        mcp_id : str
+            The id of the mcp to get the method for.
+        method_name : str
+            The name of the method to get the reference link for.
+
+        Returns
+        -------
+        List[str]
+            A list containing the properties for which state is ignored.
+        """
+        try:
+            # NOTE: find mcp name
+            mcp_name = next(
+                (
+                    module['name'] for module in MCP_MODULES
+                    if module['id'] == mcp_id
+                ),
+                None
+            )
+
+            # check if mcp name exists
+            if not mcp_name:
+                logger.error(f"MCP with id '{mcp_id}' not found.")
+                return []
+
+            # NOTE: load the mcp descriptor
+            mcp_descriptor = MCPDescriptor().mcp_descriptor(mcp_name)
+
+            # NOTE: check if method exists
+            if method_name not in mcp_descriptor:
+                logger.error(
+                    f"Method '{method_name}' not found in MCP '{mcp_name}'.")
+                return []
+
+            # NOTE:reference inputs
+            ignore_state_props: List[str] = mcp_descriptor[method_name].get(
+                'IGNORE_STATE_PROPS', []
+            )
+
+            return ignore_state_props
+        except Exception as e:
+            logger.error(f"Error loading ignore state props: {e}")
+            return []
