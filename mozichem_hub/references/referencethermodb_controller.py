@@ -140,7 +140,9 @@ class ReferenceThermoDBController():
                     component_name=component_name,
                     component_formula=component_formula,
                     component_state=component_state,
-                    databook_name=selected_databook
+                    databook_name=selected_databook,
+                    add_label=True,
+                    check_labels=True
                 )
 
             # check if the reference config is empty

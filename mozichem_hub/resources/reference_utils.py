@@ -6,7 +6,7 @@ from typing import (
     Tuple
 )
 # locals
-from ..models import Component
+from ..models import Component, ReferenceThermoDB
 from .hub import Hub
 from ..errors import (
     CustomReferenceInitializationError,
@@ -134,7 +134,7 @@ def initialize_custom_reference(
             ReferenceMapper_ = ReferenceMapper()
 
             # NOTE: build reference_thermodb
-            reference_thermodb = \
+            reference_thermodb: ReferenceThermoDB = \
                 ReferenceMapper_.generate_reference_thermodb(
                     reference_content=custom_reference_content,
                     reference_config=custom_reference_config
@@ -154,7 +154,7 @@ def initialize_custom_reference(
                 components = [components]
 
             # NOTE: build reference_thermodb with content only
-            reference_thermodb = \
+            reference_thermodb: ReferenceThermoDB = \
                 ReferenceMapper_.\
                 _reference_thermodb_generator_from_reference_content(
                     reference_content=custom_reference_content,
