@@ -6,6 +6,9 @@ from typing import (
     Dict,
     List
 )
+from pyThermoDB.references import component_reference_mapper
+from pyThermoDB.models import ComponentReferenceThermoDB as ComponentReferenceThermoDB_ptdb
+from pyThermoDB.models import Component as ptdbComponent
 # locals
 from .reference_services import ReferenceServices
 from .reference_controller import ReferenceController
@@ -15,6 +18,9 @@ from ..models import (
 )
 from .referencethermodb_controller import ReferenceThermoDBController
 from ..models.resources_models import Component
+
+# NOTE: logger
+logger = logging.getLogger(__name__)
 
 
 class ReferenceMapper(ReferenceServices):
@@ -121,57 +127,6 @@ class ReferenceMapper(ReferenceServices):
             logging.error(f"Failed to get reference thermodb: {e}")
             raise RuntimeError("Failed to get reference thermodb.") from e
 
-    def _reference_thermodb_generator_from_reference_content(
-        self,
-        reference_content: str,
-        components: List[Component]
-    ) -> ReferenceThermoDB:
-        """
-        Generate the reference thermodb from the reference content.
-
-        Parameters
-        ----------
-        reference_content : str
-            The reference content to be used for generating the reference thermodb.
-        components : List[Component]
-            List of components for which the reference thermodb is generated.
-
-        Returns
-        -------
-        ReferenceThermoDB
-            The reference thermodb generated from the reference content.
-
-        Notes
-        -----
-        This method is used to generate the reference thermodynamic database
-        (thermodb) from the provided reference content and components.
-        It is only used after the MCP server starts and is not used
-        before the server starts.
-        One of the method arguments is custom reference content,
-        which is a string containing the reference data.
-        """
-        try:
-            # NOTE: check if reference content is provided
-            if not reference_content:
-                raise ValueError(
-                    "Reference content is required to generate reference thermodb.")
-
-            # SECTION: init reference thermodb controller
-            ReferenceThermoDBController_ = ReferenceThermoDBController(
-                reference_content=reference_content
-            )
-
-            # NOTE: generate the reference thermodb
-            return ReferenceThermoDBController_.\
-                generate_components_reference_thermodb(
-                    components=components
-                )
-        except Exception as e:
-            logging.error(
-                f"Failed to generate reference thermodb from content: {e}")
-            raise RuntimeError(
-                "Failed to generate reference thermodb from content.") from e
-
     def generate_reference_thermodb(
         self,
         reference_content: Optional[
@@ -220,3 +175,148 @@ class ReferenceMapper(ReferenceServices):
         except Exception as e:
             logging.error(f"Failed to generate reference thermodb: {e}")
             raise RuntimeError("Failed to generate reference thermodb.") from e
+
+    def reference_thermodb_generator_from_reference_content(
+        self,
+        components: List[Component],
+        reference_content: str,
+    ) -> ReferenceThermoDB:
+        """
+        Generate the reference thermodb from the reference content.
+
+        Parameters
+        ----------
+        components : List[Component]
+            List of components for which the reference thermodb is generated.
+        reference_content : str
+            The reference content to be used for generating the reference thermodb.
+        **kwargs
+            Additional keyword arguments.
+            - ignore_state_props: Optional[List[str]] = None
+                List of properties to ignore state for, if any.
+
+        Returns
+        -------
+        ReferenceThermoDB
+            The reference thermodb generated from the reference content.
+
+        Notes
+        -----
+        This method is used to generate the reference thermodynamic database
+        (thermodb) from the provided reference content and components.
+        It is only used after the MCP server starts and is not used
+        before the server starts.
+        One of the method arguments is custom reference content,
+        which is a string containing the reference data.
+        """
+        try:
+            # NOTE: check if reference content is provided
+            if not reference_content:
+                raise ValueError(
+                    "Reference content is required to generate reference thermodb.")
+
+            # SECTION: init reference thermodb controller
+            ReferenceThermoDBController_ = ReferenceThermoDBController(
+                reference_content=reference_content
+            )
+
+            # NOTE: generate the reference thermodb
+            return ReferenceThermoDBController_.\
+                generate_components_reference_thermodb(
+                    components=components
+                )
+        except Exception as e:
+            logging.error(
+                f"Failed to generate reference thermodb from content: {e}")
+            raise RuntimeError(
+                "Failed to generate reference thermodb from content.") from e
+
+    def reference_thermodb_generator_from_reference_mapper(
+        self,
+        component: Component,
+        reference_content: str,
+        **kwargs
+    ) -> ReferenceThermoDB:
+        """
+        Generate the component thermodb from the reference content.
+
+        Parameters
+        ----------
+        component : Component
+            The component for which the component thermodb is generated.
+        reference_content : str
+            The reference content to be used for generating the component thermodb.
+        **kwargs
+            Additional keyword arguments.
+            - component_key: Optional[str] = 'Name-State'
+                Key to identify the component in the reference content, by default 'Name-State'.
+            - ignore_state_props: Optional[List[str]] = None
+                List of properties to ignore state for, if any.
+
+        Returns
+        -------
+        ComponentThermoDB
+            The component thermodb generated from the reference content.
+
+        Notes
+        -----
+        This method is used to generate the component thermodynamic database
+        (thermodb) from the provided reference content and component.
+        It is only used after the MCP server starts and is not used
+        before the server starts.
+        One of the method arguments is custom reference content,
+        which is a string containing the reference data.
+        """
+        try:
+            # SECTION: inputs
+            # NOTE: get component_key from kwargs and validate
+            component_key: str = kwargs.get('component_key', 'Name-State')
+            if component_key not in ('Name-State', 'Formula-State'):
+                component_key = 'Name-State'
+
+            # NOTE: get ignore_state_props from kwargs
+            ignore_state_props: Optional[List[str]] = kwargs.get(
+                'ignore_state_props', None
+            )
+
+            # check
+            if ignore_state_props is None or not isinstance(ignore_state_props, list):
+                ignore_state_props = []
+
+            # NOTE: check if reference content is provided
+            if not reference_content:
+                raise ValueError(
+                    "Reference content is required to generate component thermodb.")
+
+            # SECTION: convert component to ptdbComponent
+            ptdb_component = ptdbComponent(
+                name=component.name,
+                formula=component.formula,
+                state=component.state
+            )
+
+            # SECTION: generate the component reference thermodb
+            component_reference_thermodb: ComponentReferenceThermoDB_ptdb = \
+                component_reference_mapper(
+                    component=ptdb_component,
+                    reference_content=reference_content,
+                    component_key=component_key,
+                    ignore_state_props=ignore_state_props
+                )
+
+            # NOTE: reference thermodb
+            return ReferenceThermoDB(
+                reference=component_reference_thermodb.reference_thermodb.reference,
+                contents=component_reference_thermodb.reference_thermodb.contents,
+                config=component_reference_thermodb.reference_thermodb.configs,
+                link=component_reference_thermodb.reference_thermodb.rules,
+                labels=component_reference_thermodb.reference_thermodb.labels,
+                ignore_labels=component_reference_thermodb.reference_thermodb.ignore_labels,
+                ignore_props=component_reference_thermodb.reference_thermodb.ignore_props
+            )
+
+        except Exception as e:
+            logging.error(
+                f"Failed to generate component thermodb from content: {e}")
+            raise RuntimeError(
+                "Failed to generate component thermodb from content.") from e

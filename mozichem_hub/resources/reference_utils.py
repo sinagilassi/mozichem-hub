@@ -5,6 +5,7 @@ from typing import (
     List,
     Tuple
 )
+
 # locals
 from ..models import Component, ReferenceThermoDB
 from .hub import Hub
@@ -156,13 +157,24 @@ def initialize_custom_reference(
             if isinstance(components, Component):
                 components = [components]
 
-            # NOTE: build reference_thermodb with content only
+            # SECTION: build reference_thermodb with content only
+            # NOTE: method 1
+            # reference_thermodb: ReferenceThermoDB = \
+            #     ReferenceMapper_.\
+            #     reference_thermodb_generator_from_reference_content(
+            #         components=components,
+            #         reference_content=custom_reference_content,
+            #     )
+
+            # NOTE: method 2 (with ignore_state_props)
             reference_thermodb: ReferenceThermoDB = \
                 ReferenceMapper_.\
-                _reference_thermodb_generator_from_reference_content(
+                reference_thermodb_generator_from_reference_mapper(
+                    component=components[0],
                     reference_content=custom_reference_content,
-                    components=components
+                    ignore_state_props=ignore_state_props
                 )
+
             # ! reinitialize hub with the new reference thermodb
             return Hub(reference_thermodb)
         else:

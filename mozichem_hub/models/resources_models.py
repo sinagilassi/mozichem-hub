@@ -65,14 +65,21 @@ class ComponentThermoDB(BaseModel):
     ----------
     component: Component
         The component for which the thermodynamic database is built.
-    property_source: dict
-        Source of properties for the component.
-    build_mode: Literal['name', 'formula']
-        Mode to build the thermodynamic database, either by name or formula.
+    thermodb: CompBuilder
+        The thermodynamic database object from pyThermoDB.
+    component_key: Literal[
+        'Name-State', 'Formula-State', 'Name', 'Formula', 'Name-Formula-State'
+    ]
+        Key to identify the component in the reference content.
     """
     component: Component
     thermodb: CompBuilder
-    build_mode: Literal['name', 'formula'] = 'name'
+    component_key: Literal[
+        'Name-State', 'Formula-State', 'Name', 'Formula', 'Name-Formula-State'
+    ] = Field(
+        default='Name-State',
+        description="Key to identify the component in the reference content."
+    )
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,

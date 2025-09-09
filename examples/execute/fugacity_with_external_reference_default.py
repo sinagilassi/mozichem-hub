@@ -1,9 +1,67 @@
 # import libs
+from mozichem_hub import (
+    __version__,
+)
+from mozichem_hub.executors import ToolExecuter
+from mozichem_hub.models import Temperature, Pressure, Component
+from mozichem_hub.prebuilt import (
+    create_mozichem_mcp,
+    get_mozichem_mcp
+)
+from mozichem_hub.models import Reference
+# log
 from rich import print
-from mozichem_hub.references import ReferenceMapper
-from mozichem_hub.models import Component
 
-# SECTION: reference content
+# NOTE: version
+print(f"[bold green]Mozichem Hub Version: {__version__}[/bold green]")
+
+# SECTION: mcp names
+mcp_names = get_mozichem_mcp()
+print(f"mcp names: {mcp_names}")
+
+# SECTION: Build the MCP server
+thermo_models_mcp = create_mozichem_mcp(name="eos-models-mcp")
+
+# NOTE: mcp tools
+# tools_info = thermo_models_mcp.tools_info()
+# print(f"Tools available in 'thermo-models-mcp': {tools_info}")
+
+# SECTION: Create a ToolExecuter instance
+tool_executer = ToolExecuter(mozichem_mcp=thermo_models_mcp)
+# all tools
+tools_ = tool_executer.get_tools()
+print(f"All tools in 'eos-models-mcp': {tools_}")
+
+# select a tool to execute
+tool_name = "calc_gas_component_fugacity"
+
+# arguments for the tool
+temperature = Temperature(
+    value=300.1,
+    unit="K"
+)
+
+pressure = Pressure(
+    value=9.99,
+    unit="bar"
+)
+
+component = Component(
+    name="propane",
+    formula="C3H8",
+    state="g"
+)
+
+component = Component(
+    name='carbon dioxide',
+    formula='CO2',
+    state='g'
+)
+
+eos_model = "SRK"
+
+# SECTION: custom reference settings
+# NOTE: default reference for the ThermoDB
 REFERENCE_CONTENT = """
 REFERENCES:
     CUSTOM-REF-1:
@@ -123,61 +181,21 @@ REFERENCES:
             - [14,'benzene','C6H6','l',83.107,-6486.2,-9.2194,6.98E-06,2,278.68,4.76E+03,562.05,4.88E+06,1]
             - [15,'nitrogen','N2','g',58.282,-1084.1,-8.3144,4.41E-02,1,63.15,1.25E+04,126.2,3.39E+06,1]
             - [16,'ethane','C2H6','g',51.857,-2598.7,-5.1283,1.49E-05,2,90.35,1.13E+00,305.32,4.85E+06,1]
-        NRTL Non-randomness parameters-1:
-          TABLE-ID: 4
-          DESCRIPTION:
-            This table provides the NRTL non-randomness parameters for the NRTL equation.
-          MATRIX-SYMBOL:
-            - a
-            - b
-            - c
-            - alpha
-          STRUCTURE:
-            COLUMNS: [No.,Name,Formula,a_i_1,a_i_2,b_i_1,b_i_2,c_i_1,c_i_2,alpha_i_1,alpha_i_2]
-            SYMBOL: [None,None,None,a_i_1,a_i_2,b_i_1,b_i_2,c_i_1,c_i_2,alpha_i_1,alpha_i_2]
-            UNIT: [None,None,None,1,1,1,1,1,1,1,1]
-          VALUES:
-            - [None,None,None,methanol,ethanol,methanol,ethanol,methanol,ethanol,methanol,ethanol]
-            - [None,None,None,CH3OH,C2H5OH,CH3OH,C2H5OH,CH3OH,C2H5OH,CH3OH,C2H5OH]
-            - [1,methanol,CH3OH,0,0.300492719,0,1.564200272,0,35.05450323,0,4.481683583]
-            - [2,ethanol,C2H5OH,0.380229054,0,-20.63243601,0,0.059982839,0,4.481683583,0]
-        NRTL Non-randomness parameters-2:
-          TABLE-ID: 5
-          DESCRIPTION:
-            This table provides the NRTL non-randomness parameters for the NRTL equation.
-          MATRIX-SYMBOL:
-            - a
-            - b
-            - c
-            - alpha
-          STRUCTURE:
-            COLUMNS: [No.,Mixture,Name,Formula,a_i_1,a_i_2,b_i_1,b_i_2,c_i_1,c_i_2,alpha_i_1,alpha_i_2]
-            SYMBOL: [None,None,None,None,a_i_1,a_i_2,b_i_1,b_i_2,c_i_1,c_i_2,alpha_i_1,alpha_i_2]
-            UNIT: [None,None,None,None,1,1,1,1,1,1,1,1]
-          VALUES:
-            - [1,methanol|ethanol,methanol,CH3OH,0,0.300492719,0,1.564200272,0,35.05450323,0,4.481683583]
-            - [2,methanol|ethanol,ethanol,C2H5OH,0.380229054,0,-20.63243601,0,0.059982839,0,4.481683583,0]
-            - [1,methane|ethanol,methanol,CH3OH,0,0.300492719,0,1.564200272,0,35.05450323,0,4.481683583]
-            - [2,methane|ethanol,ethanol,C2H5OH,0.380229054,0,-20.63243601,0,0.059982839,0,4.481683583,0]
 """
 
-# SECTION: check component availability
-component_name = 'carbon dioxide'
-component_formula = 'CO2'
-component_state = 'g'
-# CO2
-CO2 = Component(
-    name=component_name,
-    formula=component_formula,
-    state=component_state
+
+# NOTE: prompt for the tool
+prompt = f"""Calculate the fugacity of {component.name} at {temperature.value} {temperature.unit}
+and {pressure.value} {pressure.unit} using the {eos_model} EOS model."""
+print(f"Prompt for '{tool_name}': {prompt}")
+
+# SECTION: Execute the tool
+result = tool_executer.execute_tool(
+    tool_name=tool_name,
+    component=component,
+    temperature=temperature,
+    pressure=pressure,
+    eos_model=eos_model,
+    custom_reference_content=REFERENCE_CONTENT
 )
-
-# SECTION: generate reference thermodb
-ReferenceMapper_ = ReferenceMapper()
-
-reference_thermodb = ReferenceMapper_.\
-    reference_thermodb_generator_from_reference_content(
-        reference_content=REFERENCE_CONTENT,
-        components=[CO2]
-    )
-print(f"Reference ThermoDB: {reference_thermodb}")
+print(f"Result of '{tool_name}': {result}")

@@ -152,3 +152,15 @@ class ReferenceThermoDB(BaseModel):
     contents: List[str]
     config: Dict[str, Dict[str, Dict[str, str]]]
     link: Dict[str, Dict[str, Dict[str, str]]]
+    labels: Optional[List[str]] = Field(
+        default_factory=list,
+        description="List of labels used in the reference config."
+    )
+    ignore_labels: Optional[List[str]] = Field(
+        default_factory=list,
+        description="List of property labels to ignore state during the build."
+    )
+    ignore_props: Optional[List[str]] = Field(
+        default_factory=list,
+        description="List of property names to ignore state during the build."
+    )

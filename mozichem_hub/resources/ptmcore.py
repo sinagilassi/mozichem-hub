@@ -222,9 +222,11 @@ class PTMCore:
             component_ = f"{component_name}-{component_state}"
 
             # SECTION: ignore state props
+            # NOTE: get ignore_state_props for the component from MCPDescriptor
+            ignore_state_props: List[str] = []
             try:
-                ignore_state_props = get_mcp_ignore_state_props(
-                    mcp_name=self.id,
+                ignore_state_props = MCPDescriptor().mcp_method_ignore_state_props(
+                    mcp_id=self.id,
                     method_name='calc_gas_component_fugacity'
                 )
                 logger.debug(
@@ -241,7 +243,8 @@ class PTMCore:
                     hub=self.hub,
                     components=component,
                     custom_reference_content=custom_reference_content,
-                    custom_reference_config=custom_reference_config
+                    custom_reference_config=custom_reference_config,
+                    ignore_state_props=ignore_state_props
                 )
                 logger.debug("Custom reference initialized successfully")
             except Exception as e:
@@ -251,9 +254,11 @@ class PTMCore:
 
             # SECTION: build model source
             try:
+                # REVIEW
+                # ! component-key is set to Name-State
                 model_source = self.hub.build_component_model_source(
                     component=component,
-                    build_mode='name'  # REVIEW
+                    component_key='Name-State'
                 )
                 logger.debug("Model source built successfully")
             except Exception as e:

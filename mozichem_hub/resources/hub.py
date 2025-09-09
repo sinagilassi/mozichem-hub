@@ -263,7 +263,7 @@ class Hub:
             The component thermodynamic database to register.
             - component: Component
             - thermodb: CompBuilder
-            - build_mode: Literal['name', 'formula']
+            - component_key: Literal['name', 'formula']
 
         Returns
         -------
@@ -276,7 +276,7 @@ class Hub:
             # NOTE: extract component
             component = component_thermodb.component
             thermodb = component_thermodb.thermodb
-            # build_mode = component_thermodb.build_mode
+            # component_key = component_thermodb.component_key
 
             # NOTE: extract component name
             component_name = component.name.strip()
@@ -284,41 +284,42 @@ class Hub:
             component_state = component.state.strip().lower()
 
             # NOTE: set name
-            name_ = f"{component_name}-{component_state}"
-            formula_ = f"{component_formula}-{component_state}"
+            name_state = f"{component_name}-{component_state}"
+            formula_state = f"{component_formula}-{component_state}"
 
-            logger.debug(f"Registering component: {name_} / {formula_}")
+            logger.debug(
+                f"Registering component: {name_state} / {formula_state}")
 
             # SECTION: create component reference rule
             # ! by name-state
             component_reference_rule_by_name = \
                 self._set_component_reference_rule(
-                    component_id=name_
+                    component_id=name_state
                 )
             # ! by formula-state
             component_reference_rule_by_formula = \
                 self._set_component_reference_rule(
-                    component_id=formula_
+                    component_id=formula_state
                 )
 
             # SECTION: register the component thermodynamic database
             # NOTE: by name
             self.thermo_hub.add_thermodb(
-                name=name_,
+                name=name_state,
                 data=thermodb,
                 rules=component_reference_rule_by_name
             )
 
             # NOTE: by formula
             self.thermo_hub.add_thermodb(
-                name=formula_,
+                name=formula_state,
                 data=thermodb,
                 rules=component_reference_rule_by_formula
             )
 
             logger.debug(
                 f"Component thermodynamic database registered "
-                f"successfully: {name_} / {formula_}"
+                f"successfully: {name_state} / {formula_state}"
             )
             return True
 
@@ -333,9 +334,9 @@ class Hub:
     def build_component_thermodb(
         self,
         component: Component | List[Component],
-        build_mode: Literal[
-            'name', 'formula'
-        ] = 'name'
+        component_key: Literal[
+            'Name-State', 'Formula-State'
+        ] = 'Name-State'
     ) -> Union[
         ComponentThermoDB,
         List[ComponentThermoDB]
@@ -352,10 +353,10 @@ class Hub:
               single component.
             - If a list of Components is provided, each item must be a
               Component.
-        build_mode : Literal['name', 'formula'], optional
-            The mode to build the thermodynamic database, either by 'name'
-            or 'formula'.
-            Default is 'name'.
+        component_key : Literal['Name-State', 'Formula-State'], optional
+            The mode to build the thermodynamic database, either by 'Name-State'
+            or 'Formula-State'.
+            Default is 'Name-State'.
 
         Returns
         -------
@@ -404,7 +405,7 @@ class Hub:
 
                 # SECTION: build the component thermodynamic database
                 # NOTE: check build mode
-                if build_mode == 'name':  # ! >> name-state
+                if component_key == 'Name-State':  # ! >> name-state
                     # NOTE: component reference config
                     component_id = f"{component_name}-{component_state}"
 
@@ -427,9 +428,9 @@ class Hub:
                         component=component_ptdb,
                         reference_config=component_reference_config,
                         custom_reference=self.reference,
-                        component_key='Name-State'
+                        component_key=component_key
                     )
-                elif build_mode == 'formula':  # ! >> formula-state
+                elif component_key == 'Formula-State':  # ! >> formula-state
                     # NOTE: component reference config
                     component_id = f"{component_formula}-{component_state}"
 
@@ -452,18 +453,18 @@ class Hub:
                         component=component_ptdb,
                         reference_config=component_reference_config,
                         custom_reference=self.reference,
-                        component_key='Formula-State'
+                        component_key=component_key
                     )
                 else:
                     raise ValueError(
-                        f"Invalid build mode: {build_mode}. Use 'name' or 'formula'.")
+                        f"Invalid build mode: {component_key}. Use 'name' or 'formula'.")
 
                 # NOTE: save the component thermodynamic database
                 components_thermodb.append(
                     ComponentThermoDB(
                         component=component,
                         thermodb=component_thermodb,
-                        build_mode=build_mode
+                        component_key=component_key
                     )
                 )
 
@@ -575,9 +576,9 @@ class Hub:
     def build_component_model_source(
         self,
         component: Component,
-        build_mode: Literal[
-            'name', 'formula'
-        ] = 'name'
+        component_key: Literal[
+            'Name-State', 'Formula-State'
+        ] = 'Name-State'
     ) -> Dict[str, Any]:
         """
         Build the model source for a component or list of components.
@@ -586,9 +587,10 @@ class Hub:
         ----------
         component : Component
             The component for which to build the model source.
-        build_mode : Literal['name', 'formula'], optional
-            The mode to build the model source, either by 'name' or 'formula'.
-            Default is 'name'.
+        component_key : Literal['Name-State', 'Formula-State'], optional
+            The mode to build the model source, either by 'Name-State' or
+            'Formula-State'.
+            Default is 'Name-State'.
 
         Returns
         -------
@@ -602,7 +604,7 @@ class Hub:
             logger.debug("Building component thermodynamic database")
             components_thermodb = self.build_component_thermodb(
                 component=component,
-                build_mode=build_mode
+                component_key=component_key
             )
 
             # SECTION: register the component thermodynamic database
@@ -643,9 +645,9 @@ class Hub:
     def build_components_model_source(
         self,
         components: List[Component],
-        build_mode: Literal[
-            'name', 'formula'
-        ] = 'name'
+        component_key: Literal[
+            'Name-State', 'Formula-State'
+        ] = 'Name-State'
     ) -> Dict:
         """
         Build the model source for multiple components.
@@ -654,9 +656,10 @@ class Hub:
         ----------
         components : List[Component]
             The list of components for which to build the model source.
-        build_mode : Literal['name', 'formula'], optional
-            The mode to build the model source, either by 'name' or 'formula'.
-            Default is 'name'.
+        component_key : Literal['Name-State', 'Formula-State'], optional
+            The mode to build the model source, either by 'Name-State' or
+            'Formula-State'.
+            Default is 'Name-State'.
 
         Returns
         -------
@@ -674,7 +677,7 @@ class Hub:
             logger.debug("Building component thermodynamic databases")
             components_thermodb = self.build_component_thermodb(
                 component=components,
-                build_mode=build_mode
+                component_key=component_key
             )
 
             # SECTION: register the component thermodynamic databases
