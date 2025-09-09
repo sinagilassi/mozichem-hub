@@ -304,15 +304,26 @@ class ReferenceMapper(ReferenceServices):
                     ignore_state_props=ignore_state_props
                 )
 
+            # extract
+            reference_ = component_reference_thermodb.reference_thermodb.reference
+            contents_ = component_reference_thermodb.reference_thermodb.contents
+            configs_: Dict[str, Dict[str, Dict[str, str]]
+                           ] = component_reference_thermodb.reference_thermodb.configs
+            rules_: Dict[str, Dict[str, Dict[str, str]]
+                         ] = component_reference_thermodb.reference_thermodb.rules
+            labels_ = component_reference_thermodb.reference_thermodb.labels
+            ignore_labels_ = component_reference_thermodb.reference_thermodb.ignore_labels
+            ignore_props_ = component_reference_thermodb.reference_thermodb.ignore_props
+
             # NOTE: reference thermodb
             return ReferenceThermoDB(
-                reference=component_reference_thermodb.reference_thermodb.reference,
-                contents=component_reference_thermodb.reference_thermodb.contents,
-                config=component_reference_thermodb.reference_thermodb.configs,
-                link=component_reference_thermodb.reference_thermodb.rules,
-                labels=component_reference_thermodb.reference_thermodb.labels,
-                ignore_labels=component_reference_thermodb.reference_thermodb.ignore_labels,
-                ignore_props=component_reference_thermodb.reference_thermodb.ignore_props
+                reference=reference_,
+                contents=contents_,
+                config=configs_,
+                link=rules_,
+                labels=labels_,
+                ignore_labels=ignore_labels_,
+                ignore_props=ignore_props_
             )
 
         except Exception as e:
