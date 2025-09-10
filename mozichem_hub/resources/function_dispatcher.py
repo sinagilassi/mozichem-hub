@@ -8,7 +8,7 @@ from typing import (
 )
 # locals
 from ..models import (
-    ReferenceThermoDB
+    ReferencesThermoDB
 )
 from .hub import Hub
 from .mozi_tool_builder import MoziToolBuilder
@@ -29,7 +29,7 @@ class FunctionDispatcher(MoziToolBuilder, MCPClassBuilder):
 
     def __init__(
         self,
-        reference_thermodb: ReferenceThermoDB,
+        references_thermodb: ReferencesThermoDB,
     ):
         """
         Initialize the Dispatcher instance.
@@ -48,7 +48,7 @@ class FunctionDispatcher(MoziToolBuilder, MCPClassBuilder):
 
         # SECTION: Initialize the Hub
         self.Hub_ = Hub(
-            reference_thermodb=reference_thermodb
+            references_thermodb=references_thermodb
         )
 
     def _init_mcp_class(self, mcp_name: str):
