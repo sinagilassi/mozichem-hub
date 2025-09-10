@@ -3,12 +3,14 @@ import logging
 from typing import (
     Optional,
     List,
-    Tuple
+    Tuple,
+    Dict
 )
-
+from pyThermoDB.models import ComponentConfig, ComponentRule
 # locals
 from ..models import Component, ReferenceThermoDB, ComponentReferenceThermoDB, ReferencesThermoDB
 from .hub import Hub
+from ..utils import create_component_id
 from ..errors import (
     CustomReferenceInitializationError,
     EmptyReferenceContentError,
@@ -153,6 +155,10 @@ def initialize_custom_reference(
             # LINK: initialize reference mapper
             ReferenceMapper_ = ReferenceMapper()
 
+            # init components reference thermodb list
+            components_reference_thermodb: List[ComponentReferenceThermoDB] = [
+            ]
+
             # SECTION: build component reference thermodb
             # NOTE: set component
             if isinstance(components, list):
@@ -161,7 +167,7 @@ def initialize_custom_reference(
                     raise ValueError("Components list is empty.")
 
                 # NOTE: method 1
-                reference_thermodb_: List[ComponentReferenceThermoDB] = \
+                components_reference_thermodb: List[ComponentReferenceThermoDB] = \
                     ReferenceMapper_.\
                     components_reference_thermodb_generator_from_reference_content(
                         components=components,
@@ -179,12 +185,15 @@ def initialize_custom_reference(
                         reference_content=custom_reference_content,
                         ignore_state_props=ignore_state_props
                     )
-                reference_thermodb_ = [reference_thermodb__]
+                components_reference_thermodb = [reference_thermodb__]
             else:
                 raise TypeError(
                     "Components must be a Component or a list of Components.")
 
             # NOTE: build references thermodb
+            reference_thermodb: ReferencesThermoDB = to_references_thermodb(
+                components_reference_thermodb=components_reference_thermodb
+            )
 
             # ! reinitialize hub with the new reference thermodb
             return Hub(reference_thermodb)
@@ -195,3 +204,90 @@ def initialize_custom_reference(
         logging.error(f"Failed to initialize custom reference: {e}")
         raise CustomReferenceInitializationError(
             CUSTOM_REFERENCE_INIT_ERROR_MSG) from e
+
+
+def to_references_thermodb(
+        components_reference_thermodb: List[ComponentReferenceThermoDB]
+) -> ReferencesThermoDB:
+    """
+    Convert a list of ComponentReferenceThermoDB to a single ReferencesThermoDB.
+
+    Parameters
+    ----------
+    components_reference_thermodb : List[ComponentReferenceThermoDB]
+        List of ComponentReferenceThermoDB instances.
+
+    Returns
+    -------
+    ReferencesThermoDB
+        A single ReferencesThermoDB instance containing all references and contents.
+    """
+    try:
+        # SECTION: convert to ReferencesThermoDB
+        reference: Dict[str, Dict[str, List[str]]] = {}
+        contents: Dict[str, List[str]] = {}
+        configs: Dict[str, Dict[str, ComponentConfig]] = {}
+        rules: Dict[str, Dict[str, ComponentRule]] = {}
+        labels: Dict[str, List[str]] = {}
+        ignore_labels: Dict[str, List[str]] = {}
+        ignore_props: Dict[str, List[str]] = {}
+
+        # NOTE: iterate over components_reference_thermodb
+        for component_ref in components_reference_thermodb:
+            # ! component id
+            component_id_ = create_component_id(
+                component=component_ref.component
+            )
+            # >> component name-state
+            component_name_state = component_id_.name_state
+            # >> component formula-state
+            component_formula_state = component_id_.formula_state
+
+            # components ids
+            component_ids = [
+                component_name_state,
+                component_formula_state,
+            ]
+
+            # ! iterate over component ids
+            for component_id in component_ids:
+                # check if component_name already exists
+                if component_id in reference:
+                    continue  # skip if already exists
+
+                # ! required fields
+                # merge reference
+                reference[component_id] = component_ref.reference_thermodb.reference
+                # merge contents
+                contents[component_id] = component_ref.reference_thermodb.contents
+                # merge configs
+                configs[component_id] = component_ref.reference_thermodb.configs
+                # merge rules
+                rules[component_id] = component_ref.reference_thermodb.rules
+
+                # ! NOTE: merge labels, ignore_labels, ignore_props
+                # merge labels
+                labels[component_id] = component_ref.reference_thermodb.labels or []
+                # merge ignore_labels
+                ignore_labels[component_id] = component_ref.reference_thermodb.ignore_labels or [
+                ]
+                # merge ignore_props
+                ignore_props[component_id] = component_ref.reference_thermodb.ignore_props or [
+                ]
+
+            # NOTE: reset component ids
+            component_ids = []
+
+        # NOTE: return ReferencesThermoDB
+        return ReferencesThermoDB(
+            reference=reference,
+            contents=contents,
+            configs=configs,
+            rules=rules,
+            labels=labels,
+            ignore_labels=ignore_labels,
+            ignore_props=ignore_props
+        )
+    except Exception as e:  # pragma: no cover
+        logging.error(f"Failed to convert to ReferencesThermoDB: {e}")
+        raise e
