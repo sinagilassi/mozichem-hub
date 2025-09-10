@@ -133,13 +133,13 @@ class MCP():
         """
         try:
             # NOTE: dependencies
-            dependencies = self._settings.dependencies
+            # dependencies = self._settings.dependencies
 
             # NOTE: Initialize the MCP instance
             return FastMCP(
                 name=self._name,
                 instructions=self._instructions,
-                dependencies=dependencies
+                # dependencies=dependencies
             )
         except ToolError as e:
             raise ToolRegistrationError(
@@ -167,6 +167,27 @@ class MCP():
 
             # NOTE: add tools to the MCP server
             return self._mcp
+        except Exception as e:
+            raise MCPInitializationError(
+                f"{MCP_INITIALIZATION_ERROR_MSG} {e}") from e
+
+    def env_dependencies(self) -> List[str]:
+        """
+        Get the environment dependencies for the MCP server.
+
+        Returns
+        -------
+        List[str]
+            A list of environment dependencies.
+        """
+        try:
+            # NOTE: get dependencies from settings
+            dependencies = self._settings.dependencies
+            if not isinstance(dependencies, list):
+                raise MCPInitializationError(
+                    f"{MCP_INITIALIZATION_ERROR_MSG} Dependencies must be a list.")
+
+            return dependencies
         except Exception as e:
             raise MCPInitializationError(
                 f"{MCP_INITIALIZATION_ERROR_MSG} {e}") from e
