@@ -235,14 +235,12 @@ class ComponentReferenceThermoDB(BaseModel):
 class ReferencesThermoDB(BaseModel):
     """
     Model for references thermodynamic database (ThermoDB).
-
-
     """
-    reference: Dict[str, List[str]] = Field(
+    reference: Dict[str, Dict[str, List[str]]] = Field(
         ...,
         description="Dictionary of references with their associated contents."
     )
-    contents: List[str] = Field(
+    contents: Dict[str, List[str]] = Field(
         ...,
         description="List of reference contents used for building the thermodynamic database."
     )

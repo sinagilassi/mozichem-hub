@@ -75,7 +75,7 @@ class ComponentThermoDB(BaseModel):
     component: Component
     thermodb: CompBuilder
     component_key: Literal[
-        'Name-State', 'Formula-State', 'Name', 'Formula', 'Name-Formula-State'
+        'Name-State', 'Formula-State'
     ] = Field(
         default='Name-State',
         description="Key to identify the component in the reference content."
