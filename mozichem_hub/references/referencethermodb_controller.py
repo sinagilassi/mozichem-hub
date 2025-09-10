@@ -2,7 +2,8 @@
 import logging
 from typing import (
     Dict,
-    Literal
+    Literal,
+    List,
 )
 from pyThermoDB.references import (
     ReferenceChecker,
@@ -25,7 +26,6 @@ from ..models import (
     ComponentReferenceLink,
     ReferenceThermoDB,
     ComponentReferenceThermoDB,
-    ComponentsReferenceThermoDB
 )
 
 
@@ -313,7 +313,7 @@ class ReferenceThermoDBController():
         component_key: Literal[
             'Name-State', 'Formula-State'
         ] = 'Name-State'
-    ) -> ComponentsReferenceThermoDB:
+    ) -> List[ComponentReferenceThermoDB]:
         """
         Generate the reference thermodynamic database (ReferenceThermoDB).
 
@@ -326,7 +326,7 @@ class ReferenceThermoDBController():
 
         Returns
         -------
-        ComponentsReferenceThermoDB
+        List[ComponentReferenceThermoDB]
             A list of ComponentReferenceThermoDB instances.
         """
         try:
@@ -343,7 +343,8 @@ class ReferenceThermoDBController():
             components_reference_link = {}
 
             # NOTE: init
-            components_reference_thermodb: ComponentsReferenceThermoDB = []
+            components_reference_thermodb: List[ComponentReferenceThermoDB] = [
+            ]
 
             # SECTION: iterate over components
             for component in components:

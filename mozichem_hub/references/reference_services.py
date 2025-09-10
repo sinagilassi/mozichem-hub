@@ -5,7 +5,7 @@ from typing import (
 # local
 from ..models import (
     References,
-    ReferenceThermoDB
+    ReferencesThermoDB
 )
 from .references_initializer import ReferencesInitializer
 
@@ -25,7 +25,7 @@ class ReferenceServices:
     def _generate_references(
         self,
         references: Optional[References] = None
-    ) -> ReferenceThermoDB:
+    ) -> ReferencesThermoDB:
         """
         Initialize the references.
 
@@ -41,7 +41,7 @@ class ReferenceServices:
             )
 
             # NOTE: reference thermodb
-            _reference_thermodb: ReferenceThermoDB = \
+            _reference_thermodb: ReferencesThermoDB = \
                 self.ReferencesInitializer_._get_reference_thermodb()
 
             # return

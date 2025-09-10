@@ -5,12 +5,13 @@ from typing import (
     Dict,
     List,
     Union)
+from pyThermoDB.models import ComponentConfig, ComponentRule
 # local
 from .contents import REFERENCE_CONTENT
 from .config import REFERENCE_CONFIGS
 from ..models import (
     References,
-    ReferenceThermoDB,
+    ReferencesThermoDB,
 )
 from .reference_adapter import ReferencesAdapter
 
@@ -47,23 +48,23 @@ class ReferencesInitializer:
         return self.reference_thermodb.contents
 
     @property
-    def reference_config(self) -> Dict[str, Dict[str, Dict[str, str]]]:
+    def reference_config(self) -> Dict[str, Dict[str, ComponentConfig]]:
         """
         Get the reference configuration.
         """
-        return self.reference_thermodb.config
+        return self.reference_thermodb.configs
 
     @property
-    def reference_link(self) -> Dict[str, Dict[str, Dict[str, str]]]:
+    def reference_link(self) -> Dict[str, Dict[str, ComponentRule]]:
         """
         Get the reference rule.
         """
-        return self.reference_thermodb.link
+        return self.reference_thermodb.rules
 
     def initialize_references(
         self,
         references: Optional[References] = None,
-    ) -> ReferenceThermoDB:
+    ) -> ReferencesThermoDB:
         """
         Analyze the custom reference for the ThermoHub.
 
@@ -136,7 +137,7 @@ class ReferencesInitializer:
     def __generate_reference_thermodb(
         self,
         external_references: Union[References, None] = None
-    ) -> ReferenceThermoDB:
+    ) -> ReferencesThermoDB:
         """
         Generate the ReferenceThermoDB object.
 
@@ -171,11 +172,11 @@ class ReferencesInitializer:
                     )
 
                 # LINK: Create the ReferenceThermoDB object
-                reference_thermodb = ReferenceThermoDB(
+                reference_thermodb = ReferencesThermoDB(
                     reference=reference,
                     contents=local_reference_content,
-                    config=local_reference_config,
-                    link=local_reference_link_
+                    configs=local_reference_config,
+                    rules=local_reference_link_
                 )
             else:
                 # SECTION: external reference
@@ -223,11 +224,11 @@ class ReferencesInitializer:
                     )
 
                 # LINK: Create the ReferenceThermoDB object
-                reference_thermodb = ReferenceThermoDB(
+                reference_thermodb = ReferencesThermoDB(
                     reference=reference,
                     contents=reference_contents,
-                    config=reference_config,
-                    link=reference_link_
+                    configs=reference_config,
+                    rules=reference_link_
                 )
 
             # res
@@ -254,7 +255,7 @@ class ReferencesInitializer:
 
     def _get_reference_thermodb(
         self,
-    ) -> ReferenceThermoDB:
+    ) -> ReferencesThermoDB:
         """
         Get the reference thermodynamic database.
 

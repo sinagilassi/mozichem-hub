@@ -17,7 +17,7 @@ from .reference_controller import ReferenceController
 from ..models import (
     References,
     ReferenceThermoDB,
-    ComponentsReferenceThermoDB,
+    ReferencesThermoDB,
     ComponentReferenceThermoDB,
 )
 from .referencethermodb_controller import ReferenceThermoDBController
@@ -107,7 +107,7 @@ class ReferenceMapper(ReferenceServices):
     def _reference_thermodb_generator(
         self,
         references: References
-    ) -> ReferenceThermoDB:
+    ) -> ReferencesThermoDB:
         """
         Generate the reference thermodb for the MCP methods.
 
@@ -142,7 +142,7 @@ class ReferenceMapper(ReferenceServices):
                 Dict[str, Dict[str, ComponentConfig]]
             ]
         ] = None
-    ) -> ReferenceThermoDB:
+    ) -> ReferencesThermoDB:
         """
         Generate the reference thermodb for the MCP.
 
@@ -155,8 +155,8 @@ class ReferenceMapper(ReferenceServices):
 
         Returns
         -------
-        ReferenceThermoDB
-            The reference thermodb for the MCP.
+        ReferencesThermoDB
+            The references thermodb for the MCP.
 
         Notes
         -----
@@ -186,7 +186,7 @@ class ReferenceMapper(ReferenceServices):
         reference_content: str,
         component_key: Literal['Name-State', 'Formula-State'] = 'Name-State',
         **kwargs
-    ) -> ComponentsReferenceThermoDB:
+    ) -> List[ComponentReferenceThermoDB]:
         """
         Generate the reference thermodb from the reference content.
 
@@ -203,7 +203,7 @@ class ReferenceMapper(ReferenceServices):
 
         Returns
         -------
-        ComponentsReferenceThermoDB
+        List[ComponentReferenceThermoDB]
             The reference thermodb generated from the reference content.
 
         Notes

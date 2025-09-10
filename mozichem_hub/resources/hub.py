@@ -84,30 +84,34 @@ class Hub:
 
         try:
             # NOTE: set
-            self.reference_thermodb = references_thermodb
+            self.references_thermodb = references_thermodb
             # LINK: set the references
-            self.reference: Dict[str, List[str]] = reference_thermodb.reference
+            self.reference: Dict[
+                str, List[str]
+            ] = references_thermodb.reference
             # LINK: content of the reference thermodynamic database
             # ! [not used]
-            self.reference_contents: List[str] = reference_thermodb.contents
+            self.reference_contents: List[str] = references_thermodb.contents
             # LINK: configuration for the thermodynamic database
             # ! [consists ALL and component-specific configurations]
             self.reference_configs: Dict[
                 str, Dict[str, ComponentConfig]
-            ] = reference_thermodb.configs
+            ] = references_thermodb.configs
             # LINK: rule for the thermodynamic database
             # ! [consists ALL and component-specific configurations]
             self.thermodb_rules: Dict[
                 str, Dict[str, ComponentRule]
-            ] = reference_thermodb.rules
+            ] = references_thermodb.rules
             # LINK: labels to use in the reference config
-            self.labels: Dict[str, List[str]] = reference_thermodb.labels or {}
+            self.labels: Dict[
+                str, List[str]
+            ] = references_thermodb.labels or {}
             # LINK: labels to ignore in the reference config
             self.ignore_labels: Dict[str, List[str]] = \
-                reference_thermodb.ignore_labels or {}
+                references_thermodb.ignore_labels or {}
             # LINK: properties to ignore in the reference config
             self.ignore_props: Dict[str, List[str]] = \
-                reference_thermodb.ignore_props or {}
+                references_thermodb.ignore_props or {}
 
             # SECTION: Initialize the ThermoHub
             logger.debug("Building ThermoHub instance")

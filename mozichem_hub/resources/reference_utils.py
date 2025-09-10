@@ -7,7 +7,7 @@ from typing import (
 )
 
 # locals
-from ..models import Component, ReferenceThermoDB, ComponentsReferenceThermoDB, ComponentReferenceThermoDB
+from ..models import Component, ReferenceThermoDB, ComponentReferenceThermoDB, ReferencesThermoDB
 from .hub import Hub
 from ..errors import (
     CustomReferenceInitializationError,
@@ -138,7 +138,7 @@ def initialize_custom_reference(
             ReferenceMapper_ = ReferenceMapper()
 
             # NOTE: build reference_thermodb
-            reference_thermodb: ReferenceThermoDB = \
+            reference_thermodb: ReferencesThermoDB = \
                 ReferenceMapper_.generate_reference_thermodb(
                     reference_content=custom_reference_content,
                     reference_config=custom_reference_config
@@ -161,24 +161,30 @@ def initialize_custom_reference(
                     raise ValueError("Components list is empty.")
 
                 # NOTE: method 1
-                reference_thermodb: ComponentsReferenceThermoDB = \
+                reference_thermodb_: List[ComponentReferenceThermoDB] = \
                     ReferenceMapper_.\
                     components_reference_thermodb_generator_from_reference_content(
                         components=components,
                         reference_content=custom_reference_content,
                         ignore_state_props=ignore_state_props
-                    )
+                )
 
             elif isinstance(components, Component):
                 components = [components]
                 # NOTE: method 2 (with ignore_state_props)
-                reference_thermodb: ComponentReferenceThermoDB = \
+                reference_thermodb__: ComponentReferenceThermoDB = \
                     ReferenceMapper_.\
                     component_reference_thermodb_generator_from_reference_mapper(
                         component=components[0],
                         reference_content=custom_reference_content,
                         ignore_state_props=ignore_state_props
                     )
+                reference_thermodb_ = [reference_thermodb__]
+            else:
+                raise TypeError(
+                    "Components must be a Component or a list of Components.")
+
+            # NOTE: build references thermodb
 
             # ! reinitialize hub with the new reference thermodb
             return Hub(reference_thermodb)

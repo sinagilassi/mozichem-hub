@@ -323,7 +323,7 @@ class ReferencesAdapter:
     def to_reference_config(
         self,
         reference_config: Dict[str, Dict[str, ComponentPropertySource]]
-    ) -> Dict[str, Dict[str, Dict[str, str]]]:
+    ) -> Dict[str, Dict[str, ComponentConfig]]:
         """
         Build the reference configuration from a string or dictionary.
 
@@ -334,7 +334,7 @@ class ReferencesAdapter:
 
         Returns
         -------
-        Dict[str, Dict[str, str]]
+        Dict[str, Dict[str, ComponentConfig]]
             The built reference configuration as a dictionary.
 
         Notes
@@ -367,7 +367,7 @@ class ReferencesAdapter:
         # NOTE: convert the dictionary to the required format
         try:
             # NOTE: initialize the result dictionary
-            res: Dict[str, Dict[str, Dict[str, str]]] = {}
+            res: Dict[str, Dict[str, ComponentConfig]] = {}
 
             # Iterate over components and sections
             for component, sections in reference_config.items():
