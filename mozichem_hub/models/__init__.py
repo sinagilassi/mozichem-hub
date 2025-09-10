@@ -19,6 +19,7 @@ from .references_models import (
     ComponentReferenceThermoDB,
     ReferencesThermoDB
 )
+from .uni_models import ComponentIdentity
 
 __all__ = [
     "MCPConfig",
@@ -35,5 +36,6 @@ __all__ = [
     "ComponentReferenceConfig",
     "ComponentReferenceLink",
     "ComponentReferenceThermoDB",
-    "ReferencesThermoDB"
+    "ReferencesThermoDB",
+    "ComponentIdentity"
 ]
