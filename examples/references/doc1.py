@@ -211,7 +211,7 @@ print(f"Reference Link (Specific Table): {reference_link_specific}")
 ReferenceMapper_ = ReferenceMapper()
 
 reference_thermodb: ReferenceThermoDB = ReferenceMapper_.\
-    reference_thermodb_generator_from_reference_content(
+    components_reference_thermodb_generator_from_reference_content(
         reference_content=REFERENCE_CONTENT,
         components=[CO2]
     )

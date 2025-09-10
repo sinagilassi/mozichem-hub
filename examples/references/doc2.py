@@ -176,7 +176,7 @@ CO2 = Component(
 ReferenceMapper_ = ReferenceMapper()
 
 reference_thermodb = ReferenceMapper_.\
-    reference_thermodb_generator_from_reference_content(
+    components_reference_thermodb_generator_from_reference_content(
         reference_content=REFERENCE_CONTENT,
         components=[CO2]
     )

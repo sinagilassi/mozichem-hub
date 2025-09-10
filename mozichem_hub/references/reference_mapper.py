@@ -4,17 +4,21 @@ from typing import (
     Optional,
     Union,
     Dict,
-    List
+    List,
+    Literal
 )
 from pyThermoDB.references import component_reference_mapper
 from pyThermoDB.models import ComponentReferenceThermoDB as ComponentReferenceThermoDB_ptdb
 from pyThermoDB.models import Component as ptdbComponent
+from pyThermoDB.models import ComponentConfig, ComponentRule
 # locals
 from .reference_services import ReferenceServices
 from .reference_controller import ReferenceController
 from ..models import (
     References,
-    ReferenceThermoDB
+    ReferenceThermoDB,
+    ComponentsReferenceThermoDB,
+    ComponentReferenceThermoDB,
 )
 from .referencethermodb_controller import ReferenceThermoDBController
 from ..models.resources_models import Component
@@ -46,7 +50,7 @@ class ReferenceMapper(ReferenceServices):
         reference_config: Optional[
             Union[
                 str,
-                Dict[str, Dict[str, str | Dict[str, str]]]
+                Dict[str, Dict[str, ComponentConfig]]
             ]
         ] = None
     ) -> References:
@@ -57,7 +61,7 @@ class ReferenceMapper(ReferenceServices):
         ----------
         reference_content : Optional[Union[str, List[str]]]
             Reference content for the MCP.
-        reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+        reference_config : Optional[Union[str, Dict[str, Dict[str, str]], Dict[str, Dict[str, ComponentConfig]]]]
             Reference configuration for the MCP.
 
         Returns
@@ -135,7 +139,7 @@ class ReferenceMapper(ReferenceServices):
         reference_config: Optional[
             Union[
                 str,
-                Dict[str, Dict[str, str | Dict[str, str]]]
+                Dict[str, Dict[str, ComponentConfig]]
             ]
         ] = None
     ) -> ReferenceThermoDB:
@@ -146,7 +150,7 @@ class ReferenceMapper(ReferenceServices):
         ----------
         reference_content : Optional[Union[str, List[str]]]
             Reference content for the MCP.
-        reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+        reference_config : Optional[Union[str, Dict[str, Dict[str, ComponentConfig]]]]
             Reference configuration for the MCP.
 
         Returns
@@ -176,11 +180,13 @@ class ReferenceMapper(ReferenceServices):
             logging.error(f"Failed to generate reference thermodb: {e}")
             raise RuntimeError("Failed to generate reference thermodb.") from e
 
-    def reference_thermodb_generator_from_reference_content(
+    def components_reference_thermodb_generator_from_reference_content(
         self,
         components: List[Component],
         reference_content: str,
-    ) -> ReferenceThermoDB:
+        component_key: Literal['Name-State', 'Formula-State'] = 'Name-State',
+        **kwargs
+    ) -> ComponentsReferenceThermoDB:
         """
         Generate the reference thermodb from the reference content.
 
@@ -197,7 +203,7 @@ class ReferenceMapper(ReferenceServices):
 
         Returns
         -------
-        ReferenceThermoDB
+        ComponentsReferenceThermoDB
             The reference thermodb generated from the reference content.
 
         Notes
@@ -231,12 +237,13 @@ class ReferenceMapper(ReferenceServices):
             raise RuntimeError(
                 "Failed to generate reference thermodb from content.") from e
 
-    def reference_thermodb_generator_from_reference_mapper(
+    def component_reference_thermodb_generator_from_reference_mapper(
         self,
         component: Component,
         reference_content: str,
+        component_key: Literal['Name-State', 'Formula-State'] = 'Name-State',
         **kwargs
-    ) -> ReferenceThermoDB:
+    ) -> ComponentReferenceThermoDB:
         """
         Generate the component thermodb from the reference content.
 
@@ -255,7 +262,7 @@ class ReferenceMapper(ReferenceServices):
 
         Returns
         -------
-        ComponentThermoDB
+        ComponentReferenceThermoDB
             The component thermodb generated from the reference content.
 
         Notes
@@ -268,12 +275,7 @@ class ReferenceMapper(ReferenceServices):
         which is a string containing the reference data.
         """
         try:
-            # SECTION: inputs
-            # NOTE: get component_key from kwargs and validate
-            component_key: str = kwargs.get('component_key', 'Name-State')
-            if component_key not in ('Name-State', 'Formula-State'):
-                component_key = 'Name-State'
-
+            # SECTION: inputs check
             # NOTE: get ignore_state_props from kwargs
             ignore_state_props: Optional[List[str]] = kwargs.get(
                 'ignore_state_props', None
@@ -295,6 +297,10 @@ class ReferenceMapper(ReferenceServices):
                 state=component.state
             )
 
+            # NOTE: component ids
+            component_name_state = f"{component.name}-{component.state}"
+            component_formula_state = f"{component.formula}-{component.state}"
+
             # SECTION: generate the component reference thermodb
             component_reference_thermodb: ComponentReferenceThermoDB_ptdb = \
                 component_reference_mapper(
@@ -304,27 +310,45 @@ class ReferenceMapper(ReferenceServices):
                     ignore_state_props=ignore_state_props
                 )
 
-            # extract
-            reference_ = component_reference_thermodb.reference_thermodb.reference
-            contents_ = component_reference_thermodb.reference_thermodb.contents
-            configs_: Dict[str, Dict[str, Dict[str, str]]
-                           ] = component_reference_thermodb.reference_thermodb.configs
-            rules_: Dict[str, Dict[str, Dict[str, str]]
-                         ] = component_reference_thermodb.reference_thermodb.rules
-            labels_ = component_reference_thermodb.reference_thermodb.labels
-            ignore_labels_ = component_reference_thermodb.reference_thermodb.ignore_labels
-            ignore_props_ = component_reference_thermodb.reference_thermodb.ignore_props
+            # NOTE: extract
+            reference_: Dict[
+                str, List[str]
+            ] = component_reference_thermodb.reference_thermodb.reference
+            contents_: List[
+                str
+            ] = component_reference_thermodb.reference_thermodb.contents
+            configs_: Dict[
+                str, ComponentConfig
+            ] = component_reference_thermodb.reference_thermodb.configs
+            rules_: Dict[
+                str, ComponentRule
+            ] = component_reference_thermodb.reference_thermodb.rules
+            labels_: Optional[
+                List[str]
+            ] = component_reference_thermodb.reference_thermodb.labels
+            ignore_labels_: Optional[
+                List[str]
+            ] = component_reference_thermodb.reference_thermodb.ignore_labels
+            ignore_props_: Optional[
+                List[str]
+            ] = component_reference_thermodb.reference_thermodb.ignore_props
+
+            # NOTE: >> build component thermodb
+            component_reference_thermodb_ = ComponentReferenceThermoDB(
+                component=component,
+                reference_thermodb=ReferenceThermoDB(
+                    reference=reference_,
+                    contents=contents_,
+                    configs=configs_,
+                    rules=rules_,
+                    labels=labels_,
+                    ignore_labels=ignore_labels_,
+                    ignore_props=ignore_props_
+                )
+            )
 
             # NOTE: reference thermodb
-            return ReferenceThermoDB(
-                reference=reference_,
-                contents=contents_,
-                config=configs_,
-                link=rules_,
-                labels=labels_,
-                ignore_labels=ignore_labels_,
-                ignore_props=ignore_props_
-            )
+            return component_reference_thermodb_
 
         except Exception as e:
             logging.error(

@@ -15,7 +15,9 @@ from .references_models import (
     ReferenceThermoDB,
     ComponentPropertySource,
     ComponentReferenceConfig,
-    ComponentReferenceLink
+    ComponentReferenceLink,
+    ComponentReferenceThermoDB,
+    ReferencesThermoDB
 )
 
 __all__ = [
@@ -32,4 +34,6 @@ __all__ = [
     "ComponentPropertySource",
     "ComponentReferenceConfig",
     "ComponentReferenceLink",
+    "ComponentReferenceThermoDB",
+    "ReferencesThermoDB"
 ]

@@ -1,12 +1,14 @@
 # import libs
 import logging
 from typing import (
-    Dict
+    Dict,
+    Literal
 )
 from pyThermoDB.references import (
     ReferenceChecker,
     load_reference_from_str
 )
+from pyThermoDB.models import ComponentConfig, ComponentRule
 # locals
 from ..errors import (
     NoDatabookFoundError,
@@ -21,7 +23,9 @@ from ..models import (
     Component,
     ComponentReferenceConfig,
     ComponentReferenceLink,
-    ReferenceThermoDB
+    ReferenceThermoDB,
+    ComponentReferenceThermoDB,
+    ComponentsReferenceThermoDB
 )
 
 
@@ -89,8 +93,10 @@ class ReferenceThermoDBController():
         component_name: str,
         component_formula: str,
         component_state: str,
-        component_key: str = 'name'
-    ) -> ComponentReferenceConfig:
+        component_key: Literal[
+            'Name-State', 'Formula-State'
+        ] = 'Name-State'
+    ) -> Dict[str, ComponentConfig]:
         """
         Generate the reference configuration for a component.
 
@@ -102,10 +108,12 @@ class ReferenceThermoDBController():
             The formula of the component.
         component_state : str
             The state of the component (e.g., s, l, g).
+        component_key : str, optional
+            Key to identify the component in the reference content, by default 'Name-State'.
 
         Returns
         -------
-        ComponentReferenceConfig
+        Dict[str, ComponentConfig]
             A dictionary containing the reference configuration for the component.
 
         Notes
@@ -135,6 +143,11 @@ class ReferenceThermoDBController():
             # NOTE: selected databook
             selected_databook = self.get_default_databook_name()
 
+            # check if the selected databook is valid
+            if not selected_databook:
+                logging.error(NO_DATABOOK_FOUND_MSG)
+                raise NoDatabookFoundError(NO_DATABOOK_FOUND_MSG)
+
             # SECTION: generate the reference config
             component_reference_config = \
                 self.ReferenceChecker_.get_component_reference_config(
@@ -142,6 +155,7 @@ class ReferenceThermoDBController():
                     component_formula=component_formula,
                     component_state=component_state,
                     databook_name=selected_databook,
+                    component_key=component_key,
                     add_label=True,
                     check_labels=True
                 )
@@ -164,8 +178,11 @@ class ReferenceThermoDBController():
 
     def generate_components_reference_config(
         self,
-        components: list[Component]
-    ) -> Dict[str, ComponentReferenceConfig]:
+        components: list[Component],
+        component_key: Literal[
+            'Name-State', 'Formula-State'
+        ] = 'Name-State'
+    ) -> Dict[str, Dict[str, ComponentConfig]]:
         """
         Generate the reference configuration for multiple components.
 
@@ -176,7 +193,7 @@ class ReferenceThermoDBController():
 
         Returns
         -------
-        dict[str, ComponentReferenceConfig]
+        Dict[str, Dict[str, ComponentConfig]]
             A dictionary containing the reference configuration for each component.
         """
         try:
@@ -188,7 +205,8 @@ class ReferenceThermoDBController():
                 ref_config = self.generate_component_reference_config(
                     component_name=component.name,
                     component_formula=component.formula,
-                    component_state=component.state
+                    component_state=component.state,
+                    component_key=component_key
                 )
                 reference_config[component.name] = ref_config
 
@@ -206,7 +224,10 @@ class ReferenceThermoDBController():
         component_name: str,
         component_formula: str,
         component_state: str,
-    ) -> ComponentReferenceLink:
+        component_key: Literal[
+            'Name-State', 'Formula-State'
+        ] = 'Name-State'
+    ) -> Dict[str, ComponentRule]:
         """
         Generate the reference link for a specific databook. The first databook
         in the list of databooks will be used to generate the reference link.
@@ -222,7 +243,7 @@ class ReferenceThermoDBController():
 
         Returns
         -------
-        dict[str, ComponentReferenceLink]
+        Dict[str, ComponentRule]
             A dictionary containing the reference link for the specified databook.
         """
         try:
@@ -230,13 +251,14 @@ class ReferenceThermoDBController():
             databook_name = self.get_default_databook_name()
 
             # SECTION: get the reference link
-            reference_link: ComponentReferenceLink = \
+            reference_link: Dict[str, ComponentRule] = \
                 self.ReferenceChecker_.generate_reference_link(
                     databook_name=databook_name,
                     component_name=component_name,
                     component_formula=component_formula,
-                    component_state=component_state
-                )
+                    component_state=component_state,
+                    component_key=component_key
+            )
 
             # res
             return reference_link
@@ -247,8 +269,11 @@ class ReferenceThermoDBController():
 
     def generate_components_reference_link(
         self,
-        components: list[Component]
-    ) -> Dict[str, ComponentReferenceLink]:
+        components: list[Component],
+        component_key: Literal[
+            'Name-State', 'Formula-State'
+        ] = 'Name-State'
+    ) -> Dict[str, Dict[str, ComponentRule]]:
         """
         Generate the reference link for multiple components.
 
@@ -259,7 +284,7 @@ class ReferenceThermoDBController():
 
         Returns
         -------
-        dict[str, ComponentReferenceLink]
+        Dict[str, Dict[str, ComponentRule]]
             A dictionary containing the reference link for each component.
         """
         try:
@@ -271,7 +296,8 @@ class ReferenceThermoDBController():
                 ref_link = self.generate_component_reference_link(
                     component_name=component.name,
                     component_formula=component.formula,
-                    component_state=component.state
+                    component_state=component.state,
+                    component_key=component_key
                 )
                 reference_link[component.name] = ref_link
 
@@ -283,19 +309,25 @@ class ReferenceThermoDBController():
 
     def generate_components_reference_thermodb(
         self,
-        components: list[Component]
-    ) -> ReferenceThermoDB:
+        components: list[Component],
+        component_key: Literal[
+            'Name-State', 'Formula-State'
+        ] = 'Name-State'
+    ) -> ComponentsReferenceThermoDB:
         """
         Generate the reference thermodynamic database (ReferenceThermoDB).
 
         Parameters
         ----------
-        component_name : str
-            The name of the component.
-        component_formula : str
-            The formula of the component.
-        component_state : str
-            The state of the component (e.g., s, l, g).
+        components : list[Component]
+            A list of Component instances.
+        component_key : Literal['Name-State', 'Formula-State'], optional
+            Key to identify the component in the reference content, by default 'Name-State'.
+
+        Returns
+        -------
+        ComponentsReferenceThermoDB
+            A list of ComponentReferenceThermoDB instances.
         """
         try:
             # SECTION: reference
@@ -310,14 +342,18 @@ class ReferenceThermoDBController():
             # init components reference link
             components_reference_link = {}
 
-            # iterate over components
+            # NOTE: init
+            components_reference_thermodb: ComponentsReferenceThermoDB = []
+
+            # SECTION: iterate over components
             for component in components:
                 # NOTE: generate reference config
                 component_reference_config = \
                     self.generate_component_reference_config(
                         component_name=component.name,
                         component_formula=component.formula,
-                        component_state=component.state
+                        component_state=component.state,
+                        component_key=component_key
                     )
 
                 # NOTE: generate reference link
@@ -325,7 +361,8 @@ class ReferenceThermoDBController():
                     self.generate_component_reference_link(
                         component_name=component.name,
                         component_formula=component.formula,
-                        component_state=component.state
+                        component_state=component.state,
+                        component_key=component_key
                     )
 
                 # ! component name-state
@@ -349,16 +386,26 @@ class ReferenceThermoDBController():
                 components_reference_link[component_formula_state] = \
                     component_reference_link
 
-            # SECTION: create ReferenceThermoDB instance
-            reference_thermodb = ReferenceThermoDB(
-                reference=reference,
-                contents=reference_contents,
-                config=components_reference_config,
-                link=components_reference_link
-            )
+                # NOTE: create ReferenceThermoDB instance
+                reference_thermodb = ReferenceThermoDB(
+                    reference=reference,
+                    contents=reference_contents,
+                    configs=components_reference_config,
+                    rules=components_reference_link
+                )
 
-            # SECTION: return ReferenceThermoDB instance
-            return reference_thermodb
+                # NOTE: create ComponentReferenceThermoDB instance
+                component_reference_thermodb = ComponentReferenceThermoDB(
+                    component=component,
+                    reference_thermodb=reference_thermodb,
+                )
+
+                # NOTE: store
+                components_reference_thermodb.append(
+                    component_reference_thermodb)
+
+            # return
+            return components_reference_thermodb
 
         except Exception as e:
             logging.error(

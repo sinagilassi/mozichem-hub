@@ -7,7 +7,7 @@ from typing import (
 )
 
 # locals
-from ..models import Component, ReferenceThermoDB
+from ..models import Component, ReferenceThermoDB, ComponentsReferenceThermoDB, ComponentReferenceThermoDB
 from .hub import Hub
 from ..errors import (
     CustomReferenceInitializationError,
@@ -153,27 +153,32 @@ def initialize_custom_reference(
             # LINK: initialize reference mapper
             ReferenceMapper_ = ReferenceMapper()
 
+            # SECTION: build component reference thermodb
             # NOTE: set component
-            if isinstance(components, Component):
+            if isinstance(components, list):
+                # check if list is empty
+                if len(components) == 0:
+                    raise ValueError("Components list is empty.")
+
+                # NOTE: method 1
+                reference_thermodb: ComponentsReferenceThermoDB = \
+                    ReferenceMapper_.\
+                    components_reference_thermodb_generator_from_reference_content(
+                        components=components,
+                        reference_content=custom_reference_content,
+                        ignore_state_props=ignore_state_props
+                    )
+
+            elif isinstance(components, Component):
                 components = [components]
-
-            # SECTION: build reference_thermodb with content only
-            # NOTE: method 1
-            # reference_thermodb: ReferenceThermoDB = \
-            #     ReferenceMapper_.\
-            #     reference_thermodb_generator_from_reference_content(
-            #         components=components,
-            #         reference_content=custom_reference_content,
-            #     )
-
-            # NOTE: method 2 (with ignore_state_props)
-            reference_thermodb: ReferenceThermoDB = \
-                ReferenceMapper_.\
-                reference_thermodb_generator_from_reference_mapper(
-                    component=components[0],
-                    reference_content=custom_reference_content,
-                    ignore_state_props=ignore_state_props
-                )
+                # NOTE: method 2 (with ignore_state_props)
+                reference_thermodb: ComponentReferenceThermoDB = \
+                    ReferenceMapper_.\
+                    component_reference_thermodb_generator_from_reference_mapper(
+                        component=components[0],
+                        reference_content=custom_reference_content,
+                        ignore_state_props=ignore_state_props
+                    )
 
             # ! reinitialize hub with the new reference thermodb
             return Hub(reference_thermodb)

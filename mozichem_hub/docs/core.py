@@ -11,6 +11,7 @@ from typing import (
     Set,
     Union
 )
+from pyThermoDB.models import ComponentConfig
 # local
 from .registry import RegistryMixin
 from .server import MoziServer
@@ -26,13 +27,11 @@ from ..errors import (
     MCPUpdateError,
     ToolBuildingError,
     LoadingReferenceError,
-    ReferenceConfigGenerationError,
     MCP_INITIALIZATION_ERROR_MSG,
     MCP_EXECUTION_ERROR_MSG,
     MCP_UPDATE_ERROR_MSG,
     TOOL_BUILDING_ERROR_MSG,
     LOADING_REFERENCE_ERROR_MSG,
-    REFERENCE_CONFIG_GEN_ERROR_MSG
 )
 
 
@@ -54,7 +53,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
             reference_config: Optional[
                 Union[
                     str,
-                    Dict[str, Dict[str, str | Dict[str, str]]]
+                    Dict[str, Dict[str, ComponentConfig]]
                 ]
             ] = None,
             local_mcp: Optional[bool] = False,
@@ -73,7 +72,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
             Instructions for the mcp server, default is None.
         reference_content : Optional[Union[str, List[str]]]
             Reference content for the mcp server, default is None.
-        reference_config : Optional[Union[str, Dict[str, Dict[str, str]]]]
+        reference_config : Optional[Union[str, Dict[str, Dict[str, ComponentConfig]]]]
             Reference configuration for the mcp server, default is None.
         local_mcp : Optional[bool]
             If True, the mcp server will be configured to run locally.
@@ -293,7 +292,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
         reference_config: Optional[
             Union[
                 str,
-                Dict[str, Dict[str, str | Dict[str, str]]]
+                Dict[str, Dict[str, ComponentConfig]]
             ]
         ] = None,
     ) -> str:
@@ -304,7 +303,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
         ----------
         reference_content : Optional[Union[str, List[str]]]
             The content of the reference, can be a string or a list of strings.
-        reference_config : Optional[Union[str, Dict[str, Dict[str, str | Dict[str, str]]]]]
+        reference_config : Optional[Union[str, Dict[str, Dict[str, ComponentConfig]]]]
             The configuration of the reference, can be a string or a dictionary.
 
         Notes

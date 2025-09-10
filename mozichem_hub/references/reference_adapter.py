@@ -4,6 +4,7 @@ import json
 import logging
 from typing import Dict, Any, Literal, Union
 from pyThermoDB.references import ReferenceConfig, ReferenceChecker
+from pyThermoDB.models import ComponentConfig, ComponentRule
 # local
 from ..models import ComponentPropertySource
 
@@ -58,6 +59,7 @@ class ReferencesAdapter:
                 "Invalid reference_config_type: %s. "
                 "Expected 'str' or 'dict'.", reference_config_type
             )
+            res_dict = None
 
         try:
             # NOTE: check if the result is a valid dictionary
@@ -117,7 +119,7 @@ class ReferencesAdapter:
 
     def config_from_dict(
         self,
-        reference_config: Dict[str, Dict[str, str | Dict[str, str]]]
+        reference_config: dict
     ) -> Dict[str, Dict[str, ComponentPropertySource]]:
         """
         Convert the reference configuration from a dictionary to the required format (dictionary).
@@ -257,14 +259,14 @@ class ReferencesAdapter:
 
     def str_from_reference_link(
             self,
-            reference_link: Dict[str, Dict[str, Dict[str, str]]]
+            reference_link: Dict[str, Dict[str, ComponentRule]]
     ) -> str:
         """
         Convert the reference link to a string format.
 
         Parameters
         ----------
-        reference_link : Dict[str, Dict[str, str]]
+        reference_link : Dict[str, Dict[str, ComponentRule]]
             The reference link to be converted.
 
         Returns
@@ -293,7 +295,7 @@ class ReferencesAdapter:
     def dict_from_reference_link(
             self,
             reference_link: str
-    ) -> Dict[str, Dict[str, Dict[str, str]]]:
+    ) -> Dict[str, Dict[str, ComponentRule]]:
         """
         Convert the reference link from a string to a dictionary format.
 

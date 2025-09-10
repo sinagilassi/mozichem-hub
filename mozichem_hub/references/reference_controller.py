@@ -1,4 +1,5 @@
 # import libs
+import logging
 from typing import (
     Optional,
     Union,
@@ -6,7 +7,7 @@ from typing import (
     Dict,
     Tuple,
 )
-import logging
+from pyThermoDB.models import ComponentConfig
 # locals
 from .reference_adapter import ReferencesAdapter
 from ..models import ComponentPropertySource
@@ -26,7 +27,7 @@ class ReferenceController(ReferencesAdapter):
         reference_config: Optional[
             Union[
                 str,
-                Dict[str, Dict[str, str | Dict[str, str]]]
+                Dict[str, Dict[str, ComponentConfig]]
             ]
         ] = None
     ):
