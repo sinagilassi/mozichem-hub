@@ -17,7 +17,7 @@ from .registry import RegistryMixin
 from .server import MoziServer
 from ..tools import ToolManager
 from ..models import (
-    ReferenceThermoDB,
+    ReferencesThermoDB,
 )
 from ..descriptors import MCPDescriptor
 from ..references import ReferenceMapper
@@ -143,7 +143,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
 
         # SECTION: standardize the reference content and config
         # # NOTE: generate the reference thermodb
-        _reference_thermodb: ReferenceThermoDB = \
+        _references_thermodb: ReferencesThermoDB = \
             self.generate_reference_thermodb(
                 reference_content=reference_content,
                 reference_config=reference_config
@@ -159,7 +159,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
         # SECTION: initialize the ToolManager with references
         # NOTE: create the ToolManager instance
         self.ToolManager_ = ToolManager(
-            reference_thermodb=_reference_thermodb,
+            references_thermodb=_references_thermodb,
         )
 
         # SECTION: configure the MCP server
@@ -343,7 +343,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
         try:
             # SECTION: standardize the reference content and config
             # NOTE: generate the reference thermodb
-            _reference_thermodb: ReferenceThermoDB = \
+            _references_thermodb: ReferencesThermoDB = \
                 self.generate_reference_thermodb(
                     reference_content=reference_content,
                     reference_config=reference_config
@@ -351,7 +351,7 @@ class MoziChemMCP(RegistryMixin, ReferenceMapper):
 
             # SECTION: reinitialize the ToolManager with new references
             self.ToolManager_ = ToolManager(
-                reference_thermodb=_reference_thermodb,
+                references_thermodb=_references_thermodb,
             )
 
             # SECTION: update the MCP server with new references

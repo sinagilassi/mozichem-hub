@@ -14,7 +14,7 @@ from .tool_builder import ToolBuilder
 from ..resources import FunctionDispatcher
 from ..models import MoziTool
 from ..models import (
-    ReferenceThermoDB,
+    ReferencesThermoDB,
 )
 from ..errors import (
     FunctionRetrievalError,
@@ -37,7 +37,7 @@ class ToolManager(ToolBuilder):
 
     def __init__(
         self,
-        reference_thermodb: ReferenceThermoDB,
+        references_thermodb: ReferencesThermoDB,
     ):
         """
         Initialize the ToolManager instance.
@@ -46,11 +46,11 @@ class ToolManager(ToolBuilder):
         ToolBuilder().__init__()
 
         # SECTION: set references
-        self._reference_thermodb = reference_thermodb
+        self._references_thermodb = references_thermodb
 
         # SECTION: init FunctionDispatcher
         self.FunctionDispatcher_ = FunctionDispatcher(
-            reference_thermodb=self._reference_thermodb
+            references_thermodb=self._references_thermodb
         )
 
     def _retrieve_all_local_functions(self) -> Dict[str, List[MoziTool]]:
