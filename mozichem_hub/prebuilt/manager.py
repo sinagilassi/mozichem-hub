@@ -7,6 +7,7 @@ from typing import (
     Union,
     Any
 )
+from pyThermoDB.models import ComponentConfig
 # locals
 from ..docs import MCPHub, MoziChemMCP
 from ..utils import MCPController
@@ -49,7 +50,7 @@ def create_mozichem_mcp(
     reference_config: Optional[
         Union[
             str,
-            Dict[str, Dict[str, str | Dict[str, str]]]
+            Dict[str, Dict[str, ComponentConfig]]
         ]
     ] = None,
     **kwargs
