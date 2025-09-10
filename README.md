@@ -6,7 +6,6 @@
 ![PyPI Version](https://img.shields.io/pypi/v/mozichem-hub)
 ![Supported Python Versions](https://img.shields.io/pypi/pyversions/mozichem-hub.svg)
 ![License](https://img.shields.io/pypi/l/mozichem-hub)
-[![FastAPI](https://img.shields.io/badge/FastAPI-Framework-green?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![MCP](https://img.shields.io/badge/Model_Context_Protocol-Compatible-orange)](https://modelcontextprotocol.io)
 
 > 🚀 **A modular Python toolkit for building Model Context Protocol (MCP) modules focused on chemical engineering and chemistry applications.**
