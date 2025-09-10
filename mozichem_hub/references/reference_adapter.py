@@ -375,7 +375,7 @@ class ReferencesAdapter:
                 # Iterate over sections and extract databook and table
                 for section, cps in sections.items():
                     # property name
-                    prop_name = section
+                    prop_name = str(section)
                     # Extract databook and table
                     if isinstance(cps, ComponentPropertySource):
                         # databook
@@ -384,10 +384,10 @@ class ReferencesAdapter:
                         table = cps.table
 
                         # prop
-                        prop_ = {
-                            'databook': databook,
-                            'table': table
-                        }
+                        prop_ = ComponentConfig(
+                            databook=databook,
+                            table=table
+                        )
 
                         # add to component
                         res[component][prop_name] = prop_

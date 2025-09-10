@@ -41,7 +41,7 @@ class ReferencesInitializer:
         self.reference_thermodb = self.initialize_references(references)
 
     @property
-    def reference_contents(self) -> List[str]:
+    def reference_contents(self) -> Dict[str, List[str]]:
         """
         Get the reference content.
         """
@@ -173,8 +173,8 @@ class ReferencesInitializer:
 
                 # LINK: Create the ReferenceThermoDB object
                 reference_thermodb = ReferencesThermoDB(
-                    reference=reference,
-                    contents=local_reference_content,
+                    reference={'ALL': reference},
+                    contents={'ALL': local_reference_content},
                     configs=local_reference_config,
                     rules=local_reference_link_
                 )
@@ -225,8 +225,8 @@ class ReferencesInitializer:
 
                 # LINK: Create the ReferenceThermoDB object
                 reference_thermodb = ReferencesThermoDB(
-                    reference=reference,
-                    contents=reference_contents,
+                    reference={'ALL': reference},
+                    contents={'ALL': reference_contents},
                     configs=reference_config,
                     rules=reference_link_
                 )

@@ -48,21 +48,3 @@ class ReferenceServices:
             return _reference_thermodb
         except Exception as e:
             raise Exception("Failed to initialize references.") from e
-
-    def _set_custom_references(
-        self,
-        references: References,
-    ):
-        """
-        Add a custom reference to the mcp server.
-
-        Parameters
-        ----------
-        references : References
-            The custom references to be added to the mcp server.
-
-        Returns
-        -------
-        None
-        """
-        pass
