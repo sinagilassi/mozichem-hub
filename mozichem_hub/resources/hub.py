@@ -9,10 +9,12 @@ from typing import (
 )
 import pyThermoDB as ptdb
 from pyThermoDB.models import Component as ptdbComponent
-from pyThermoDB.models import ComponentConfig, ComponentRule
+from pyThermoDB.models import ComponentConfig, ComponentRule, CustomReference
 from pyThermoDB import CompBuilder
 import pyThermoLinkDB as ptldb
 # locals
+from .hub_manager import HubManager
+from ..utils.component_utils import create_component_id
 from ..models import (
     Component,
     ComponentThermoDB,
@@ -24,8 +26,6 @@ from ..errors import (
     HubInitializationError,
     HubThermoHubBuildError,
     HubThermoHubCleanError,
-    HubComponentReferenceConfigError,
-    HubComponentReferenceRuleError,
     HubComponentThermoDBRegistrationError,
     HubComponentsThermoDBRegistrationError,
     ComponentThermoDBBuildError,
@@ -35,8 +35,6 @@ from ..errors import (
     HUB_INITIALIZATION_ERROR_MSG,
     HUB_THERMO_HUB_BUILD_ERROR_MSG,
     HUB_THERMO_HUB_CLEAN_ERROR_MSG,
-    HUB_COMPONENT_REFERENCE_CONFIG_ERROR_MSG,
-    HUB_COMPONENT_REFERENCE_RULE_ERROR_MSG,
     HUB_COMPONENT_THERMODB_REGISTRATION_ERROR_MSG,
     HUB_COMPONENTS_THERMODB_REGISTRATION_ERROR_MSG,
     COMPONENT_THERMODB_BUILD_ERROR_MSG,
@@ -49,7 +47,7 @@ from ..errors import (
 logger = logging.getLogger(__name__)
 
 
-class Hub:
+class Hub(HubManager):
     """
     Hub class for building and managing the thermodynamic properties
     """
@@ -83,35 +81,8 @@ class Hub:
         logger.info("Initializing Hub instance")
 
         try:
-            # NOTE: set
-            self.references_thermodb = references_thermodb
-            # LINK: set the references
-            self.reference: Dict[
-                str, List[str]
-            ] = references_thermodb.reference
-            # LINK: content of the reference thermodynamic database
-            # ! [not used]
-            self.reference_contents: List[str] = references_thermodb.contents
-            # LINK: configuration for the thermodynamic database
-            # ! [consists ALL and component-specific configurations]
-            self.reference_configs: Dict[
-                str, Dict[str, ComponentConfig]
-            ] = references_thermodb.configs
-            # LINK: rule for the thermodynamic database
-            # ! [consists ALL and component-specific configurations]
-            self.thermodb_rules: Dict[
-                str, Dict[str, ComponentRule]
-            ] = references_thermodb.rules
-            # LINK: labels to use in the reference config
-            self.labels: Dict[
-                str, List[str]
-            ] = references_thermodb.labels or {}
-            # LINK: labels to ignore in the reference config
-            self.ignore_labels: Dict[str, List[str]] = \
-                references_thermodb.ignore_labels or {}
-            # LINK: properties to ignore in the reference config
-            self.ignore_props: Dict[str, List[str]] = \
-                references_thermodb.ignore_props or {}
+            # LINK: initialize parent class
+            super().__init__(references_thermodb)
 
             # SECTION: Initialize the ThermoHub
             logger.debug("Building ThermoHub instance")
@@ -122,129 +93,6 @@ class Hub:
         except Exception as e:
             logger.error(f"Failed to initialize Hub: {e}")
             raise HubInitializationError(HUB_INITIALIZATION_ERROR_MSG) from e
-
-    def _set_component_reference_config(
-        self,
-        component_id: str
-    ) -> Dict[str, ComponentConfig]:
-        """
-        Set the reference configuration for a specific component.
-        Parameters
-        ----------
-        component_id : str
-            The ID of the component for which to set the reference
-            configuration.
-        Returns
-        -------
-        Dict[str, Dict[str, str]]
-            The reference configuration for the specified component.
-        """
-        logger.debug(f"Setting reference config for component: {component_id}")
-
-        try:
-            # SECTION: get the reference configuration for the component
-            component_reference_config = self.reference_configs.get(
-                component_id,
-                None
-            )
-
-            # NOTE: if not found, get ALL
-            if component_reference_config is None:
-                logger.debug(
-                    f"Component '{component_id}' config not found, "
-                    "using ALL config"
-                )
-                component_reference_config = self.reference_configs.get(
-                    'ALL',
-                    None
-                )
-
-                # check if ALL is also not found
-                if component_reference_config is None:
-                    error_msg = (
-                        f"Component '{component_id}' not found in "
-                        "the reference configuration."
-                    )
-                    logger.error(error_msg)
-                    raise ValueError(error_msg)
-
-            # SECTION: return the reference configuration
-            logger.debug(
-                f"Reference config set successfully for "
-                f"component: {component_id}"
-            )
-            return component_reference_config
-
-        except Exception as e:
-            logger.error(
-                f"Failed to set component reference config for "
-                f"'{component_id}': {e}"
-            )
-            raise HubComponentReferenceConfigError(
-                HUB_COMPONENT_REFERENCE_CONFIG_ERROR_MSG
-            ) from e
-
-    def _set_component_reference_rule(
-        self,
-        component_id: str
-    ) -> Dict[str, ComponentRule]:
-        """
-        Set the reference rule for a specific component.
-
-        Parameters
-        ----------
-        component_id : str
-            The ID of the component for which to set the reference rule.
-
-        Returns
-        -------
-        Dict[str, Dict[str, str]]
-            The reference rule for the specified component, or None if not
-            found.
-        """
-        logger.debug(f"Setting reference rule for component: {component_id}")
-
-        try:
-            # SECTION: get the reference rule for the component
-            component_reference_rule = self.thermodb_rules.get(
-                component_id,
-                None
-            )
-
-            # NOTE: if not found, get ALL
-            if component_reference_rule is None:
-                logger.debug(
-                    f"Component '{component_id}' rule not found, "
-                    "using ALL rule"
-                )
-                component_reference_rule = self.thermodb_rules.get(
-                    'ALL',
-                    None
-                )
-
-                # check if ALL is also not found
-                if component_reference_rule is None:
-                    error_msg = (
-                        f"Component '{component_id}' not found in "
-                        "the reference rule."
-                    )
-                    logger.error(error_msg)
-                    raise ValueError(error_msg)
-
-            logger.debug(
-                f"Reference rule set successfully for "
-                f"component: {component_id}"
-            )
-            return component_reference_rule
-
-        except Exception as e:
-            logger.error(
-                f"Failed to set component reference rule for "
-                f"'{component_id}': {e}"
-            )
-            raise HubComponentReferenceRuleError(
-                HUB_COMPONENT_REFERENCE_RULE_ERROR_MSG
-            ) from e
 
     def build_thermo_hub(self):
         """
@@ -309,14 +157,13 @@ class Hub:
             thermodb = component_thermodb.thermodb
             # component_key = component_thermodb.component_key
 
-            # NOTE: extract component name
-            component_name = component.name.strip()
-            component_formula = component.formula.strip()
-            component_state = component.state.strip().lower()
+            # NOTE: set component identity
+            component_identity = create_component_id(
+                component=component
+            )
 
-            # NOTE: set name
-            name_state = f"{component_name}-{component_state}"
-            formula_state = f"{component_formula}-{component_state}"
+            name_state = component_identity.name_state
+            formula_state = component_identity.formula_state
 
             logger.debug(
                 f"Registering component: {name_state} / {formula_state}")
@@ -422,9 +269,6 @@ class Hub:
                     "Reference is not set. Please provide a valid reference."
                 )
 
-            # NOTE: init
-            component_ignore_labels = []
-
             # NOTE: loop through each component
             for component in component_:
                 # NOTE: input configuration
@@ -441,13 +285,27 @@ class Hub:
                 # NOTE: check build mode
                 if component_key == 'Name-State':  # ! >> name-state
                     # NOTE: component reference config
-                    component_id = f"{component_name}-{component_state}"
+                    component_id = create_component_id(
+                        component=component
+                    ).name_state
 
-                    # ! get the component reference config
-                    component_reference_config = \
+                    # >>> get the component reference config
+                    component_reference_config_: Dict[str, ComponentConfig] = \
                         self._set_component_reference_config(
                             component_id=component_id
+                    )
+
+                    # >>> get the component reference
+                    component_reference_: CustomReference = \
+                        self._set_component_reference(
+                            component_id=component_id
                         )
+
+                    # >>> get ignore labels
+                    # ! by default, empty list
+                    component_ignore_labels_: List[str] = self._set_component_ignore_labels(
+                        component_id=component_id
+                    )
 
                     # ! by name (older version)
                     # component_thermodb: CompBuilder = ptdb.build_component_thermodb(
@@ -456,27 +314,37 @@ class Hub:
                     #     custom_reference=self.reference
                     # )
 
-                    # >> set ignore labels
-                    if component_id in self.ignore_labels:
-                        component_ignore_labels = self.ignore_labels[component_id]
-
                     # ! by name (newer version)
                     component_thermodb: CompBuilder = ptdb.check_and_build_component_thermodb(
                         component=component_ptdb,
-                        reference_config=component_reference_config,
-                        custom_reference=self.reference,
+                        reference_config=component_reference_config_,
+                        custom_reference=component_reference_,
                         component_key=component_key,
-                        ignore_state_props=component_ignore_labels,
+                        ignore_state_props=component_ignore_labels_,
                     )
                 elif component_key == 'Formula-State':  # ! >> formula-state
                     # NOTE: component reference config
-                    component_id = f"{component_formula}-{component_state}"
+                    component_id = create_component_id(
+                        component=component
+                    ).formula_state
 
                     # get the component reference config
-                    component_reference_config = \
+                    component_reference_config_: Dict[str, ComponentConfig] = \
                         self._set_component_reference_config(
                             component_id=component_id
+                    )
+
+                    # >>> get the component reference
+                    component_reference_: CustomReference = \
+                        self._set_component_reference(
+                            component_id=component_id
                         )
+
+                    # >>> get ignore labels
+                    # ! by default, empty list
+                    component_ignore_labels_: List[str] = self._set_component_ignore_labels(
+                        component_id=component_id
+                    )
 
                     # ! by formula (older version)
                     # component_thermodb = ptdb.build_component_thermodb(
@@ -486,17 +354,13 @@ class Hub:
                     #     component_key='Formula'
                     # )
 
-                    # >> set ignore labels
-                    if component_id in self.ignore_labels:
-                        component_ignore_labels = self.ignore_labels[component_id]
-
                     # ! by formula (newer version)
                     component_thermodb = ptdb.check_and_build_component_thermodb(
                         component=component_ptdb,
-                        reference_config=component_reference_config,
-                        custom_reference=self.reference,
+                        reference_config=component_reference_config_,
+                        custom_reference=component_reference_,
                         component_key=component_key,
-                        ignore_state_props=component_ignore_labels,
+                        ignore_state_props=component_ignore_labels_,
                     )
                 else:
                     raise ValueError(
