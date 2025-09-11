@@ -22,8 +22,6 @@ from ..errors import (
 )
 from ..models import (
     Component,
-    ComponentReferenceConfig,
-    ComponentReferenceLink,
     ReferenceThermoDB,
     ComponentReferenceThermoDB,
 )
