@@ -6,6 +6,19 @@ from pydantic import BaseModel, Field
 class MCPConfig(BaseModel):
     """
     Model for MCP configuration.
+
+    Attributes
+    ----------
+    transport : str
+        Transport protocol for the MCP server.
+    host : str
+        Host address for the MCP server.
+    port : int
+        Port for the MCP server.
+    path : str
+        Path for the MCP server.
+    log_level : str
+        Log level for the MCP server.
     """
     transport: str = Field(
         "stdio",
