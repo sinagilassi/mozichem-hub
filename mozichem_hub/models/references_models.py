@@ -17,11 +17,6 @@ from pyThermoDB.models import ComponentConfig, ComponentRule
 # local
 from .resources_models import Component
 
-# NOTE: component reference config
-ComponentReferenceConfig = Dict[str, ComponentConfig]
-# NOTE: component reference link
-ComponentReferenceLink = Dict[str, ComponentRule]
-
 
 class ComponentPropertySource(BaseModel):
     """
