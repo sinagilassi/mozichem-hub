@@ -35,7 +35,7 @@ REFERENCES:
     ARGS:
       - name: component
         type: Component
-        description: "Chemical component for which the thermodynamic properties are verified."
+        description: Chemical component for which the thermodynamic properties are verified.
     TAGS:
       - thermodynamic properties
       - components
@@ -53,7 +53,7 @@ REFERENCES:
     ARGS:
       - name: databook
         type: str | int
-        description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
+        description: Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1
     TAGS:
       - databooks
       - information
@@ -64,13 +64,13 @@ REFERENCES:
     ARGS:
       - name: component
         type: Component
-        description: "Component name and properties"
+        description: Component name and properties
       - name: databook
         type: str | int
-        description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
+        description: Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1
       - name: table
         type: str | int
-        description: "Table name or id such as 'Vapor Pressure' or 1"
+        description: Table name or id such as 'Vapor Pressure' or 1
     TAGS:
       - databooks
       - components
@@ -90,7 +90,7 @@ REFERENCES:
     ARGS:
       - name: databook
         type: str | int
-        description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
+        description: Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1
     TAGS:
       - databooks
       - tables
@@ -102,10 +102,10 @@ REFERENCES:
     ARGS:
       - name: databook
         type: str | int
-        description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
+        description: Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1
       - name: table
         type: str | int
-        description: "Table name or id such as 'Vapor Pressure' or 1"
+        description: Table name or id such as 'Vapor Pressure' or 1
     TAGS:
       - tables
       - information
@@ -116,10 +116,10 @@ REFERENCES:
     ARGS:
       - name: databook
         type: str | int
-        description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
+        description: Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1
       - name: table
         type: str | int
-        description: "Table name or id such as 'Vapor Pressure' or 1"
+        description: Table name or id such as 'Vapor Pressure' or 1
     TAGS:
       - tables
       - structure
@@ -130,10 +130,10 @@ REFERENCES:
     ARGS:
       - name: databook
         type: str | int
-        description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
+        description: Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1
       - name: table
         type: str | int
-        description: "Table name or id such as 'Vapor Pressure' or 1"
+        description: Table name or id such as 'Vapor Pressure' or 1
     TAGS:
       - tables
       - data
@@ -144,7 +144,7 @@ REFERENCES:
     ARGS:
       - name: databook
         type: str
-        description: "Databook name such as 'Perry's Chemical Engineers' Handbook'"
+        description: Databook name such as 'Perry's Chemical Engineers' Handbook'
     TAGS:
       - databooks
       - id
@@ -155,10 +155,10 @@ REFERENCES:
     ARGS:
       - name: databook
         type: str | int
-        description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
+        description: Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1
       - name: table
         type: str
-        description: "Table name such as 'Vapor Pressure'"
+        description: Table name such as 'Vapor Pressure'
     TAGS:
       - tables
       - id
@@ -169,10 +169,10 @@ REFERENCES:
     ARGS:
       - name: databook
         type: str | int
-        description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
+        description: Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1
       - name: table
         type: str
-        description: "Table name such as 'Vapor Pressure'"
+        description: Table name such as 'Vapor Pressure'
     TAGS:
       - tables
       - description
@@ -183,10 +183,10 @@ REFERENCES:
     ARGS:
       - name: databook
         type: str | int
-        description: "Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1"
+        description: Databook name or id such as 'Perry's Chemical Engineers' Handbook' or 1
       - name: table
         type: str
-        description: "Table name such as 'Vapor Pressure'"
+        description: Table name such as 'Vapor Pressure'
     TAGS:
       - tables
       - structure
