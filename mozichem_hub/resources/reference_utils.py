@@ -128,6 +128,8 @@ def initialize_custom_reference(
             custom_reference_config=custom_reference_config
         )
 
+    # SECTION: check format of custom reference content
+
     # set hub
     try:
         # SECTION: reinitialize hub if needed
