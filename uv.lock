@@ -591,7 +591,7 @@ requires-dist = [
     { name = "fastmcp", specifier = ">=2.12.2" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pydantic-settings", specifier = ">=2.10.1" },
-    { name = "pythermodb", specifier = ">=1.11.32" },
+    { name = "pythermodb", specifier = ">=1.11.33" },
     { name = "pythermoflash", specifier = ">=0.1.5" },
     { name = "pythermolinkdb", specifier = ">=1.3.8" },
     { name = "pythermomodels", specifier = ">=1.4.8" },
@@ -940,7 +940,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/30/23/2f0a3efc4d6a32f3b
 
 [[package]]
 name = "pythermodb"
-version = "1.11.33"
+version = "1.11.34"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy" },
@@ -950,9 +950,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/78/18/eb4f7691d59893ba4e7ab4f2141aeb6a67b488893938cd6553b12536ccbf/pythermodb-1.11.33.tar.gz", hash = "sha256:0e76b6a1434245f00b12e9d8ae0cfb77a323f2ad4cbde52c4857dc54aa6471c3", size = 356950, upload-time = "2025-09-12T03:27:42.66Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1c/7c/703ccc56745c13c23ecce1fa19aca06f37a28ec92408175270bfc402411e/pythermodb-1.11.34.tar.gz", hash = "sha256:cb2f00c27e3e2231702c47d9629735ac3325d8e2f7d2a80da37b9291863dd820", size = 358251, upload-time = "2025-09-12T20:57:12.109Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/58/2d/77b0bbfa681f753307185ce531b581abad495b28d4c1ca8aad0371b0f978/pythermodb-1.11.33-py3-none-any.whl", hash = "sha256:d5e9f8152e2cec59125e805e6c468530892aee0dbc1a67d8721ae04b3a79d275", size = 396716, upload-time = "2025-09-12T03:27:41.229Z" },
+    { url = "https://files.pythonhosted.org/packages/7a/ac/8ab21edda3b821f801bb1fc3d4c4891d922237e0c9611caf5219603dd3d7/pythermodb-1.11.34-py3-none-any.whl", hash = "sha256:1a6111e12f73d5f8d1203dd10b2c13b29d5775fcea8d891840af8aa9c65c54ec", size = 397659, upload-time = "2025-09-12T20:57:10.475Z" },
 ]
 
 [[package]]
