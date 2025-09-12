@@ -7,6 +7,7 @@ from typing import (
     Dict
 )
 from pyThermoDB.models import ComponentConfig, ComponentRule
+from pyThermoDB.references import extract_reference_from_str
 # locals
 from ..models import Component, ReferenceThermoDB, ComponentReferenceThermoDB, ReferencesThermoDB
 from .hub import Hub
@@ -19,6 +20,10 @@ from ..errors import (
     InvalidReferenceConfigTypeError,
     CUSTOM_REFERENCE_INIT_ERROR_MSG
 )
+
+# NOTE: logger
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 def set_custom_reference(
@@ -129,8 +134,26 @@ def initialize_custom_reference(
         )
 
     # SECTION: check format of custom reference content
+    if custom_reference_content is not None:
+        # check reference is valid
+        check_ = is_str_reference_valid(
+            reference_content=custom_reference_content,
+        )
 
-    # set hub
+        if not check_[0]:
+            raise InvalidReferenceContentTypeError(
+                "Custom reference content is not valid."
+            )
+
+        if check_[1] is None or check_[1].strip() == '':
+            raise EmptyReferenceContentError(
+                "Custom reference content is empty after validation."
+            )
+
+        # NOTE: update custom_reference_content with the extracted content
+        custom_reference_content = check_[1]
+
+    # NOTE: set hub
     try:
         # SECTION: reinitialize hub if needed
         # NOTE: select the reference mapper
@@ -293,3 +316,44 @@ def to_references_thermodb(
     except Exception as e:  # pragma: no cover
         logging.error(f"Failed to convert to ReferencesThermoDB: {e}")
         raise e
+
+
+def is_str_reference_valid(
+        reference_content: str,
+):
+    '''
+    Check if the str reference content is valid.
+
+    Parameters
+    ----------
+    custom_reference_content : str
+        Custom reference content provided by the user.
+
+    Returns
+    -------
+    Tuple[bool, str]
+        A tuple containing a boolean indicating if the custom reference is valid,
+        and a string.
+
+    Notes
+    -----
+    - This function attempts to extract references from the provided content.
+    - If extraction is successful, it returns True and a yaml content string.
+    - If extraction fails, it returns False and an error message.
+    '''
+    try:
+        # SECTION: check if custom reference content is valid
+        # NOTE: try to extract references from the content
+        extract_status, extracted_content_ = extract_reference_from_str(
+            content=reference_content,
+        )
+
+        # NOTE: if extraction is successful, return True and a yaml content string
+        if extract_status:
+            return True, extracted_content_
+
+        # NOTE: if extraction fails, return False and an error message
+        return False, "Failed to extract references from the provided content."
+    except Exception as e:  # pragma: no cover
+        logging.error(f"Failed to validate custom reference content: {e}")
+        return False, str(e)
