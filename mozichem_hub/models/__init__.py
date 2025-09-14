@@ -3,9 +3,6 @@ from .mcp_models import MCPConfig
 from .resources_models import (
     MoziTool,
     MoziToolArg,
-    Temperature,
-    Pressure,
-    Component,
     ComponentThermoDB
 )
 # references
@@ -23,9 +20,6 @@ __all__ = [
     "MCPConfig",
     "MoziTool",
     "MoziToolArg",
-    "Temperature",
-    "Pressure",
-    "Component",
     "ComponentThermoDB",
     "References",
     "Reference",
