@@ -1,7 +1,7 @@
 # import libs
 from rich import print
 from mozichem_hub.references import ReferenceMapper
-from mozichem_hub.models import Component
+from pythermodb_settings.models import Component
 
 # SECTION: reference content
 REFERENCE_CONTENT = """

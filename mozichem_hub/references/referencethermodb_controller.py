@@ -9,7 +9,13 @@ from pyThermoDB.references import (
     ReferenceChecker,
     load_reference_from_str
 )
-from pyThermoDB.models import ComponentConfig, ComponentRule
+from pythermodb_settings.models import (
+    ComponentConfig,
+    ComponentRule,
+    Component,
+    ReferenceThermoDB,
+    ComponentReferenceThermoDB
+)
 # locals
 from ..errors import (
     NoDatabookFoundError,
@@ -19,11 +25,6 @@ from ..errors import (
     REFERENCE_CONFIG_GEN_ERROR_MSG,
     COMPONENT_REFERENCE_CONFIG_ERROR_MSG,
     COMPONENT_REFERENCE_LINK_ERROR_MSG
-)
-from ..models import (
-    Component,
-    ReferenceThermoDB,
-    ComponentReferenceThermoDB,
 )
 
 

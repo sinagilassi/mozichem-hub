@@ -4,16 +4,18 @@ from typing import (
     Optional,
     Dict,
     List,
-    Union)
-from pyThermoDB.models import ComponentConfig, ComponentRule
+    Union
+)
+from pythermodb_settings.models import (
+    ComponentConfig,
+    ComponentRule,
+    ReferencesThermoDB
+)
 # local
+from ..models import References
+from .reference_adapter import ReferencesAdapter
 from .contents import REFERENCE_CONTENT
 from .config import REFERENCE_CONFIGS
-from ..models import (
-    References,
-    ReferencesThermoDB,
-)
-from .reference_adapter import ReferencesAdapter
 
 
 class ReferencesInitializer:

@@ -8,20 +8,19 @@ from typing import (
     Literal
 )
 from pyThermoDB.references import component_reference_mapper
-from pyThermoDB.models import ComponentReferenceThermoDB as ComponentReferenceThermoDB_ptdb
-from pyThermoDB.models import Component as ptdbComponent
-from pyThermoDB.models import ComponentConfig, ComponentRule
+from pythermodb_settings.models import (
+    ComponentConfig,
+    ComponentRule,
+    Component,
+    ComponentReferenceThermoDB,
+    ReferencesThermoDB,
+    ReferenceThermoDB
+)
 # locals
 from .reference_services import ReferenceServices
 from .reference_controller import ReferenceController
-from ..models import (
-    References,
-    ReferenceThermoDB,
-    ReferencesThermoDB,
-    ComponentReferenceThermoDB,
-)
+from ..models import References
 from .referencethermodb_controller import ReferenceThermoDBController
-from ..models.resources_models import Component
 
 # NOTE: logger
 logger = logging.getLogger(__name__)
@@ -229,7 +228,8 @@ class ReferenceMapper(ReferenceServices):
             # NOTE: generate the reference thermodb
             return ReferenceThermoDBController_.\
                 generate_components_reference_thermodb(
-                    components=components
+                    components=components,
+                    component_key=component_key,
                 )
         except Exception as e:
             logging.error(
@@ -291,7 +291,7 @@ class ReferenceMapper(ReferenceServices):
                     "Reference content is required to generate component thermodb.")
 
             # SECTION: convert component to ptdbComponent
-            ptdb_component = ptdbComponent(
+            ptdb_component = Component(
                 name=component.name,
                 formula=component.formula,
                 state=component.state
@@ -302,7 +302,7 @@ class ReferenceMapper(ReferenceServices):
             component_formula_state = f"{component.formula}-{component.state}"
 
             # SECTION: generate the component reference thermodb
-            component_reference_thermodb: ComponentReferenceThermoDB_ptdb = \
+            component_reference_thermodb: ComponentReferenceThermoDB = \
                 component_reference_mapper(
                     component=ptdb_component,
                     reference_content=reference_content,

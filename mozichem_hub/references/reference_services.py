@@ -2,10 +2,12 @@
 from typing import (
     Optional,
 )
+from pythermodb_settings.models import (
+    ReferencesThermoDB
+)
 # local
 from ..models import (
     References,
-    ReferencesThermoDB
 )
 from .references_initializer import ReferencesInitializer
 

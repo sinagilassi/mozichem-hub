@@ -254,7 +254,7 @@ Execute thermodynamic calculations directly without MCP server:
 
 ```python
 from mozichem_hub.executors import ToolExecuter
-from mozichem_hub.models import Temperature, Pressure, Component
+from pythermodb_settings.models import Temperature, Pressure, Component
 from mozichem_hub.prebuilt import create_mozichem_mcp
 
 # Create MCP and tool executor

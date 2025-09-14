@@ -3,7 +3,7 @@ from mozichem_hub import (
     __version__,
 )
 from mozichem_hub.executors import ToolExecuter
-from mozichem_hub.models import Pressure, Component
+from pythermodb_settings.models import Pressure, Component
 from mozichem_hub.prebuilt import (
     create_mozichem_mcp,
     get_mozichem_mcp

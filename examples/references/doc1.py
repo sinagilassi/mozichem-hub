@@ -1,8 +1,9 @@
 # import libs
-from rich import print
+from typing import List
 from pyThermoDB.references import ReferenceChecker
 from mozichem_hub.references import ReferenceMapper
-from mozichem_hub.models import Component, ReferenceThermoDB
+from pythermodb_settings.models import Component, ComponentReferenceThermoDB
+from rich import print
 
 # SECTION: reference content
 REFERENCE_CONTENT = """
@@ -210,9 +211,9 @@ print(f"Reference Link (Specific Table): {reference_link_specific}")
 # SECTION: generate reference thermodb
 ReferenceMapper_ = ReferenceMapper()
 
-reference_thermodb: ReferenceThermoDB = ReferenceMapper_.\
+reference_thermodb: List[ComponentReferenceThermoDB] = ReferenceMapper_.\
     components_reference_thermodb_generator_from_reference_content(
         reference_content=REFERENCE_CONTENT,
         components=[CO2]
-    )
+)
 print(f"Reference ThermoDB: {reference_thermodb}")
