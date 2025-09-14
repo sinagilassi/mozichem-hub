@@ -4,11 +4,13 @@ from typing import (
     Dict,
     List,
 )
-from pyThermoDB.models import ComponentConfig, ComponentRule, CustomReference
-# locals
-from ..models import (
-    ReferencesThermoDB,
+from pythermodb_settings.models import (
+    ComponentConfig,
+    ComponentRule,
+    CustomReference,
+    ReferencesThermoDB
 )
+# locals
 from ..errors import (
     HubComponentReferenceConfigError,
     HubComponentReferenceRuleError,

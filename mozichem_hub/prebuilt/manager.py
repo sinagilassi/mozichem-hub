@@ -7,7 +7,7 @@ from typing import (
     Union,
     Any
 )
-from pyThermoDB.models import ComponentConfig
+from pythermodb_settings.models import ComponentConfig
 # locals
 from ..docs import MCPHub, MoziChemMCP
 from ..utils import MCPController

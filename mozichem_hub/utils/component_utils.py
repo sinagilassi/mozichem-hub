@@ -1,7 +1,8 @@
 # import libs
 import logging
+from pythermodb_settings.models import Component
 # local
-from ..models import Component, ComponentIdentity
+from ..models import ComponentIdentity
 
 # NOTE: logger
 logger = logging.getLogger(__name__)

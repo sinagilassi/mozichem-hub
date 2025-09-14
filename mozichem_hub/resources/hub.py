@@ -8,20 +8,19 @@ from typing import (
     Any
 )
 import pyThermoDB as ptdb
-from pyThermoDB.models import Component as ptdbComponent
-from pyThermoDB.models import ComponentConfig, ComponentRule, CustomReference
+from pythermodb_settings.models import (
+    ComponentConfig,
+    CustomReference,
+    Component,
+    ReferencesThermoDB
+)
 from pyThermoDB import CompBuilder
 import pyThermoLinkDB as ptldb
 # locals
 from .hub_manager import HubManager
 from ..utils.component_utils import create_component_id
-from ..models import (
-    Component,
-    ComponentThermoDB,
-)
-from ..models import (
-    ReferencesThermoDB
-)
+from ..models import ComponentThermoDB
+# error messages
 from ..errors import (
     HubInitializationError,
     HubThermoHubBuildError,
@@ -276,11 +275,6 @@ class Hub(HubManager):
                 component_formula = component.formula.strip()
                 component_state = component.state.strip().lower()
 
-                # REVIEW: adapt
-                component_ptdb = ptdbComponent.model_validate(
-                    component.model_dump()
-                )
-
                 # SECTION: build the component thermodynamic database
                 # NOTE: check build mode
                 if component_key == 'Name-State':  # ! >> name-state
@@ -316,7 +310,7 @@ class Hub(HubManager):
 
                     # ! by name (newer version)
                     component_thermodb: CompBuilder = ptdb.check_and_build_component_thermodb(
-                        component=component_ptdb,
+                        component=component,
                         reference_config=component_reference_config_,
                         custom_reference=component_reference_,
                         component_key=component_key,
@@ -356,7 +350,7 @@ class Hub(HubManager):
 
                     # ! by formula (newer version)
                     component_thermodb = ptdb.check_and_build_component_thermodb(
-                        component=component_ptdb,
+                        component=component,
                         reference_config=component_reference_config_,
                         custom_reference=component_reference_,
                         component_key=component_key,

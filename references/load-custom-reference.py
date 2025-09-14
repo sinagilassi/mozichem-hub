@@ -1,5 +1,6 @@
 # import libs
 import os
+from typing import Dict, List, Any
 from rich import print
 import pyThermoDB as ptdb
 from pyThermoDB.references import (
@@ -90,7 +91,7 @@ ThermoReference_.save_references(output_file, res_format='yml')
 
 # SECTION: initialize own thermo db
 # custom ref
-ref = {'reference': [references]}
+ref: Dict[str, Any] = {'reference': [references]}
 # md ref
 # ref = {'reference': [md_path]}
 # yml ref

@@ -11,7 +11,7 @@ from typing import Annotated, Literal
 from pydantic import Field
 import pyThermoModels as ptm
 # local
-from ..models import (
+from pythermodb_settings.models import (
     Temperature,
     Pressure,
     Component,

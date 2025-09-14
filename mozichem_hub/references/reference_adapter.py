@@ -4,7 +4,7 @@ import json
 import logging
 from typing import Dict, Any, Literal, Union
 from pyThermoDB.references import ReferenceConfig, ReferenceChecker
-from pyThermoDB.models import ComponentConfig, ComponentRule
+from pythermodb_settings.models import ComponentConfig, ComponentRule
 # local
 from ..models import ComponentPropertySource
 

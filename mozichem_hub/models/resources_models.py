@@ -2,6 +2,7 @@
 from typing import Any, List, Set, Callable, Literal, Optional
 from pydantic import BaseModel, Field, ConfigDict
 from pyThermoDB import CompBuilder
+from pythermodb_settings.models import Component
 # local
 
 
@@ -28,33 +29,33 @@ class MoziTool(BaseModel):
     tags: Set[str] = set()
 
 
-class Temperature(BaseModel):
-    """Temperature model for input validation"""
-    value: float = Field(..., description="Temperature value")
-    unit: str = Field(..., description="Temperature unit, e.g., 'K', 'C', 'F'")
+# class Temperature(BaseModel):
+#     """Temperature model for input validation"""
+#     value: float = Field(..., description="Temperature value")
+#     unit: str = Field(..., description="Temperature unit, e.g., 'K', 'C', 'F'")
 
 
-class Pressure(BaseModel):
-    """Pressure model for input validation"""
-    value: float = Field(..., description="Pressure value")
-    unit: str = Field(
-        ...,
-        description="Pressure unit, e.g., 'bar', 'atm', 'Pa'"
-    )
+# class Pressure(BaseModel):
+#     """Pressure model for input validation"""
+#     value: float = Field(..., description="Pressure value")
+#     unit: str = Field(
+#         ...,
+#         description="Pressure unit, e.g., 'bar', 'atm', 'Pa'"
+#     )
 
 
-class Component(BaseModel):
-    """Component model for input validation"""
-    name: str = Field(..., description="Name of the component")
-    formula: str = Field(..., description="Chemical formula of the component")
-    state: Literal['g', 'l', 's', 'aq'] = Field(
-        ...,
-        description="State of the component: 'g' for gas, 'l' for liquid, 's' for solid"
-    )
-    mole_fraction: float = Field(
-        default=1.0,
-        description="Mole fraction of the component in a mixture, if applicable"
-    )
+# class Component(BaseModel):
+#     """Component model for input validation"""
+#     name: str = Field(..., description="Name of the component")
+#     formula: str = Field(..., description="Chemical formula of the component")
+#     state: Literal['g', 'l', 's', 'aq'] = Field(
+#         ...,
+#         description="State of the component: 'g' for gas, 'l' for liquid, 's' for solid"
+#     )
+#     mole_fraction: float = Field(
+#         default=1.0,
+#         description="Mole fraction of the component in a mixture, if applicable"
+#     )
 
 
 class ComponentThermoDB(BaseModel):
@@ -83,4 +84,5 @@ class ComponentThermoDB(BaseModel):
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
+        extra="allow"
     )

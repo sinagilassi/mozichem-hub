@@ -7,7 +7,7 @@ from typing import (
     Dict,
     Tuple,
 )
-from pyThermoDB.models import ComponentConfig
+from pythermodb_settings.models import ComponentConfig
 # locals
 from .reference_adapter import ReferencesAdapter
 from ..models import ComponentPropertySource

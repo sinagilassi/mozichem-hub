@@ -3,9 +3,10 @@ import logging
 from typing import (
     List,
     Literal,
-    Dict)
+    Dict
+)
 # locals
-from ..models import (
+from pythermodb_settings.models import (
     Component,
 )
 

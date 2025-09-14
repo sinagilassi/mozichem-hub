@@ -13,7 +13,7 @@ from pydantic import (
     field_validator,
     model_validator
 )
-from pyThermoDB.models import ComponentConfig, ComponentRule
+from pythermodb_settings.models import ComponentConfig, ComponentRule
 # local
 from .resources_models import Component
 
@@ -112,6 +112,15 @@ class Reference(BaseModel):
 class References(BaseModel):
     """
     Model for references thermodynamic database (ThermoDB).
+
+    Attributes
+    ----------
+    contents : Optional[List[str]]
+        List of reference contents provided by the user.
+    config : Optional[Dict[str, Dict[str, ComponentConfig]]]
+        Configuration for the thermodynamic database, which properties should be included.
+    link : Optional[str]
+        Link to the reference thermodynamic database.
 
     Notes
     -----

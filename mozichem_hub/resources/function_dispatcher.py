@@ -6,10 +6,8 @@ from typing import (
     Any,
     Callable
 )
+from pythermodb_settings.models import ReferencesThermoDB
 # locals
-from ..models import (
-    ReferencesThermoDB
-)
 from .hub import Hub
 from .mozi_tool_builder import MoziToolBuilder
 from .class_builder import MCPClassBuilder

@@ -4,12 +4,13 @@ from typing import (
     Dict,
     Any,
     Callable,
-    Union)
+    Union
+)
 import inspect
 from pydantic import Field
 import pyThermoDB as ptdb
 # local
-from ..models import (
+from pythermodb_settings.models import (
     Component,
 )
 from .hub import Hub

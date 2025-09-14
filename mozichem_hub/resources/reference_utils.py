@@ -6,10 +6,15 @@ from typing import (
     Tuple,
     Dict
 )
-from pyThermoDB.models import ComponentConfig, ComponentRule
+from pythermodb_settings.models import (
+    ComponentConfig,
+    ComponentRule,
+    ComponentReferenceThermoDB,
+    ReferencesThermoDB,
+    Component
+)
 from pyThermoDB.references import extract_reference_from_str
 # locals
-from ..models import Component, ReferenceThermoDB, ComponentReferenceThermoDB, ReferencesThermoDB
 from .hub import Hub
 from ..utils import create_component_id
 from ..errors import (

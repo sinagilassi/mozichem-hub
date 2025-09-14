@@ -9,13 +9,12 @@ from typing import (
     Any,
     Set
 )
+from pythermodb_settings.models import ReferencesThermoDB
 # local
 from .tool_builder import ToolBuilder
 from ..resources import FunctionDispatcher
 from ..models import MoziTool
-from ..models import (
-    ReferencesThermoDB,
-)
+# errors
 from ..errors import (
     FunctionRetrievalError,
     FunctionLoadingError,

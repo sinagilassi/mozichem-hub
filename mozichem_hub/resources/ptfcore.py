@@ -12,7 +12,7 @@ import inspect
 from pydantic import Field
 import pyThermoFlash as ptf
 # local
-from ..models import (
+from pythermodb_settings.models import (
     Temperature,
     Pressure,
     Component,

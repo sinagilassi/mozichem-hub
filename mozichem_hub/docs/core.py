@@ -11,14 +11,14 @@ from typing import (
     Set,
     Union
 )
-from pyThermoDB.models import ComponentConfig
+from pythermodb_settings.models import (
+    ReferencesThermoDB,
+    ComponentConfig
+)
 # local
 from .registry import RegistryMixin
 from .server import MoziServer
 from ..tools import ToolManager
-from ..models import (
-    ReferencesThermoDB,
-)
 from ..descriptors import MCPDescriptor
 from ..references import ReferenceMapper
 from ..errors import (
