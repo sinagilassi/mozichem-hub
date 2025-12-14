@@ -5,7 +5,7 @@ from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __description__ = "MoziChem-Hub"
 __author__ = "Sina Gilassi"
 __author_email__ = "sina.gilassi@gmail.com"
