@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/sinagilassi-mozichem-hub-badge.png)](https://mseep.ai/app/sinagilassi-mozichem-hub)
+
 # MoziChem-Hub
 
 ![MoziChem Logo](https://drive.google.com/uc?export=view&id=1G-lxZzOBxX8UtKCvIqSoHfugIOxJw6ft)
